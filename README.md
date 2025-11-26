@@ -9,40 +9,7 @@ The repository is organized to be **modular, maintainable, and easily extensible
 
 ## 📁 Repository Structure
 
-MyShop/
-│
-├── src/
-│ ├── MyShop.sln # Main solution containing all projects
-│ │
-│ ├── MyShop.App/ # UI Layer (WPF/WinUI/Maui) - MVVM
-│ │ ├── Views/
-│ │ ├── ViewModels/
-│ │ ├── Services/
-│ │ └── App.xaml.cs
-│ │
-│ ├── MyShop.Domain/ # Domain Layer (Core business)
-│ │ ├── Entities/
-│ │ ├── ValueObjects/
-│ │ ├── Interfaces/ # Repository Interfaces
-│ │ └── Events/
-│ │
-│ ├── MyShop.Application/ # Application Layer (UseCases)
-│ │ ├── Services/
-│ │ ├── DTOs/
-│ │ ├── Validators/
-│ │ └── Mappings/
-│ │
-│ └── MyShop.Infrastructure/ # Infrastructure Layer (PostgreSQL, EFCore)
-│ ├── Db/
-│ ├── Configurations/
-│ ├── Repositories/
-│ └── DependencyInjection.cs
-│
-└── tests/ # Unit tests (optional)
-├── MyShop.Domain.Tests/
-├── MyShop.Application.Tests/
-└── MyShop.Infrastructure.Tests/
-
+![Layer Diagram](docs/images/repo_structure.png "Repo Structure")
 
 ---
 
@@ -85,15 +52,7 @@ MyShop/
 
 ## 🔗 Layer Relationships
 
-UI (MyShop.App)
-↓
-Application (UseCases)
-↓
-Domain (Entities & Interfaces)
-↓
-Infrastructure (DB, Repository Implementation)
-
-Explanation:
+![Layer Diagram](docs/images/dependency_layer.png "Dependency Layer")
 
 UI → Application: UI calls UseCases / Services
 Application → Domain: Application uses Domain entities and repository interfaces
