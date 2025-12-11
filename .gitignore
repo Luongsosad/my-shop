@@ -48,3 +48,9 @@ Desktop.ini
 [Dd]esktop.ini
 $RECYCLE.BIN/
 .DS_Store
+# Environment variables and secrets
+.env
+appsettings.*.local.json
+*.db
+*.db-shm
+*.db-wal

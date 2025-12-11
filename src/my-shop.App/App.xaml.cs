@@ -45,6 +45,7 @@ namespace my_shop.App
             AppHost = Host.CreateDefaultBuilder().ConfigureServices((context, services) =>
             {
                 services.AddTransient<MainWindow>();
+                services.AddTransient<MainLayout>();
 
                 // Add View Services
                 services.AddTransient<ConfigScreenView>();
@@ -65,8 +66,7 @@ namespace my_shop.App
                 services.AddTransient<SettingsScreenViewModel>();
 
                 // Add Services
-                services.AddTransient<IDataService, SQLiteService>();
-                services.AddTransient<IDataService, PostgresService>();
+                services.AddSingleton<IDataService, PostgresService>();
             }).Build();
         }
 
