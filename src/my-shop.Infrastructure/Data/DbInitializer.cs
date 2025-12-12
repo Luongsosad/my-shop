@@ -14,16 +14,37 @@ public static class DbInitializer
 
         try
         {
-            // Ensure database and tables exist
-            await context.Database.EnsureCreatedAsync();
-            Console.WriteLine("? Database schema ensured.");
+            // Apply pending migrations
+            Console.WriteLine("?? Checking for pending database migrations...");
+            var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+            
+            if (pendingMigrations.Any())
+            {
+                Console.WriteLine($"?? Found {pendingMigrations.Count()} pending migration(s):");
+                foreach (var migration in pendingMigrations)
+                {
+                    Console.WriteLine($"   - {migration}");
+                }
+                
+                Console.WriteLine("??  Applying migrations...");
+                await context.Database.MigrateAsync();
+                Console.WriteLine("? Migrations applied successfully!");
+            }
+            else
+            {
+                Console.WriteLine("? Database is up to date. No pending migrations.");
+            }
+            
             Console.WriteLine($"? Database connection: {(context.Database.CanConnect() ? "SUCCESS" : "FAILED")}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"? ERROR: Cannot connect to database. Please check your .env file.");
+            Console.WriteLine($"? ERROR: Cannot connect to database or apply migrations.");
             Console.WriteLine($"Error: {ex.Message}");
-            Console.WriteLine("\nMake sure database 'My-Shop' exists on Neon.tech");
+            Console.WriteLine("\nTroubleshooting:");
+            Console.WriteLine("1. Make sure database 'My-Shop' exists on Neon.tech");
+            Console.WriteLine("2. Check your .env file has correct DATABASE_URL");
+            Console.WriteLine("3. Verify network connectivity to database");
             throw;
         }
 
