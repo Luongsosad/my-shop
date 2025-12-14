@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using my_shop.Application.Interfaces;
 using my_shop.Domain.Entities;
 
 namespace my_shop.Infrastructure.Db;
 
-public class MyShopDbContext : DbContext
+public class MyShopDbContext : DbContext, IApplicationDbContext
 {
     public MyShopDbContext(DbContextOptions<MyShopDbContext> options) : base(options)
     {
@@ -13,6 +14,11 @@ public class MyShopDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
+    
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await base.SaveChangesAsync(cancellationToken);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -35,6 +35,9 @@ public class Product
     [Column("extension_data", TypeName = "jsonb")]
     public string? ExtensionData { get; set; }
 
+    [Column("images", TypeName = "jsonb")]
+    public List<string>? Images { get; set; }
+
     [ForeignKey(nameof(CategoryId))]
     public Category? Category { get; set; }
 }

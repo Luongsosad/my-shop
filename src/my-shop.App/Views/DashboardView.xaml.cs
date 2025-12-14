@@ -1,17 +1,23 @@
 ﻿using Microsoft.UI.Xaml.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.UI.Xaml.Navigation;
+using my_shop.App.ViewModels;
 
 namespace my_shop.App.Views
 {
-    public sealed partial class DashboardView
+    public sealed partial class DashboardView : Page
     {
+        public DashboardViewModel ViewModel { get; }
+
         public DashboardView()
         {
             this.InitializeComponent();
+            ViewModel = App.GetService<DashboardViewModel>();
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            await ViewModel.LoadDataAsync();
         }
     }
 }

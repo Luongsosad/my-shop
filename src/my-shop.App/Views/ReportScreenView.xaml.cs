@@ -1,17 +1,17 @@
 ﻿using Microsoft.UI.Xaml.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using my_shop.App.ViewModels;
 
 namespace my_shop.App.Views
 {
     public sealed partial class ReportScreenView : Page
     {
+        public ReportScreenViewModel ViewModel { get; }
+
         public ReportScreenView()
         {
             this.InitializeComponent();
+            ViewModel = App.GetService<ReportScreenViewModel>();
+            this.DataContext = ViewModel;
         }
     }
 }

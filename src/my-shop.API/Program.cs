@@ -1,14 +1,65 @@
 using Microsoft.EntityFrameworkCore;
+using my_shop.Application.Interfaces;
+using my_shop.Application.Services;
 using my_shop.Infrastructure.Db;
-using my_shop.Domain.Entities;
-using HotChocolate;
-using HotChocolate.Data;
+using my_shop.Infrastructure.Data;
+using my_shop.API.GraphQL;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<MyShopDbContext>(options =>
-    options.UseSqlite("Data Source=myshop.db"));
+// Load .env file from root directory
+var envPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
+if (System.IO.File.Exists(envPath))
+{
+    foreach (var line in System.IO.File.ReadAllLines(envPath))
+    {
+        if (string.IsNullOrWhiteSpace(line) || line.StartsWith('#')) continue;
+        var parts = line.Split('=', 2);
+        if (parts.Length == 2)
+        {
+            Environment.SetEnvironmentVariable(parts[0].Trim(), parts[1].Trim());
+        }
+    }
+}
 
+// Read DATABASE_URL from environment variable
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+string connectionString;
+
+if (!string.IsNullOrEmpty(databaseUrl) && databaseUrl.StartsWith("postgresql://"))
+{
+    // Parse PostgreSQL URL format
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':');
+    var port = uri.Port > 0 ? uri.Port : 5432;
+    var database = uri.AbsolutePath.TrimStart('/');
+    
+    if (database.Contains('?'))
+    {
+        database = database.Substring(0, database.IndexOf('?'));
+    }
+    
+    connectionString = $"Host={uri.Host};Port={port};Database={database};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+}
+else
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+        ?? "Host=localhost;Port=5432;Database=myshop;Username=postgres;Password=postgres";
+}
+
+// Register Infrastructure services
+builder.Services.AddDbContext<MyShopDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+builder.Services.AddScoped<IApplicationDbContext>(provider => 
+    provider.GetRequiredService<MyShopDbContext>());
+
+// Register Application services
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
+// Register GraphQL
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
@@ -18,49 +69,17 @@ builder.Services
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+// Initialize database with seeding
+try
 {
-    var db = scope.ServiceProvider.GetRequiredService<MyShopDbContext>();
-    db.Database.EnsureCreated();
-    
-    if (!db.Categories.Any())
-    {
-        db.Categories.Add(new Category { Name = "Electronics", Description = "Gadgets and devices" });
-        db.Categories.Add(new Category { Name = "Clothing", Description = "Apparel and fashion" });
-        db.SaveChanges();
-    }
-
-    if (!db.Products.Any())
-    {
-        var catElec = db.Categories.First(c => c.Name == "Electronics");
-        db.Products.Add(new Product 
-        { 
-            Name = "Smartphone X", 
-            Sku = "SPX-001", 
-            ImportPrice = 500, 
-            Count = 10, 
-            CategoryId = catElec.Id,
-            ExtensionData = "{\"Screen\": \"OLED\", \"Battery\": \"5000mAh\"}"
-        });
-        db.SaveChanges();
-    }
+    await DbInitializer.InitializeAsync(app.Services);
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"? Failed to initialize database: {ex.Message}");
+    return;
 }
 
 app.MapGraphQL();
 
 app.Run();
-
-public class Query
-{
-    [UseProjection]
-    [UseFiltering]
-    [UseSorting]
-    public IQueryable<Product> GetProducts([Service] MyShopDbContext context) =>
-        context.Products;
-
-    [UseProjection]
-    [UseFiltering]
-    [UseSorting]
-    public IQueryable<Category> GetCategories([Service] MyShopDbContext context) =>
-        context.Categories;
-}
