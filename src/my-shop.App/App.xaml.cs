@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -8,6 +9,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
+using my_shop.App.Helpers;
 using my_shop.App.Services;
 using my_shop.App.ViewModels;
 using my_shop.App.Views;
@@ -20,6 +22,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -29,7 +32,7 @@ namespace my_shop.App
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    public partial class App : Application
+    public partial class App : Microsoft.UI.Xaml.Application
     {
         private Window? _window;
         public IHost AppHost { get; private set; }
@@ -55,6 +58,7 @@ namespace my_shop.App
                 services.AddTransient<ProductsScreenView>();
                 services.AddTransient<ReportScreenView>();
                 services.AddTransient<SettingsScreenView>();
+                services.AddTransient<SignupView>();
 
                 // Add ViewModel Services
                 services.AddTransient<ConfigScreenViewModel>();
@@ -64,9 +68,23 @@ namespace my_shop.App
                 services.AddTransient<ProductsScreenViewModel>();
                 services.AddTransient<ReportScreenViewModel>();
                 services.AddTransient<SettingsScreenViewModel>();
+                services.AddTransient<SignupViewModel>();
+                services.AddTransient<AuthService>();
 
                 // Add Services
                 services.AddSingleton<IDataService, PostgresService>();
+                services.AddSingleton<IJwtHelper, JwtHelper>();
+                services.AddSingleton<ITokenService, TokenService>();
+                services.AddSingleton<ICredentialsService, CredentialsService>(); 
+                services.AddSingleton<ITokenExpirationMonitor, TokenExpirationMonitor>();
+                services.AddHttpClient<ISignupService, SignupService>(client =>
+                {
+                    client.BaseAddress = new Uri("http://localhost:5000"); 
+                });
+                services.AddHttpClient<IAuthService, AuthService>(client =>
+                {
+                    client.BaseAddress = new Uri("http://localhost:5000");
+                });
             }).Build();
         }
 
@@ -76,7 +94,15 @@ namespace my_shop.App
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            _window = AppHost.Services.GetRequiredService<MainWindow>();
+            //Windows.Storage.ApplicationData.Current.LocalSettings.Values.Remove("auth_token");
+            var tokenService = AppHost.Services.GetRequiredService<ITokenService>();
+            var jwtHelper = AppHost.Services.GetRequiredService<IJwtHelper>();
+            var credentialsService = AppHost.Services.GetRequiredService<ICredentialsService>();
+            var authService = AppHost.Services.GetRequiredService<IAuthService>();
+            var tokenMonitor = new TokenExpirationMonitor(tokenService, jwtHelper);
+
+
+            _window = new MainWindow(AppHost, tokenService, tokenMonitor, credentialsService, authService);
             _window.Activate();
         }
 

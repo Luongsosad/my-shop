@@ -5,6 +5,7 @@ namespace my_shop.Application.Interfaces;
 
 public interface IApplicationDbContext
 {
+    DbSet<Admin> Admins { get; }
     DbSet<Product> Products { get; }
     DbSet<Category> Categories { get; }
     DbSet<Order> Orders { get; }
