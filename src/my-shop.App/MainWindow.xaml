@@ -13,7 +13,7 @@
         <MicaBackdrop />
     </Window.SystemBackdrop>
 
-    <Grid x:Name="RootGrid" RequestedTheme="Light">
-        
+    <Grid RequestedTheme="Light">
+        <Frame x:Name="MainFrame"/>
     </Grid>
 </Window>
