@@ -10,6 +10,9 @@ public class Order
     [Column("order_id")]
     public int Id { get; set; }
 
+    [Column("customer_id")]
+    public int? CustomerId { get; set; }
+
     [Column("created_time")]
     public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
 
@@ -18,6 +21,9 @@ public class Order
 
     [Column("extension_data", TypeName = "jsonb")]
     public string? ExtensionData { get; set; }
+
+    [ForeignKey(nameof(CustomerId))]
+    public Customer? Customer { get; set; }
 
     public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

@@ -3,6 +3,7 @@ using my_shop.Application.Interfaces;
 using my_shop.Application.Services;
 using my_shop.Infrastructure.Db;
 using my_shop.Infrastructure.Data;
+using my_shop.Infrastructure.Services;
 using my_shop.API.GraphQL;
 using System.IO;
 
@@ -49,8 +50,12 @@ else
 }
 
 // Register Infrastructure services
+var dataSourceBuilder = new Npgsql.NpgsqlDataSourceBuilder(connectionString);
+dataSourceBuilder.EnableDynamicJson();
+var dataSource = dataSourceBuilder.Build();
+
 builder.Services.AddDbContext<MyShopDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(dataSource));
 
 builder.Services.AddScoped<IApplicationDbContext>(provider => 
     provider.GetRequiredService<MyShopDbContext>());
@@ -59,10 +64,18 @@ builder.Services.AddScoped<IApplicationDbContext>(provider =>
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
+// Register Cloudinary service
+var cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
+if (!string.IsNullOrEmpty(cloudinaryUrl))
+{
+    builder.Services.AddSingleton<ICloudinaryService>(sp => new CloudinaryService(cloudinaryUrl));
+}
+
 // Register GraphQL
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
+    .AddMutationType<Mutation>()
     .AddProjections()
     .AddFiltering()
     .AddSorting();

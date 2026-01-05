@@ -3,14 +3,27 @@
     x:Class="my_shop.App.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:my_shop.App">
+    xmlns:local="using:my_shop.App"
+    xmlns:converters="using:my_shop.App.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
+            
+            <!-- Converters -->
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter"/>
+            <converters:InvertedBoolToOpacityConverter x:Key="InvertedBoolToOpacityConverter"/>
+            <converters:CurrencyConverter x:Key="CurrencyConverter"/>
+            <converters:ImageListToFirstImageConverter x:Key="ImageListToFirstImageConverter"/>
+            <converters:StockStatusConverter x:Key="StockStatusConverter"/>
+            <converters:StockStatusColorConverter x:Key="StockStatusColorConverter"/>
+            <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
+            <converters:IntToBoolConverter x:Key="IntToBoolConverter"/>
+            <converters:IntToInvertedVisibilityConverter x:Key="IntToInvertedVisibilityConverter"/>
+            <converters:StringToInfoBarSeverityConverter x:Key="StringToInfoBarSeverityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -31,6 +31,7 @@ namespace my_shop.App.Views
                     "Dashboard" => typeof(DashboardView),
                     "Products" => typeof(ProductsScreenView),
                     "Orders" => typeof(OrdersScreenView),
+                    "Customers" => typeof(CustomersScreenView),
                     "Reports" => typeof(ReportScreenView),
                     "Config" => typeof(ConfigScreenView),
                     _ => typeof(DashboardView)

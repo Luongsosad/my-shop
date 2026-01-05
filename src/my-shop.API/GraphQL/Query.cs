@@ -1,5 +1,6 @@
 using HotChocolate;
 using HotChocolate.Data;
+using Microsoft.EntityFrameworkCore;
 using my_shop.Application.DTOs;
 using my_shop.Application.Interfaces;
 using my_shop.Domain.Entities;
@@ -8,13 +9,13 @@ namespace my_shop.API.GraphQL;
 
 public class Query
 {
-    // Product Queries
+    // Product Queries - Filter out deleted products
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public async Task<IQueryable<Product>> GetProducts([Service] IProductService productService)
+    public IQueryable<Product> GetProducts([Service] IApplicationDbContext context)
     {
-        return await productService.GetProductsAsync();
+        return context.Products.Where(p => !p.IsDeleted);
     }
 
     // Category Queries
@@ -26,6 +27,15 @@ public class Query
         return context.Categories;
     }
 
+    // Customer Queries - Filter out deleted customers
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<Customer> GetCustomers([Service] IApplicationDbContext context)
+    {
+        return context.Customers.Where(c => !c.IsDeleted);
+    }
+
     // Order Queries
     [UseProjection]
     [UseFiltering]
@@ -33,6 +43,15 @@ public class Query
     public IQueryable<Order> GetOrders([Service] IApplicationDbContext context)
     {
         return context.Orders;
+    }
+
+    // Admin Queries
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<Admin> GetAdmins([Service] IApplicationDbContext context)
+    {
+        return context.Admins;
     }
 
     // Dashboard Statistics
