@@ -13,8 +13,8 @@ using my_shop.Infrastructure.Db;
 namespace my_shop.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(MyShopDbContext))]
-    [Migration("20251231143519_AddAdmin")]
-    partial class AddAdmin
+    [Migration("20260105154645_MergeMainAddAdminCustomer")]
+    partial class MergeMainAddAdminCustomer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,8 +36,10 @@ namespace my_shop.Infrastructure.Data.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -46,7 +48,9 @@ namespace my_shop.Infrastructure.Data.Migrations
                         .HasColumnName("email");
 
                     b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("is_active");
 
                     b.Property<string>("Name")
@@ -65,6 +69,9 @@ namespace my_shop.Infrastructure.Data.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("admins");
                 });
@@ -97,6 +104,46 @@ namespace my_shop.Infrastructure.Data.Migrations
                     b.ToTable("categories");
                 });
 
+            modelBuilder.Entity("my_shop.Domain.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("customer_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("phone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Phone");
+
+                    b.ToTable("customers");
+                });
+
             modelBuilder.Entity("my_shop.Domain.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -112,6 +159,10 @@ namespace my_shop.Infrastructure.Data.Migrations
                         .HasColumnName("created_time")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("customer_id");
+
                     b.Property<string>("ExtensionData")
                         .HasColumnType("jsonb")
                         .HasColumnName("extension_data");
@@ -123,6 +174,8 @@ namespace my_shop.Infrastructure.Data.Migrations
                         .HasColumnName("final_price");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("orders");
                 });
@@ -198,6 +251,12 @@ namespace my_shop.Infrastructure.Data.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("import_price");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -215,6 +274,16 @@ namespace my_shop.Infrastructure.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("products");
+                });
+
+            modelBuilder.Entity("my_shop.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("my_shop.Domain.Entities.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("my_shop.Domain.Entities.OrderItem", b =>
@@ -249,6 +318,11 @@ namespace my_shop.Infrastructure.Data.Migrations
             modelBuilder.Entity("my_shop.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("my_shop.Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("my_shop.Domain.Entities.Order", b =>
