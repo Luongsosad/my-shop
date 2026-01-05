@@ -57,7 +57,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"KhÙng th? t?i d? li?u: {ex.Message}";
+                ErrorMessage = $"Kh√¥ng th·ªÉ t·∫£i d·ªØ li·ªáu: {ex.Message}";
             }
             finally
             {
@@ -93,7 +93,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"KhÙng th? tÏm ki?m: {ex.Message}";
+                ErrorMessage = $"Kh√¥ng th·ªÉ t√¨m ki·∫øm: {ex.Message}";
             }
             finally
             {
@@ -117,7 +117,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"KhÙng th? t?o kh·ch h‡ng: {ex.Message}";
+                ErrorMessage = $"Kh√¥ng th·ªÉ t·∫°o kh√°ch h√†ng: {ex.Message}";
                 throw;
             }
             finally
@@ -147,7 +147,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"KhÙng th? c?p nh?t kh·ch h‡ng: {ex.Message}";
+                ErrorMessage = $"Kh√¥ng th·ªÉ c·∫≠p nh·∫≠t kh√°ch h√†ng: {ex.Message}";
                 throw;
             }
             finally
@@ -177,14 +177,14 @@ namespace my_shop.App.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "KhÙng th? xÛa kh·ch h‡ng";
+                    ErrorMessage = "Kh√¥ng th·ªÉ x√≥a kh√°ch h√†ng";
                     HasError = true;
                 }
             }
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"L?i khi xÛa kh·ch h‡ng: {ex.Message}";
+                ErrorMessage = $"L·ªói khi x√≥a kh√°ch h√†ng: {ex.Message}";
             }
             finally
             {

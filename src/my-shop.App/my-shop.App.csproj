@@ -35,10 +35,12 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="GraphQL.Client" Version="6.1.0" />
     <PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="6.1.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7175" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
@@ -53,6 +55,15 @@
     <Folder Include="Views\Dialogs\" />
   </ItemGroup>
   
+  <ItemGroup>
+    <ProjectReference Include="..\my-shop.Application\my-shop.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\SignupView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
     Explorer "Package and Publish" context menu entry to be enabled for this project even if

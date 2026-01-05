@@ -213,7 +213,37 @@ public class Mutation
         await context.SaveChangesAsync();
         return true;
     }
+
+    // Admin Mutations
+    public async Task<Admin> AdminSignup(
+        string email,
+        string password,
+        string name,
+        [Service] IAdminService adminService)
+    {
+        return await adminService.CreateAsync(email, password, name);
+    }
+
+    public async Task<AdminLoginResponse> AdminLogin(
+        string email,
+        string password,
+        [Service] IAdminService adminService)
+    {
+        var token = await adminService.SessionAsync(email, password);
+        return new AdminLoginResponse
+        {
+            Email = email,
+            Token = token
+        };
+    }
 }
 
 // Input types
 public record OrderItemInput(int ProductId, int Quantity, int Price);
+
+public class AdminLoginResponse
+{
+    public string Email { get; set; } = default!;
+    public string Token { get; set; } = default!;
+}
+

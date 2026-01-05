@@ -1,35 +1,37 @@
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace my_shop.Domain.Entities;
-
-[Table("admins")]
-public class Admin
+namespace my_shop.Domain.Entities
 {
-    [Key]
-    [Column("admin_id")]
-    public int Id { get; set; }
+    [Table("admins")]
+    public class Admin
+    {
+        [Key]
+        [Column("admin_id")]
+        public int Id { get; set; }
 
-    [Required]
-    [MaxLength(255)]
-    [Column("email")]
-    public string Email { get; set; } = string.Empty;
+        [Required]
+        [MaxLength(255)]
+        [Column("email")]
+        public string Email { get; set; } = null!;
 
-    [Required]
-    [MaxLength(255)]
-    [Column("password")]
-    public string Password { get; set; } = string.Empty;
+        [Required]
+        [MaxLength(255)]
+        [Column("password_hash")]
+        public string PasswordHash { get; set; } = null!;
 
-    [Required]
-    [MaxLength(255)]
-    [Column("name")]
-    public string Name { get; set; } = string.Empty;
+        [MaxLength(100)]
+        [Column("name")]
+        public string? Name { get; set; }
 
-    [Column("is_invoke")]
-    public bool IsInvoke { get; set; } = false;
+        [Column("is_active")]
+        public bool IsActive { get; set; } = true;
 
-    [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [Column("created_at")]
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-    public ICollection<Session> Sessions { get; set; } = new List<Session>();
+        [Column("updated_at")]
+        public DateTimeOffset? UpdatedAt { get; set; }
+    }
 }

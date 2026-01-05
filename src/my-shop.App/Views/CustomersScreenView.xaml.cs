@@ -64,9 +64,9 @@ namespace my_shop.App.Views
         {
             var dialog = new ContentDialog
             {
-                Title = customer == null ? "Th�m kh�ch h�ng m?i" : $"S?a kh�ch h�ng: {customer.Name}",
-                PrimaryButtonText = "L?u",
-                CloseButtonText = "H?y",
+                Title = customer == null ? "Thêm khách hàng mới" : $"Sửa khách hàng: {customer.Name}",
+                PrimaryButtonText = "Lưu",
+                CloseButtonText = "Hủy",
                 DefaultButton = ContentDialogButton.Primary,
                 XamlRoot = this.XamlRoot
             };
@@ -76,15 +76,15 @@ namespace my_shop.App.Views
             
             var nameBox = new TextBox 
             { 
-                Header = "T�n kh�ch h�ng *",
-                PlaceholderText = "Nh?p t�n kh�ch h�ng",
+                Header = "Tên khách hàng *",
+                PlaceholderText = "Nhập tên khách hàng",
                 Text = customer?.Name ?? ""
             };
             
             var phoneBox = new TextBox 
             { 
-                Header = "S? ?i?n tho?i *",
-                PlaceholderText = "Nh?p s? ?i?n tho?i",
+                Header = "Số điện thoại *",
+                PlaceholderText = "Nhập số điện thoại",
                 Text = customer?.Phone ?? ""
             };
 
@@ -100,14 +100,14 @@ namespace my_shop.App.Views
                 // Validate
                 if (string.IsNullOrWhiteSpace(nameBox.Text))
                 {
-                    await ShowErrorDialog("L?i", "T�n kh�ch h�ng kh�ng ???c ?? tr?ng");
+                    await ShowErrorDialog("Lỗi", "Tên khách hàng không được để trống");
                     await ShowCustomerDialog(customer);
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(phoneBox.Text))
                 {
-                    await ShowErrorDialog("L?i", "S? ?i?n tho?i kh�ng ???c ?? tr?ng");
+                    await ShowErrorDialog("Lỗi", "Số điện thoại không được để trống");
                     await ShowCustomerDialog(customer);
                     return;
                 }
@@ -127,7 +127,7 @@ namespace my_shop.App.Views
                 }
                 catch (Exception ex)
                 {
-                    await ShowErrorDialog("L?i", $"Kh�ng th? l?u kh�ch h�ng:\n\n{ex.Message}");
+                    await ShowErrorDialog("Lỗi", $"Không thể lưu khách hàng:\n\n{ex.Message}");
                 }
             }
         }
@@ -136,10 +136,10 @@ namespace my_shop.App.Views
         {
             var dialog = new ContentDialog
             {
-                Title = "X�c nh?n x�a",
-                Content = $"B?n c� ch?c ch?n mu?n x�a kh�ch h�ng '{customer.Name}'?\n\nH�nh ??ng n�y kh�ng th? ho�n t�c.",
-                PrimaryButtonText = "X�a",
-                CloseButtonText = "H?y",
+                Title = "Xác nhận xóa",
+                Content = $"Bạn có chắc chắn muốn xóa khách hàng '{customer.Name}'?\n\nHành động này không thể hoàn tác.",
+                PrimaryButtonText = "Xóa",
+                CloseButtonText = "Hủy",
                 DefaultButton = ContentDialogButton.Close,
                 XamlRoot = this.XamlRoot
             };
@@ -158,7 +158,7 @@ namespace my_shop.App.Views
             {
                 Title = title,
                 Content = message,
-                CloseButtonText = "?�ng",
+                CloseButtonText = "Đóng",
                 XamlRoot = this.XamlRoot
             };
             await dialog.ShowAsync();

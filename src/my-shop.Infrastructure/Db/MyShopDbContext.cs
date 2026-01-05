@@ -11,7 +11,6 @@ public class MyShopDbContext : DbContext, IApplicationDbContext
     }
 
     public DbSet<Admin> Admins { get; set; }
-    public DbSet<Session> Sessions { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
@@ -37,23 +36,8 @@ public class MyShopDbContext : DbContext, IApplicationDbContext
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         modelBuilder.Entity<Admin>()
-            .Property(a => a.IsInvoke)
-            .HasDefaultValue(false);
-
-        // Session configurations
-        modelBuilder.Entity<Session>()
-            .Property(s => s.CreatedAt)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-        modelBuilder.Entity<Session>()
-            .Property(s => s.IsActive)
+            .Property(a => a.IsActive)
             .HasDefaultValue(true);
-
-        modelBuilder.Entity<Session>()
-            .HasOne(s => s.Admin)
-            .WithMany(a => a.Sessions)
-            .HasForeignKey(s => s.AdminId)
-            .OnDelete(DeleteBehavior.Cascade);
 
         // Customer configurations
         modelBuilder.Entity<Customer>()

@@ -13,8 +13,8 @@ using my_shop.Infrastructure.Db;
 namespace my_shop.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(MyShopDbContext))]
-    [Migration("20251225133605_AddAdminSessionCustomerAndSoftDelete")]
-    partial class AddAdminSessionCustomerAndSoftDelete
+    [Migration("20260105154645_MergeMainAddAdminCustomer")]
+    partial class MergeMainAddAdminCustomer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace my_shop.Infrastructure.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at")
@@ -47,23 +47,26 @@ namespace my_shop.Infrastructure.Data.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("email");
 
-                    b.Property<bool>("IsInvoke")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_invoke");
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
-                        .HasColumnName("password");
+                        .HasColumnName("password_hash");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -273,48 +276,6 @@ namespace my_shop.Infrastructure.Data.Migrations
                     b.ToTable("products");
                 });
 
-            modelBuilder.Entity("my_shop.Domain.Entities.Session", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("session_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AdminId")
-                        .HasColumnType("integer")
-                        .HasColumnName("admin_id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expires_at");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_active");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("token");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdminId");
-
-                    b.ToTable("sessions");
-                });
-
             modelBuilder.Entity("my_shop.Domain.Entities.Order", b =>
                 {
                     b.HasOne("my_shop.Domain.Entities.Customer", "Customer")
@@ -352,22 +313,6 @@ namespace my_shop.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("my_shop.Domain.Entities.Session", b =>
-                {
-                    b.HasOne("my_shop.Domain.Entities.Admin", "Admin")
-                        .WithMany("Sessions")
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-                });
-
-            modelBuilder.Entity("my_shop.Domain.Entities.Admin", b =>
-                {
-                    b.Navigation("Sessions");
                 });
 
             modelBuilder.Entity("my_shop.Domain.Entities.Category", b =>

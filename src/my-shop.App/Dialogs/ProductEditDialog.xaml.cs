@@ -55,7 +55,7 @@ namespace my_shop.App.Dialogs
             if (product != null)
             {
                 // Edit mode
-                this.Title = $"S?a s?n ph?m: {product.Name}";
+                this.Title = $"Sửa sản phẩm: {product.Name}";
                 NameTextBox.Text = product.Name;
                 SkuTextBox.Text = product.Sku;
                 PriceNumberBox.Value = product.ImportPrice;
@@ -78,7 +78,7 @@ namespace my_shop.App.Dialogs
             else
             {
                 // Create mode
-                this.Title = "Th�m s?n ph?m m?i";
+                this.Title = "Thêm sản phẩm mới";
                 CategoryComboBox.SelectedIndex = 0;
             }
         }
@@ -87,31 +87,31 @@ namespace my_shop.App.Dialogs
         {
             if (string.IsNullOrWhiteSpace(NameTextBox.Text))
             {
-                errorMessage = "T�n s?n ph?m kh�ng ???c ?? tr?ng";
+                errorMessage = "Tên sản phẩm không được để trống";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(SkuTextBox.Text))
             {
-                errorMessage = "SKU kh�ng ???c ?? tr?ng";
+                errorMessage = "SKU không được để trống";
                 return false;
             }
 
             if (PriceNumberBox.Value <= 0)
             {
-                errorMessage = "Gi� nh?p ph?i l?n h?n 0";
+                errorMessage = "Giá nhập phải lớn hơn 0";
                 return false;
             }
 
             if (StockNumberBox.Value < 0)
             {
-                errorMessage = "T?n kho kh�ng ???c �m";
+                errorMessage = "Tồn kho không được âm";
                 return false;
             }
 
             if (CategoryComboBox.SelectedItem == null)
             {
-                errorMessage = "Vui l�ng ch?n danh m?c";
+                errorMessage = "Vui lòng chọn danh mục";
                 return false;
             }
 
@@ -258,8 +258,8 @@ namespace my_shop.App.Dialogs
                 if (UploadStatusText != null)
                 {
                     var errorMsg = ex.Message.Contains("401") 
-                        ? "? L?i: Ch?a c?u h�nh Cloudinary API key. Vui l�ng ki?m tra CLOUDINARY_URL trong environment variables."
-                        : $"? L?i upload: {ex.Message}";
+                        ? "⚠ Lỗi: Chưa cấu hình Cloudinary API key. Vui lòng kiểm tra CLOUDINARY_URL trong environment variables."
+                        : $"⚠ Lỗi upload: {ex.Message}";
                     
                     UploadStatusText.Text = errorMsg;
                     UploadStatusText.Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Red);
@@ -276,7 +276,7 @@ namespace my_shop.App.Dialogs
                     // Restore original content
                     var originalPanel = new StackPanel { Orientation = Orientation.Horizontal };
                     originalPanel.Children.Add(new FontIcon { Glyph = "\uE8B7", FontSize = 16, Margin = new Thickness(0, 0, 8, 0) });
-                    originalPanel.Children.Add(new TextBlock { Text = "Ch?n ?nh t? m�y t�nh" });
+                    originalPanel.Children.Add(new TextBlock { Text = "Chọn ảnh từ máy tính" });
                     UploadImageButton.Content = originalPanel;
                 }
             }

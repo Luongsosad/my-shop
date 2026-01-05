@@ -1,0 +1,140 @@
+﻿<UserControl
+    x:Class="my_shop.App.Views.SignupView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel 
+            Padding="0,16,0,24" 
+            Spacing="20"
+            Width="500">
+
+            <!-- Header Section -->
+            <StackPanel Spacing="8">
+                <TextBlock 
+                    Text="Create Your Account" 
+                    FontSize="24" 
+                    FontWeight="SemiBold"
+                    Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                <TextBlock 
+                    Text="Fill in the details below to get started" 
+                    FontSize="13"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            </StackPanel>
+
+            <!-- Full Name Field -->
+            <StackPanel Spacing="6">
+                <TextBlock 
+                    Text="Full Name" 
+                    FontSize="14"
+                    FontWeight="Medium"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                <TextBox
+                    PlaceholderText="Enter your full name"
+                    Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    CornerRadius="8"
+                    Height="40"
+                    BorderThickness="1.5"/>
+            </StackPanel>
+
+            <!-- Email Field -->
+            <StackPanel Spacing="6">
+                <TextBlock 
+                    Text="Email Address" 
+                    FontSize="14"
+                    FontWeight="Medium"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                <TextBox
+                    PlaceholderText="name@example.com"
+                    Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    CornerRadius="8"
+                    Height="40"
+                    BorderThickness="1.5"
+                    InputScope="EmailSmtpAddress"/>
+            </StackPanel>
+
+            <!-- Password Field -->
+            <StackPanel Spacing="6">
+                <TextBlock 
+                    Text="Password" 
+                    FontSize="14"
+                    FontWeight="Medium"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                <Grid>
+                    <PasswordBox
+                        x:Name="PasswordBox"
+                        PlaceholderText="Create a strong password"
+                        Password="{Binding Password, Mode=TwoWay}"
+                        CornerRadius="8"
+                        Height="40"
+                        BorderThickness="1.5"
+                        PasswordRevealMode="Hidden"
+                        PasswordChanged="PasswordBox_PasswordChanged"/>
+
+                    <!-- Password Reveal Button -->
+                    <Button
+                        x:Name="RevealButton"
+                        Click="RevealButton_Click"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,8,0"
+                        CornerRadius="4"
+                        Visibility="Collapsed">
+                        <FontIcon 
+                            x:Name="EyeIcon"
+                            Glyph="&#xE052;" 
+                            FontSize="16"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    </Button>
+                </Grid>
+            </StackPanel>
+
+            <!-- Password Requirements -->
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="12">
+                <StackPanel Spacing="6">
+                    <TextBlock 
+                        Text="Password must contain:" 
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <StackPanel Spacing="4">
+                        <TextBlock 
+                            Text="• At least 8 characters" 
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock 
+                            Text="• One uppercase letter" 
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock 
+                            Text="• One lowercase letter" 
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock 
+                            Text="• One number" 
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Terms and Conditions -->
+            <CheckBox 
+                FontWeight="SemiBold"
+                Content="I agree to the Terms of Service and Privacy Policy"
+                IsChecked="{Binding AcceptTerms, Mode=TwoWay}"
+                FontSize="13"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -74,18 +74,18 @@ public static class DbInitializer
                         new Admin 
                         { 
                             Email = "admin@myshop.com", 
-                            Password = "Admin@123", // In production, this should be hashed
+                            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                             Name = "Super Admin",
-                            IsInvoke = true,
-                            CreatedAt = DateTime.UtcNow
+                            IsActive = true,
+                            CreatedAt = DateTimeOffset.UtcNow
                         },
                         new Admin 
                         { 
                             Email = "manager@myshop.com", 
-                            Password = "Manager@123",
+                            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Manager@123"),
                             Name = "Shop Manager",
-                            IsInvoke = false,
-                            CreatedAt = DateTime.UtcNow
+                            IsActive = true,
+                            CreatedAt = DateTimeOffset.UtcNow
                         }
                     };
                     await context.Admins.AddRangeAsync(admins);
@@ -110,16 +110,16 @@ public static class DbInitializer
                     Console.WriteLine("?? Seeding customers...");
                     var customers = new List<Customer>
                     {
-                        new Customer { Name = "Nguy?n V?n A", Phone = "0901234567", IsDeleted = false },
-                        new Customer { Name = "Tr?n Th? B", Phone = "0912345678", IsDeleted = false },
-                        new Customer { Name = "L� V?n C", Phone = "0923456789", IsDeleted = false },
-                        new Customer { Name = "Ph?m Th? D", Phone = "0934567890", IsDeleted = false },
-                        new Customer { Name = "Ho�ng V?n E", Phone = "0945678901", IsDeleted = false },
-                        new Customer { Name = "V? Th? F", Phone = "0956789012", IsDeleted = false },
-                        new Customer { Name = "??ng V?n G", Phone = "0967890123", IsDeleted = false },
-                        new Customer { Name = "B�i Th? H", Phone = "0978901234", IsDeleted = false },
-                        new Customer { Name = "V� V?n I", Phone = "0989012345", IsDeleted = false },
-                        new Customer { Name = "?? Th? K", Phone = "0990123456", IsDeleted = false }
+                        new Customer { Name = "Nguyễn Văn A", Phone = "0901234567", IsDeleted = false },
+                        new Customer { Name = "Trần Thị B", Phone = "0912345678", IsDeleted = false },
+                        new Customer { Name = "Lê Văn C", Phone = "0923456789", IsDeleted = false },
+                        new Customer { Name = "Phạm Thị D", Phone = "0934567890", IsDeleted = false },
+                        new Customer { Name = "Hoàng Văn E", Phone = "0945678901", IsDeleted = false },
+                        new Customer { Name = "Vũ Thị F", Phone = "0956789012", IsDeleted = false },
+                        new Customer { Name = "Đặng Văn G", Phone = "0967890123", IsDeleted = false },
+                        new Customer { Name = "Bùi Thị H", Phone = "0978901234", IsDeleted = false },
+                        new Customer { Name = "Võ Văn I", Phone = "0989012345", IsDeleted = false },
+                        new Customer { Name = "Đỗ Thị K", Phone = "0990123456", IsDeleted = false }
                     };
                     await context.Customers.AddRangeAsync(customers);
                     await context.SaveChangesAsync();
