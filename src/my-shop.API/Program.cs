@@ -6,9 +6,8 @@ using my_shop.API.GraphQL;
 using my_shop.Application.Interfaces;
 using my_shop.Application.Services;
 using my_shop.Infrastructure.Data;
-using my_shop.Infrastructure.Services;
-using my_shop.API.GraphQL;
 using my_shop.Infrastructure.Db;
+using my_shop.Infrastructure.Services;
 using System.IO;
 using System.Text;
 
@@ -73,60 +72,7 @@ builder.Services.AddScoped<IApplicationDbContext>(provider =>
 // Register Application services
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IAdminService, AdminService>();
-
-// Add Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
-
-            ValidateIssuer = true,
-            ValidIssuer = jwtIssuer,
-
-            ValidateAudience = true,
-            ValidAudience = jwtAudience,
-
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnTokenValidated = context =>
-            {
-                var email = context.Principal?.FindFirst("email")?.Value;
-                Console.WriteLine($"Token verified: {email}");
-                return Task.CompletedTask;
-            },
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine($"Auth failed: {context.Exception.Message}");
-                return Task.CompletedTask;
-            }
-        };
-    });
-
-builder.Services.AddAuthorization();
-
-// Cors
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
-});
-
-// Register Cloudinary service
-var cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
-if (!string.IsNullOrEmpty(cloudinaryUrl))
-{
-    builder.Services.AddSingleton<ICloudinaryService>(sp => new CloudinaryService(cloudinaryUrl));
-}
+builder.Services.AddScoped<IReportService, ReportService>();
 
 // Register GraphQL
 builder.Services
@@ -135,7 +81,17 @@ builder.Services
     .AddMutationType<Mutation>()
     .AddProjections()
     .AddFiltering()
-    .AddSorting();
+    .AddSorting()
+    .AddType<DateTimeType>()
+    .AddErrorFilter(error =>
+    {
+        Console.WriteLine($"GraphQL Error: {error.Message}");
+        if (error.Exception != null)
+        {
+            Console.WriteLine($"Exception: {error.Exception}");
+        }
+        return error;
+    });
 
 var app = builder.Build();
 
