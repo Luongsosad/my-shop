@@ -11,8 +11,11 @@ using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
 using my_shop.App.Helpers;
 using my_shop.App.Services;
+using my_shop.App.Services.LoginService;
 using my_shop.App.ViewModels;
 using my_shop.App.Views;
+using my_shop.Application.Interfaces;
+using my_shop.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -85,6 +88,7 @@ namespace my_shop.App
                 {
                     client.BaseAddress = new Uri("http://localhost:5000");
                 });
+                services.AddTransient<my_shop.App.Services.OrdersService.OrderService>();
             }).Build();
         }
 

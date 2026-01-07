@@ -2,6 +2,7 @@
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
 using my_shop.App.Models;
+using my_shop.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using static my_shop.Application.DTOs.AdminSignupDto;
 using static System.Net.WebRequestMethods;
 
-namespace my_shop.App.Services
+namespace my_shop.App.Services.LoginService
 {
     public class SignupService : ISignupService
     {

@@ -19,5 +19,15 @@ public class Order
     [Column("extension_data", TypeName = "jsonb")]
     public string? ExtensionData { get; set; }
 
+    [Column("customer_id")]
+    public int? CustomerId { get; set; }
+
+    [ForeignKey(nameof(CustomerId))]
+    public Customer? Customer { get; set; }
+
+    [Column("status")]
+    [MaxLength(50)]
+    public string Status { get; set; } = "created";
+
     public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

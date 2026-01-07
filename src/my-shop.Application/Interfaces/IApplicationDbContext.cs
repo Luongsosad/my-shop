@@ -10,6 +10,7 @@ public interface IApplicationDbContext
     DbSet<Category> Categories { get; }
     DbSet<Order> Orders { get; }
     DbSet<OrderItem> OrderItems { get; }
+    DbSet<Customer> Customers { get;  }
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

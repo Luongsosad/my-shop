@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace my_shop.App.Services
+namespace my_shop.App.Services.LoginService
 {
     public interface IAuthService
     {

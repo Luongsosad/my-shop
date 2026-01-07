@@ -6,6 +6,7 @@
     xmlns:local="using:my_shop.App">
     <Application.Resources>
         <ResourceDictionary>
+            <x:Double x:Key="ContentDialogMaxWidth">2000</x:Double>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <!-- Other merged dictionaries here -->

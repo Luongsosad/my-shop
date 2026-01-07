@@ -1,5 +1,6 @@
 using HotChocolate;
 using HotChocolate.Data;
+using Microsoft.EntityFrameworkCore;
 using my_shop.Application.DTOs;
 using my_shop.Application.Interfaces;
 using my_shop.Domain.Entities;
@@ -32,7 +33,18 @@ public class Query
     [UseSorting]
     public IQueryable<Order> GetOrders([Service] IApplicationDbContext context)
     {
-        return context.Orders;
+        return context.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product);
+    }
+
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<Customer> GetCustomers([Service] IApplicationDbContext context)
+    {
+        return context.Customers.Where(c => !c.IsDeleted);
     }
 
     // Dashboard Statistics
@@ -65,4 +77,6 @@ public class Query
     {
         return await dashboardService.GetBestSellingProductsAsync(count);
     }
+
+
 }

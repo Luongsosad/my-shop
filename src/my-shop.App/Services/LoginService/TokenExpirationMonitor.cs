@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace my_shop.App.Services;
+namespace my_shop.App.Services.LoginService;
 
 public interface ITokenExpirationMonitor
 {
