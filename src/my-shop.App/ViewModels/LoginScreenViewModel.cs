@@ -5,16 +5,8 @@ using Microsoft.UI.Xaml.Controls;
 using my_shop.App.Services;
 using my_shop.App.Views;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.Storage;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace my_shop.App.ViewModels
 {
@@ -25,15 +17,20 @@ namespace my_shop.App.ViewModels
         private readonly ITokenExpirationMonitor _tokenMonitor;
         private readonly ICredentialsService _credentialsService;
         public event Action<Type>? NavigateRequested;
+        
         [ObservableProperty]
         private string _username;
+        
         [ObservableProperty]
         private string _password;
+        
         [ObservableProperty]
         private bool _rememberMe;
+        
         public ICommand LoginCommand { get; }
         public ICommand ForgotPasswordCommand { get; }
         public ICommand SignupCommand { get; }
+        
         public LoginScreenViewModel(IAuthService authService, ITokenExpirationMonitor tokenMonitor, ICredentialsService credentialsService)
         {
             _authService = authService;
@@ -59,11 +56,8 @@ namespace my_shop.App.ViewModels
                     Password = password;
                     RememberMe = rememberMe;
                 }
-                else
-                {
-                }
             }
-            catch (Exception ex)
+            catch
             {
             }
         }
@@ -88,11 +82,11 @@ namespace my_shop.App.ViewModels
                 {
                     await _credentialsService.ClearCredentialsAsync();
                 }
+                
                 _tokenMonitor.StartMonitoring();
                 NavigateRequested?.Invoke(typeof(MainLayout));
-
             }
-            catch (Exception ex)
+            catch
             {
                 var dialog = new ContentDialog
                 {
@@ -105,7 +99,6 @@ namespace my_shop.App.ViewModels
                 await dialog.ShowAsync();
             }
         }
-
 
         private async Task ExecuteForgotPassword()
         {
@@ -122,32 +115,78 @@ namespace my_shop.App.ViewModels
 
         private async Task ExecuteSignup()
         {
-            var vm = App.GetService<SignupViewModel>();
-            var view = new SignupView
+            try
             {
-                DataContext = vm
-            };
+                var vm = App.GetService<SignupViewModel>();
+                var view = new SignupView
+                {
+                    DataContext = vm
+                };
 
-            var dialog = new ContentDialog
+                var dialog = new ContentDialog
+                {
+                    Title = "Create Account",
+                    Content = view,
+                    PrimaryButtonText = "Sign Up",
+                    CloseButtonText = "Cancel",
+                    XamlRoot = MainXamlRoot,
+                    RequestedTheme = ElementTheme.Light
+                };
+
+                dialog.PrimaryButtonClick += async (_, args) =>
+                {
+                    var deferral = args.GetDeferral();
+                    
+                    try
+                    {
+                        await vm.SignupCommand.ExecuteAsync(null);
+                        deferral.Complete();
+                        await Task.Delay(100);
+                        
+                        var successDialog = new ContentDialog
+                        {
+                            Title = "Signup Successful",
+                            Content = "Your account has been created successfully! Please login.",
+                            CloseButtonText = "OK",
+                            XamlRoot = MainXamlRoot,
+                            RequestedTheme = ElementTheme.Light
+                        };
+                        
+                        await successDialog.ShowAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        args.Cancel = true;
+                        deferral.Complete();
+                        await Task.Delay(100);
+                        
+                        var errorDialog = new ContentDialog
+                        {
+                            Title = "Signup Failed",
+                            Content = $"Failed to create account:\n\n{ex.Message}",
+                            CloseButtonText = "OK",
+                            XamlRoot = MainXamlRoot,
+                            RequestedTheme = ElementTheme.Light
+                        };
+                        await errorDialog.ShowAsync();
+                    }
+                };
+
+                await dialog.ShowAsync();
+            }
+            catch (Exception ex)
             {
-                Title = "Create Account",
-                Content = view,
-                PrimaryButtonText = "Sign Up",
-                CloseButtonText = "Cancel",
-                XamlRoot = MainXamlRoot,
-                RequestedTheme = ElementTheme.Light
-            };
-
-            dialog.PrimaryButtonClick += async (_, __) =>
-            {
-                await vm.SignupCommand.ExecuteAsync(null);
-            };
-
-            await dialog.ShowAsync();
+                var errorDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = $"An error occurred:\n\n{ex.Message}",
+                    CloseButtonText = "OK",
+                    XamlRoot = MainXamlRoot,
+                    RequestedTheme = ElementTheme.Light
+                };
+                await errorDialog.ShowAsync();
+            }
         }
-
-
-
 
         partial void OnUsernameChanged(string value)
         {

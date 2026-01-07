@@ -13,7 +13,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Load .env file from root directory
 var envPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
 if (System.IO.File.Exists(envPath))
 {
@@ -28,13 +27,11 @@ if (System.IO.File.Exists(envPath))
     }
 }
 
-// Read DATABASE_URL from environment variable
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl) && databaseUrl.StartsWith("postgresql://"))
 {
-    // Parse PostgreSQL URL format
     var uri = new Uri(databaseUrl);
     var userInfo = uri.UserInfo.Split(':');
     var port = uri.Port > 0 ? uri.Port : 5432;
@@ -58,7 +55,6 @@ var jwtSecretKey = builder.Configuration["JwtSettings:SecretKey"]
 var jwtIssuer = builder.Configuration["JwtSettings:Issuer"] ?? "myshop.api";
 var jwtAudience = builder.Configuration["JwtSettings:Audience"] ?? "myshop.client";
 
-// Register Infrastructure services
 var dataSourceBuilder = new Npgsql.NpgsqlDataSourceBuilder(connectionString);
 dataSourceBuilder.EnableDynamicJson();
 var dataSource = dataSourceBuilder.Build();
@@ -69,12 +65,11 @@ builder.Services.AddDbContext<MyShopDbContext>(options =>
 builder.Services.AddScoped<IApplicationDbContext>(provider => 
     provider.GetRequiredService<MyShopDbContext>());
 
-// Register Application services
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
-// Register GraphQL
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
@@ -95,7 +90,6 @@ builder.Services
 
 var app = builder.Build();
 
-// Initialize database with seeding
 try
 {
     await DbInitializer.InitializeAsync(app.Services);
@@ -106,10 +100,5 @@ catch (Exception ex)
     return;
 }
 
-//app.UseCors();
-//app.UseAuthentication(); // Must be before UseAuthorization
-//app.UseAuthorization();
-
 app.MapGraphQL();
-
 app.Run();
