@@ -4,8 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using my_shop.Application.Interfaces;
 using my_shop.Domain.Entities;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -40,11 +38,7 @@ public class AdminService : IAdminService
         };
 
         _context.Admins.Add(admin);
-        Console.WriteLine("Before Save");
-        Debug.WriteLine("Before Save");
-        var rows = await _context.SaveChangesAsync();
-        Console.WriteLine($"Rows affected: {rows}");
-        Debug.WriteLine($"Rows affected: {rows}");
+        await _context.SaveChangesAsync();
         return admin;
     }
 
@@ -77,13 +71,13 @@ public class AdminService : IAdminService
 
         var claims = new[]
         {
-                new Claim(JwtRegisteredClaimNames.Sub, admin.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, admin.Email),
-                new Claim(JwtRegisteredClaimNames.Name, admin.Name ?? admin.Email),
-                new Claim(ClaimTypes.Role, "admin"),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("admin_id", admin.Id.ToString())
-            };
+            new Claim(JwtRegisteredClaimNames.Sub, admin.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, admin.Email),
+            new Claim(JwtRegisteredClaimNames.Name, admin.Name ?? admin.Email),
+            new Claim(ClaimTypes.Role, "admin"),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim("admin_id", admin.Id.ToString())
+        };
 
         var token = new JwtSecurityToken(
             issuer: issuer,
@@ -94,11 +88,6 @@ public class AdminService : IAdminService
             signingCredentials: creds
         );
 
-        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-        Console.WriteLine($"JWT Token generated for {admin.Email}");
-        Debug.WriteLine($"Token: {tokenString}");
-
-        return tokenString;
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

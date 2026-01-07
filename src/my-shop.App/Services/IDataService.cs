@@ -1,4 +1,5 @@
 ﻿using my_shop.App.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,14 +23,18 @@ namespace my_shop.App.Services
         // Category operations
         Task<List<CategoryModel>> GetCategoriesAsync();
         
-    // Customer operations
-    Task<List<CustomerModel>> GetCustomersAsync();
-    Task<CustomerModel?> GetCustomerByIdAsync(int id);
-    Task<CustomerModel> CreateCustomerAsync(string name, string phone);
-    Task<CustomerModel> UpdateCustomerAsync(int id, string name, string phone);
-    Task<bool> DeleteCustomerAsync(int id);
-    
-    // Order operations
-    Task<OrderModel> CreateOrderAsync(CreateOrderModel model);
-}
+        // Customer operations
+        Task<List<CustomerModel>> GetCustomersAsync();
+        Task<CustomerModel?> GetCustomerByIdAsync(int id);
+        Task<CustomerModel> CreateCustomerAsync(string name, string phone);
+        Task<CustomerModel> UpdateCustomerAsync(int id, string name, string phone);
+        Task<bool> DeleteCustomerAsync(int id);
+        
+        // Order operations
+        Task<OrderModel> CreateOrderAsync(CreateOrderModel model);
+        
+        // Report methods
+        Task<List<ProductSalesReport>> GetProductSalesReportAsync(DateTime startDate, DateTime endDate, ReportPeriodType periodType, int topProducts = 10);
+        Task<RevenueProfitReport> GetRevenueProfitReportAsync(DateTime startDate, DateTime endDate, ReportPeriodType periodType);
+    }
 }

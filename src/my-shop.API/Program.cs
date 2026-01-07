@@ -6,15 +6,13 @@ using my_shop.API.GraphQL;
 using my_shop.Application.Interfaces;
 using my_shop.Application.Services;
 using my_shop.Infrastructure.Data;
-using my_shop.Infrastructure.Services;
-using my_shop.API.GraphQL;
 using my_shop.Infrastructure.Db;
+using my_shop.Infrastructure.Services;
 using System.IO;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Load .env file from root directory
 var envPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
 if (System.IO.File.Exists(envPath))
 {
@@ -29,13 +27,11 @@ if (System.IO.File.Exists(envPath))
     }
 }
 
-// Read DATABASE_URL from environment variable
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 string connectionString;
 
 if (!string.IsNullOrEmpty(databaseUrl) && databaseUrl.StartsWith("postgresql://"))
 {
-    // Parse PostgreSQL URL format
     var uri = new Uri(databaseUrl);
     var userInfo = uri.UserInfo.Split(':');
     var port = uri.Port > 0 ? uri.Port : 5432;
@@ -59,7 +55,6 @@ var jwtSecretKey = builder.Configuration["JwtSettings:SecretKey"]
 var jwtIssuer = builder.Configuration["JwtSettings:Issuer"] ?? "myshop.api";
 var jwtAudience = builder.Configuration["JwtSettings:Audience"] ?? "myshop.client";
 
-// Register Infrastructure services
 var dataSourceBuilder = new Npgsql.NpgsqlDataSourceBuilder(connectionString);
 dataSourceBuilder.EnableDynamicJson();
 var dataSource = dataSourceBuilder.Build();
@@ -70,76 +65,31 @@ builder.Services.AddDbContext<MyShopDbContext>(options =>
 builder.Services.AddScoped<IApplicationDbContext>(provider => 
     provider.GetRequiredService<MyShopDbContext>());
 
-// Register Application services
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 
-// Add Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
-
-            ValidateIssuer = true,
-            ValidIssuer = jwtIssuer,
-
-            ValidateAudience = true,
-            ValidAudience = jwtAudience,
-
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnTokenValidated = context =>
-            {
-                var email = context.Principal?.FindFirst("email")?.Value;
-                Console.WriteLine($"Token verified: {email}");
-                return Task.CompletedTask;
-            },
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine($"Auth failed: {context.Exception.Message}");
-                return Task.CompletedTask;
-            }
-        };
-    });
-
-builder.Services.AddAuthorization();
-
-// Cors
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
-});
-
-// Register Cloudinary service
-var cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
-if (!string.IsNullOrEmpty(cloudinaryUrl))
-{
-    builder.Services.AddSingleton<ICloudinaryService>(sp => new CloudinaryService(cloudinaryUrl));
-}
-
-// Register GraphQL
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
     .AddMutationType<Mutation>()
     .AddProjections()
     .AddFiltering()
-    .AddSorting();
+    .AddSorting()
+    .AddType<DateTimeType>()
+    .AddErrorFilter(error =>
+    {
+        Console.WriteLine($"GraphQL Error: {error.Message}");
+        if (error.Exception != null)
+        {
+            Console.WriteLine($"Exception: {error.Exception}");
+        }
+        return error;
+    });
 
 var app = builder.Build();
 
-// Initialize database with seeding
 try
 {
     await DbInitializer.InitializeAsync(app.Services);
@@ -150,10 +100,5 @@ catch (Exception ex)
     return;
 }
 
-//app.UseCors();
-//app.UseAuthentication(); // Must be before UseAuthorization
-//app.UseAuthorization();
-
 app.MapGraphQL();
-
 app.Run();

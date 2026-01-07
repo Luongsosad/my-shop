@@ -8,6 +8,8 @@ public class MyShopDbContext : DbContext, IApplicationDbContext
 {
     public MyShopDbContext(DbContextOptions<MyShopDbContext> options) : base(options)
     {
+        // Configure Npgsql to handle timestamp with time zone
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
     public DbSet<Admin> Admins { get; set; }

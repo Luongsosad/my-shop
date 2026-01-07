@@ -84,4 +84,64 @@ public class Query
     {
         return await dashboardService.GetBestSellingProductsAsync(count);
     }
+
+    // Report Queries
+    public async Task<List<ProductSalesReportDto>> GetProductSalesReport(
+        [Service] IReportService reportService,
+        DateTime startDate,
+        DateTime endDate,
+        ReportPeriodType periodType = ReportPeriodType.Daily,
+        int topProducts = 10)
+    {
+        try
+        {
+            Console.WriteLine($"[GetProductSalesReport] StartDate: {startDate:yyyy-MM-dd HH:mm:ss}, EndDate: {endDate:yyyy-MM-dd HH:mm:ss}, PeriodType: {periodType}");
+            
+            var filter = new ReportFilterDto
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                PeriodType = periodType
+            };
+            var result = await reportService.GetProductSalesReportAsync(filter, topProducts);
+            
+            Console.WriteLine($"[GetProductSalesReport] Returned {result.Count} products");
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[GetProductSalesReport] ERROR: {ex.Message}");
+            Console.WriteLine($"[GetProductSalesReport] Stack: {ex.StackTrace}");
+            throw;
+        }
+    }
+
+    public async Task<RevenueProfitReportDto> GetRevenueProfitReport(
+        [Service] IReportService reportService,
+        DateTime startDate,
+        DateTime endDate,
+        ReportPeriodType periodType = ReportPeriodType.Daily)
+    {
+        try
+        {
+            Console.WriteLine($"[GetRevenueProfitReport] StartDate: {startDate:yyyy-MM-dd HH:mm:ss}, EndDate: {endDate:yyyy-MM-dd HH:mm:ss}, PeriodType: {periodType}");
+            
+            var filter = new ReportFilterDto
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                PeriodType = periodType
+            };
+            var result = await reportService.GetRevenueProfitReportAsync(filter);
+            
+            Console.WriteLine($"[GetRevenueProfitReport] TotalRevenue: {result.TotalRevenue}, TotalOrders: {result.TotalOrders}");
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[GetRevenueProfitReport] ERROR: {ex.Message}");
+            Console.WriteLine($"[GetRevenueProfitReport] Stack: {ex.StackTrace}");
+            throw;
+        }
+    }
 }

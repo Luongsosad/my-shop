@@ -150,7 +150,9 @@ public static class DbInitializer
                 new Category { Name = "Clothing", Description = "Fashion and apparel" },
                 new Category { Name = "Books", Description = "Books and magazines" },
                 new Category { Name = "Home & Kitchen", Description = "Home appliances and kitchenware" },
-                new Category { Name = "Sports", Description = "Sports equipment and accessories" }
+                new Category { Name = "Sports", Description = "Sports equipment and accessories" },
+                new Category { Name = "Toys & Games", Description = "Toys and gaming products" },
+                new Category { Name = "Beauty & Health", Description = "Beauty and health products" }
             };
             await context.Categories.AddRangeAsync(categories);
             await context.SaveChangesAsync();
@@ -170,6 +172,8 @@ public static class DbInitializer
             var books = await context.Categories.FirstAsync(c => c.Name == "Books");
             var homeKitchen = await context.Categories.FirstAsync(c => c.Name == "Home & Kitchen");
             var sports = await context.Categories.FirstAsync(c => c.Name == "Sports");
+            var toys = await context.Categories.FirstAsync(c => c.Name == "Toys & Games");
+            var beauty = await context.Categories.FirstAsync(c => c.Name == "Beauty & Health");
 
             var products = new List<Product>
             {

@@ -795,6 +795,139 @@ namespace my_shop.App.Services
             }
         }
 
+        public async Task<List<ProductSalesReport>> GetProductSalesReportAsync(DateTime startDate, DateTime endDate, ReportPeriodType periodType, int topProducts = 10)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"=== GetProductSalesReportAsync Called ===");
+                System.Diagnostics.Debug.WriteLine($"StartDate: {startDate:yyyy-MM-dd}");
+                System.Diagnostics.Debug.WriteLine($"EndDate: {endDate:yyyy-MM-dd}");
+                System.Diagnostics.Debug.WriteLine($"PeriodType: {periodType}");
+                
+                // Ensure dates are treated as UTC
+                var startDateUtc = DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
+                var endDateUtc = DateTime.SpecifyKind(endDate, DateTimeKind.Utc);
+                
+                var query = new GraphQLRequest
+                {
+                    Query = @"
+                        query($startDate: DateTime!, $endDate: DateTime!, $periodType: ReportPeriodType!, $topProducts: Int!) {
+                            productSalesReport(startDate: $startDate, endDate: $endDate, periodType: $periodType, topProducts: $topProducts) {
+                                productId
+                                productName
+                                sku
+                                totalQuantitySold
+                                totalRevenue
+                                dataPoints {
+                                    period
+                                    date
+                                    quantitySold
+                                }
+                            }
+                        }",
+                    Variables = new { 
+                        startDate = startDateUtc.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                        endDate = endDateUtc.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                        periodType = periodType.ToString().ToUpper(),
+                        topProducts 
+                    }
+                };
+
+                System.Diagnostics.Debug.WriteLine($"Sending GraphQL query to API...");
+                var response = await _graphQLClient.SendQueryAsync<ProductSalesReportResponse>(query);
+                
+                if (response.Errors != null && response.Errors.Length > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine($"!!! GraphQL Errors:");
+                    foreach (var error in response.Errors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"  - {error.Message}");
+                    }
+                    return new List<ProductSalesReport>();
+                }
+
+                var result = response.Data?.ProductSalesReport ?? new List<ProductSalesReport>();
+                System.Diagnostics.Debug.WriteLine($"Success! Got {result.Count} product sales records");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"!!! EXCEPTION in GetProductSalesReportAsync:");
+                System.Diagnostics.Debug.WriteLine($"  Message: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"  Type: {ex.GetType().Name}");
+                System.Diagnostics.Debug.WriteLine($"  Stack: {ex.StackTrace}");
+                return new List<ProductSalesReport>();
+            }
+        }
+
+        public async Task<RevenueProfitReport> GetRevenueProfitReportAsync(DateTime startDate, DateTime endDate, ReportPeriodType periodType)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"=== GetRevenueProfitReportAsync Called ===");
+                System.Diagnostics.Debug.WriteLine($"StartDate: {startDate:yyyy-MM-dd}");
+                System.Diagnostics.Debug.WriteLine($"EndDate: {endDate:yyyy-MM-dd}");
+                System.Diagnostics.Debug.WriteLine($"PeriodType: {periodType}");
+                
+                // Ensure dates are treated as UTC
+                var startDateUtc = DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
+                var endDateUtc = DateTime.SpecifyKind(endDate, DateTimeKind.Utc);
+                
+                var query = new GraphQLRequest
+                {
+                    Query = @"
+                        query($startDate: DateTime!, $endDate: DateTime!, $periodType: ReportPeriodType!) {
+                            revenueProfitReport(startDate: $startDate, endDate: $endDate, periodType: $periodType) {
+                                totalRevenue
+                                totalProfit
+                                totalCost
+                                totalOrders
+                                averageOrderValue
+                                profitMargin
+                                dataPoints {
+                                    period
+                                    date
+                                    revenue
+                                    profit
+                                    cost
+                                    orderCount
+                                }
+                            }
+                        }",
+                    Variables = new { 
+                        startDate = startDateUtc.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                        endDate = endDateUtc.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                        periodType = periodType.ToString().ToUpper()
+                    }
+                };
+
+                System.Diagnostics.Debug.WriteLine($"Sending GraphQL query to API...");
+                var response = await _graphQLClient.SendQueryAsync<RevenueProfitReportResponse>(query);
+                
+                if (response.Errors != null && response.Errors.Length > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine($"!!! GraphQL Errors:");
+                    foreach (var error in response.Errors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"  - {error.Message}");
+                    }
+                    return GetDefaultRevenueProfitReport();
+                }
+
+                var result = response.Data?.RevenueProfitReport ?? GetDefaultRevenueProfitReport();
+                System.Diagnostics.Debug.WriteLine($"Success! Total Revenue: {result.TotalRevenue}, Total Profit: {result.TotalProfit}");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"!!! EXCEPTION in GetRevenueProfitReportAsync:");
+                System.Diagnostics.Debug.WriteLine($"  Message: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"  Type: {ex.GetType().Name}");
+                System.Diagnostics.Debug.WriteLine($"  Stack: {ex.StackTrace}");
+                return GetDefaultRevenueProfitReport();
+            }
+        }
+
         private DashboardStats GetDefaultDashboardStats()
         {
             return new DashboardStats
@@ -803,6 +936,20 @@ namespace my_shop.App.Services
                 TodayOrders = 0,
                 TodayRevenue = 0,
                 LowStockCount = 0
+            };
+        }
+
+        private RevenueProfitReport GetDefaultRevenueProfitReport()
+        {
+            return new RevenueProfitReport
+            {
+                TotalRevenue = 0,
+                TotalProfit = 0,
+                TotalCost = 0,
+                TotalOrders = 0,
+                AverageOrderValue = 0,
+                ProfitMargin = 0,
+                DataPoints = new List<RevenueProfitDataPoint>()
             };
         }
 
@@ -976,6 +1123,18 @@ namespace my_shop.App.Services
         {
             [Newtonsoft.Json.JsonProperty("deleteCustomer")]
             public bool DeleteCustomer { get; set; }
+        }
+
+        private class ProductSalesReportResponse
+        {
+            [Newtonsoft.Json.JsonProperty("productSalesReport")]
+            public List<ProductSalesReport>? ProductSalesReport { get; set; }
+        }
+
+        private class RevenueProfitReportResponse
+        {
+            [Newtonsoft.Json.JsonProperty("revenueProfitReport")]
+            public RevenueProfitReport? RevenueProfitReport { get; set; }
         }
     }
 }

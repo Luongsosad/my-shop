@@ -112,7 +112,7 @@ namespace my_shop.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -152,7 +152,7 @@ namespace my_shop.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_time")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
