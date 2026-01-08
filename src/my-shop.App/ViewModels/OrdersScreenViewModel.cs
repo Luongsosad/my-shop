@@ -209,6 +209,9 @@ namespace my_shop.App.ViewModels
                 DefaultButton = ContentDialogButton.Close
             };
 
+            dialog.Resources["ContentDialogMaxWidth"] = 575d;
+            dialog.Resources["ContentDialogMinWidth"] = 400d;
+
             Debug.WriteLine("Debug 1");
 
             var scrollViewer = new ScrollViewer

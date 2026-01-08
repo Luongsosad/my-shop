@@ -4,28 +4,235 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:my_shop.App.Views"
     xmlns:vm="using:my_shop.App.ViewModels"
+    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+    xmlns:converters="using:my_shop.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <StackPanel Spacing="24" Padding="24">
-            <TextBlock Text="Reports &amp; Analytics" FontSize="32" FontWeight="Bold"/>
-            <TextBlock Text="View business insights and reports" 
-                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-            
-            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="8"
-                    Padding="24"
-                    Height="400">
-                <TextBlock Text="Reports screen will be implemented here" 
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Page.Resources>
+
+    <ScrollViewer>
+        <Grid Padding="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header Section -->
+            <StackPanel Grid.Row="0" Spacing="16" Margin="0,0,0,24">
+                <TextBlock Text="Reports &amp; Analytics" 
+                          FontSize="32" 
+                          FontWeight="Bold"/>
+                
+                <TextBlock Text="View business insights and reports" 
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                          FontSize="14"/>
+
+                <!-- Filters -->
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       CornerRadius="8"
+                       Padding="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                            <TextBlock Text="Start Date" FontSize="12" Margin="0,0,0,4"/>
+                            <CalendarDatePicker Date="{x:Bind ViewModel.StartDate, Mode=TwoWay}" 
+                                              Width="150"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                            <TextBlock Text="End Date" FontSize="12" Margin="0,0,0,4"/>
+                            <CalendarDatePicker Date="{x:Bind ViewModel.EndDate, Mode=TwoWay}" 
+                                              Width="150"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Margin="0,0,16,0">
+                            <TextBlock Text="Period" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{x:Bind ViewModel.PeriodTypes}"
+                                     SelectedItem="{x:Bind ViewModel.SelectedPeriodItem, Mode=TwoWay}"
+                                     DisplayMemberPath="Name"
+                                     Width="120"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="3" 
+                               Content="Apply Filter"
+                               Command="{x:Bind ViewModel.ApplyFilterCommand}"
+                               VerticalAlignment="Bottom"
+                               Style="{StaticResource AccentButtonStyle}"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <!-- Summary Cards -->
+            <Grid Grid.Row="1" Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Total Revenue Card -->
+                <Border Grid.Column="0" 
+                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       CornerRadius="8"
+                       Padding="16"
+                       Margin="0,0,8,0">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="💰 Total Revenue" 
+                                  FontSize="14" 
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="{x:Bind ViewModel.TotalRevenueText, Mode=OneWay}" 
+                                  FontSize="20" 
+                                  FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total Profit Card -->
+                <Border Grid.Column="1" 
+                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       CornerRadius="8"
+                       Padding="16"
+                       Margin="0,0,8,0">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="📈 Total Profit" 
+                                  FontSize="14" 
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="{x:Bind ViewModel.TotalProfitText, Mode=OneWay}" 
+                                  FontSize="20" 
+                                  FontWeight="Bold"
+                                  Foreground="#4CAF50"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total Orders Card -->
+                <Border Grid.Column="2" 
+                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       CornerRadius="8"
+                       Padding="16"
+                       Margin="0,0,8,0">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="🛒 Total Orders" 
+                                  FontSize="14" 
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="{x:Bind ViewModel.TotalOrdersText, Mode=OneWay}" 
+                                  FontSize="20" 
+                                  FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Average Order Value Card -->
+                <Border Grid.Column="3" 
+                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       CornerRadius="8"
+                       Padding="16"
+                       Margin="0,0,8,0">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="💵 Avg Order Value" 
+                                  FontSize="14" 
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="{x:Bind ViewModel.AverageOrderValueText, Mode=OneWay}" 
+                                  FontSize="20" 
+                                  FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Profit Margin Card -->
+                <Border Grid.Column="4" 
+                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       CornerRadius="8"
+                       Padding="16">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="📊 Profit Margin" 
+                                  FontSize="14" 
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="{x:Bind ViewModel.ProfitMarginText, Mode=OneWay}" 
+                                  FontSize="20" 
+                                  FontWeight="Bold"
+                                  Foreground="#2196F3"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Product Sales Chart -->
+            <Border Grid.Row="2" 
+                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                   BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                   BorderThickness="1"
+                   CornerRadius="8"
+                   Padding="24"
+                   Margin="0,0,0,24">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="📦 Product Sales Over Time" 
+                              FontSize="20" 
+                              FontWeight="SemiBold"/>
+                    
+                    <lvc:CartesianChart Series="{x:Bind ViewModel.ProductSalesSeriesCollection, Mode=OneWay}"
+                                       XAxes="{x:Bind ViewModel.ProductSalesXAxes, Mode=OneWay}"
+                                       YAxes="{x:Bind ViewModel.ProductSalesYAxes, Mode=OneWay}"
+                                       Height="400"
+                                       LegendPosition="Right"/>
+                </StackPanel>
             </Border>
-        </StackPanel>
-    </Grid>
+
+            <!-- Revenue & Profit Chart -->
+            <Border Grid.Row="3" 
+                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                   BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                   BorderThickness="1"
+                   CornerRadius="8"
+                   Padding="24">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="💰 Revenue &amp; Profit Analysis" 
+                              FontSize="20" 
+                              FontWeight="SemiBold"/>
+                    
+                    <lvc:CartesianChart Series="{x:Bind ViewModel.RevenueProfitSeriesCollection, Mode=OneWay}"
+                                       XAxes="{x:Bind ViewModel.RevenueProfitXAxes, Mode=OneWay}"
+                                       YAxes="{x:Bind ViewModel.RevenueProfitYAxes, Mode=OneWay}"
+                                       Height="400"
+                                       LegendPosition="Right"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Loading Overlay -->
+            <Border Grid.Row="0" Grid.RowSpan="4"
+                   Background="#80000000"
+                   Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                   VerticalAlignment="Stretch"
+                   HorizontalAlignment="Stretch">
+                <ProgressRing IsActive="True" 
+                             Width="60" 
+                             Height="60"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+            </Border>
+        </Grid>
+    </ScrollViewer>
 </Page>
