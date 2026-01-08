@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Windows.Security.Credentials;
 using Windows.Storage;
 
-namespace my_shop.App.Services
+namespace my_shop.App.Services.LoginService
 {
     public class CredentialsService : ICredentialsService
     {

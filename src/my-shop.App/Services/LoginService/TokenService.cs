@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace my_shop.App.Services;
+namespace my_shop.App.Services.LoginService;
 
 public interface ITokenService
 {

@@ -40,7 +40,7 @@ public class JwtHelper : IJwtHelper
         {
             if (string.IsNullOrWhiteSpace(token))
             {
-                Debug.WriteLine("❌ Token is null or empty");
+                Debug.WriteLine("Token is null or empty");
                 return null;
             }
 
@@ -48,7 +48,7 @@ public class JwtHelper : IJwtHelper
             var parts = token.Split('.');
             if (parts.Length != 3)
             {
-                Debug.WriteLine($"❌ Invalid token format. Expected 3 parts, got {parts.Length}");
+                Debug.WriteLine($"Invalid token format. Expected 3 parts, got {parts.Length}");
                 return null;
             }
 
@@ -73,7 +73,7 @@ public class JwtHelper : IJwtHelper
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"❌ Error decoding JWT: {ex.Message}");
+            Debug.WriteLine($"Error decoding JWT: {ex.Message}");
             return null;
         }
     }
@@ -86,17 +86,17 @@ public class JwtHelper : IJwtHelper
         var payload = DecodeToken(token);
         if (payload == null)
         {
-            Debug.WriteLine("❌ Cannot decode token, treating as expired");
+            Debug.WriteLine("Cannot decode token, treating as expired");
             return true;
         }
 
         if (payload.IsExpired)
         {
-            Debug.WriteLine($"❌ Token EXPIRED at {payload.ExpirationDateTime:yyyy-MM-dd HH:mm:ss}");
+            Debug.WriteLine($"Token EXPIRED at {payload.ExpirationDateTime:yyyy-MM-dd HH:mm:ss}");
             return true;
         }
 
-        Debug.WriteLine($"✅ Token valid for {payload.TimeUntilExpiration:hh\\:mm\\:ss} more");
+        Debug.WriteLine($"Token valid for {payload.TimeUntilExpiration:hh\\:mm\\:ss} more");
         return false;
     }
 

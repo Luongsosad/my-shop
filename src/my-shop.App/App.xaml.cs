@@ -10,8 +10,11 @@ using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
 using my_shop.App.Helpers;
 using my_shop.App.Services;
+using my_shop.App.Services.LoginService;
 using my_shop.App.ViewModels;
 using my_shop.App.Views;
+using my_shop.Application.Interfaces;
+using my_shop.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -109,6 +112,8 @@ namespace my_shop.App
                     services.AddSingleton<ITokenService, TokenService>();
                     services.AddSingleton<ICredentialsService, CredentialsService>(); 
                     services.AddSingleton<ITokenExpirationMonitor, TokenExpirationMonitor>();
+                    services.AddTransient<my_shop.App.Services.OrdersService.OrderService>();
+
                     
                     System.Diagnostics.Debug.WriteLine("🔵 App: Configuring Cloudinary service...");
                     

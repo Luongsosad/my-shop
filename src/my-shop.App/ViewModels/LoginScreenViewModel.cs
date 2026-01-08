@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using my_shop.App.Services;
+using my_shop.App.Services.LoginService;
 using my_shop.App.Views;
 using System;
 using System.Threading.Tasks;

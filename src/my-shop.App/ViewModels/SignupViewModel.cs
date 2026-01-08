@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
-using my_shop.App.Services;
+using my_shop.App.Services.LoginService;
 using System;
 using System.Threading.Tasks;
 

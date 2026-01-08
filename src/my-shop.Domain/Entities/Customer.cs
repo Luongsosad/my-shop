@@ -24,7 +24,8 @@ public class Customer
     public bool IsDeleted { get; set; } = false;
 
     [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
+    // Navigation
     public ICollection<Order> Orders { get; set; } = new List<Order>();
 }

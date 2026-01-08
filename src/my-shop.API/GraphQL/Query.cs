@@ -27,22 +27,24 @@ public class Query
         return context.Categories;
     }
 
-    // Customer Queries - Filter out deleted customers
-    [UseProjection]
-    [UseFiltering]
-    [UseSorting]
-    public IQueryable<Customer> GetCustomers([Service] IApplicationDbContext context)
-    {
-        return context.Customers.Where(c => !c.IsDeleted);
-    }
-
     // Order Queries
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<Order> GetOrders([Service] IApplicationDbContext context)
     {
-        return context.Orders;
+        return context.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product);
+    }
+
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<Customer> GetCustomers([Service] IApplicationDbContext context)
+    {
+        return context.Customers.Where(c => !c.IsDeleted);
     }
 
     // Admin Queries

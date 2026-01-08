@@ -18,7 +18,7 @@ public class MyShopDbContext : DbContext, IApplicationDbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
-    
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await base.SaveChangesAsync(cancellationToken);
@@ -43,15 +43,23 @@ public class MyShopDbContext : DbContext, IApplicationDbContext
 
         // Customer configurations
         modelBuilder.Entity<Customer>()
-            .Property(c => c.CreatedAt)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-        modelBuilder.Entity<Customer>()
             .Property(c => c.IsDeleted)
             .HasDefaultValue(false);
 
         modelBuilder.Entity<Customer>()
             .HasIndex(c => c.Phone);
+
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.Property(c => c.CreatedAt)
+                .HasColumnName("created_at")  
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(c => c.IsDeleted)
+                .HasDefaultValue(false);
+
+            entity.HasIndex(c => c.Phone);
+        });
 
         // Product configurations
         modelBuilder.Entity<Product>()

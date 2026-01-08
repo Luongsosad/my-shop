@@ -25,5 +25,9 @@ public class Order
     [ForeignKey(nameof(CustomerId))]
     public Customer? Customer { get; set; }
 
+    [Column("status")]
+    [MaxLength(50)]
+    public string Status { get; set; } = "created";
+
     public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

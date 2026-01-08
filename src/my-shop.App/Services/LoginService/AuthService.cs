@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace my_shop.App.Services
+namespace my_shop.App.Services.LoginService
 {
     public class AuthService : IAuthService
     {

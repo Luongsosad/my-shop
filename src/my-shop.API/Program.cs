@@ -7,6 +7,7 @@ using my_shop.Application.Interfaces;
 using my_shop.Application.Services;
 using my_shop.Infrastructure.Data;
 using my_shop.Infrastructure.Db;
+using Npgsql;
 using my_shop.Infrastructure.Services;
 using System.IO;
 using System.Text;
@@ -50,17 +51,21 @@ else
         ?? "Host=localhost;Port=5432;Database=myshop;Username=postgres;Password=postgres";
 }
 
+var dataSourceBuilder = new Npgsql.NpgsqlDataSourceBuilder(connectionString);
+dataSourceBuilder.EnableDynamicJson();
+var dataSource = dataSourceBuilder.Build();
+
 var jwtSecretKey = builder.Configuration["JwtSettings:SecretKey"]
     ?? throw new InvalidOperationException("JWT Secret Key not configured");
 var jwtIssuer = builder.Configuration["JwtSettings:Issuer"] ?? "myshop.api";
 var jwtAudience = builder.Configuration["JwtSettings:Audience"] ?? "myshop.client";
 
-var dataSourceBuilder = new Npgsql.NpgsqlDataSourceBuilder(connectionString);
-dataSourceBuilder.EnableDynamicJson();
-var dataSource = dataSourceBuilder.Build();
-
+// Add DbContext
 builder.Services.AddDbContext<MyShopDbContext>(options =>
-    options.UseNpgsql(dataSource));
+{
+    options.UseNpgsql(dataSource);
+    options.LogTo(Console.WriteLine, LogLevel.Information);
+});
 
 builder.Services.AddScoped<IApplicationDbContext>(provider => 
     provider.GetRequiredService<MyShopDbContext>());

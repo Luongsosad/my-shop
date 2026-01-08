@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using my_shop.App.Services;
+using my_shop.App.Services.LoginService;
 using my_shop.App.Views;
 using System;
 using System.Diagnostics;
@@ -60,7 +60,7 @@ namespace my_shop.App
                     XamlRoot = Content.XamlRoot
                 };
 
-                await dialog.ShowAsync();
+               await dialog.ShowAsync();
 
                 var loginView = _appHost.Services.GetRequiredService<LoginScreenView>();
                 MainFrame.Content = loginView;
