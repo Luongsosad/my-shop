@@ -13,6 +13,7 @@ namespace my_shop.App.ViewModels
     public partial class ProductsScreenViewModel : ObservableObject
     {
         private readonly IDataService _dataService;
+        private readonly VoucherService _voucherService;
 
         [ObservableProperty]
         private ObservableCollection<ProductModel> products = new();
@@ -34,7 +35,8 @@ namespace my_shop.App.ViewModels
 
         partial void OnSelectedCategoryChanged(CategoryModel? value)
         {
-            // Auto search when category changes
+            // Auto search when category changes, reset to page 1
+            CurrentPage = 1;
             _ = SearchProductsAsync();
         }
 
@@ -63,16 +65,71 @@ namespace my_shop.App.ViewModels
         private int cartTotalPrice;
 
         [ObservableProperty]
+        private int cartOriginalPrice;
+
+        [ObservableProperty]
+        private int cartDiscountAmount;
+
+        [ObservableProperty]
+        private string voucherCode = string.Empty;
+
+        [ObservableProperty]
+        private VoucherDiscountResult? appliedVoucherResult;
+
+        [ObservableProperty]
+        private string? voucherMessage;
+
+        [ObservableProperty]
+        private bool hasVoucherError;
+
+        public bool HasVoucherApplied => AppliedVoucherResult != null && AppliedVoucherResult.Success;
+
+        [ObservableProperty]
         private string customerName = string.Empty;
 
         [ObservableProperty]
         private string customerPhone = string.Empty;
+
+        [ObservableProperty]
+        private int currentPage = 1;
+
+        [ObservableProperty]
+        private int pageSize = 10;
+
+        [ObservableProperty]
+        private int totalPages;
+
+        [ObservableProperty]
+        private int totalProducts;
+
+        // Advanced Search Properties
+        [ObservableProperty]
+        private bool isSearchExpanded = false;
+
+        [ObservableProperty]
+        private double searchMinPrice = double.NaN;
+
+        [ObservableProperty]
+        private double searchMaxPrice = double.NaN;
+
+        [ObservableProperty]
+        private double searchMinStock = double.NaN;
+
+        [ObservableProperty]
+        private double searchMaxStock = double.NaN;
+
+        [ObservableProperty]
+        private string? searchSortBy = "name"; // name, price, stock
+
+        [ObservableProperty]
+        private string? searchSortOrder = "asc"; // asc, desc
 
         public bool HasCartItems => CartTotalQuantity > 0;
 
         public ProductsScreenViewModel(IDataService dataService)
         {
             _dataService = dataService;
+            _voucherService = new VoucherService();
         }
 
         [RelayCommand]
@@ -85,10 +142,9 @@ namespace my_shop.App.ViewModels
             try
             {
                 var categoriesTask = _dataService.GetCategoriesAsync();
-                var productsTask = _dataService.GetProductsAsync();
                 var customersTask = _dataService.GetCustomersAsync();
 
-                await Task.WhenAll(categoriesTask, productsTask, customersTask);
+                await Task.WhenAll(categoriesTask, customersTask);
 
                 Categories.Clear();
                 Categories.Add(new CategoryModel { Id = 0, Name = "Tất cả" });
@@ -97,17 +153,15 @@ namespace my_shop.App.ViewModels
                     Categories.Add(category);
                 }
 
-                Products.Clear();
-                foreach (var product in await productsTask)
-                {
-                    Products.Add(product);
-                }
-
                 Customers.Clear();
                 foreach (var customer in await customersTask)
                 {
                     Customers.Add(customer);
                 }
+
+                // Load products with paging
+                CurrentPage = 1;
+                await SearchProductsAsync();
             }
             catch (Exception ex)
             {
@@ -129,16 +183,64 @@ namespace my_shop.App.ViewModels
 
             try
             {
+                // DON'T reset CurrentPage here - let caller decide
+                // CurrentPage = 1; // ← REMOVED
+                
                 var categoryId = SelectedCategory?.Id == 0 ? null : SelectedCategory?.Id;
                 var searchTerm = string.IsNullOrWhiteSpace(SearchText) ? null : SearchText;
 
-                var products = await _dataService.GetProductsAsync(searchTerm, categoryId);
+                // Get all products first with basic filters
+                var allProducts = await _dataService.GetProductsAsync(searchTerm, categoryId);
+
+                // Apply advanced filters client-side
+                var filtered = allProducts.AsEnumerable();
+
+                // Price range filter
+                if (!double.IsNaN(SearchMinPrice) && SearchMinPrice > 0)
+                {
+                    filtered = filtered.Where(p => p.ImportPrice >= (int)SearchMinPrice);
+                }
+                if (!double.IsNaN(SearchMaxPrice) && SearchMaxPrice > 0)
+                {
+                    filtered = filtered.Where(p => p.ImportPrice <= (int)SearchMaxPrice);
+                }
+
+                // Stock range filter
+                if (!double.IsNaN(SearchMinStock) && SearchMinStock > 0)
+                {
+                    filtered = filtered.Where(p => p.Count >= (int)SearchMinStock);
+                }
+                if (!double.IsNaN(SearchMaxStock) && SearchMaxStock > 0)
+                {
+                    filtered = filtered.Where(p => p.Count <= (int)SearchMaxStock);
+                }
+
+                // Sorting
+                filtered = (SearchSortBy, SearchSortOrder) switch
+                {
+                    ("price", "asc") => filtered.OrderBy(p => p.ImportPrice),
+                    ("price", "desc") => filtered.OrderByDescending(p => p.ImportPrice),
+                    ("stock", "asc") => filtered.OrderBy(p => p.Count),
+                    ("stock", "desc") => filtered.OrderByDescending(p => p.Count),
+                    ("name", "desc") => filtered.OrderByDescending(p => p.Name),
+                    _ => filtered.OrderBy(p => p.Name) // default: name asc
+                };
+
+                var filteredList = filtered.ToList();
+                
+                // Apply paging
+                var totalCount = filteredList.Count;
+                var skip = (CurrentPage - 1) * PageSize;
+                var products = filteredList.Skip(skip).Take(PageSize).ToList();
 
                 Products.Clear();
                 foreach (var product in products)
                 {
                     Products.Add(product);
                 }
+
+                TotalProducts = totalCount;
+                TotalPages = (int)Math.Ceiling((double)totalCount / PageSize);
             }
             catch (Exception ex)
             {
@@ -148,6 +250,55 @@ namespace my_shop.App.ViewModels
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        // Helper command for basic search button (resets to page 1)
+        [RelayCommand]
+        public async Task InitiateSearchAsync()
+        {
+            CurrentPage = 1; // Reset to page 1 for new search
+            await SearchProductsAsync();
+        }
+
+        [RelayCommand]
+        public void ToggleSearch()
+        {
+            IsSearchExpanded = !IsSearchExpanded;
+        }
+
+        [RelayCommand]
+        public async Task ClearSearchAsync()
+        {
+            SearchText = string.Empty;
+            SelectedCategory = categories.FirstOrDefault(); // Select "Tất cả"
+            SearchMinPrice = double.NaN;
+            SearchMaxPrice = double.NaN;
+            SearchMinStock = double.NaN;
+            SearchMaxStock = double.NaN;
+            SearchSortBy = "name";
+            SearchSortOrder = "asc";
+            CurrentPage = 1; // Reset to page 1
+            await SearchProductsAsync();
+        }
+
+        [RelayCommand]
+        public async Task NextPageAsync()
+        {
+            if (CurrentPage < TotalPages)
+            {
+                CurrentPage++;
+                await SearchProductsAsync(); // Will use new CurrentPage
+            }
+        }
+
+        [RelayCommand]
+        public async Task PreviousPageAsync()
+        {
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+                await SearchProductsAsync(); // Will use new CurrentPage
             }
         }
 
@@ -204,21 +355,27 @@ namespace my_shop.App.ViewModels
         [RelayCommand]
         public void RemoveFromCart(CartItemModel item)
         {
+            System.Diagnostics.Debug.WriteLine($"🔵 RemoveFromCart called for {item.ProductName}");
             CartItems.Remove(item);
+            System.Diagnostics.Debug.WriteLine($"✅ Removed. Cart now has {CartItems.Count} items");
             UpdateCartTotals();
         }
 
         [RelayCommand]
         public void IncreaseQuantity(CartItemModel item)
         {
+            System.Diagnostics.Debug.WriteLine($"🔵 IncreaseQuantity called for {item.ProductName}");
+            
             var product = Products.FirstOrDefault(p => p.Id == item.ProductId);
             if (product != null && item.Quantity < product.Count)
             {
                 item.Quantity++;
+                System.Diagnostics.Debug.WriteLine($"✅ Increased to {item.Quantity}");
                 UpdateCartTotals();
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine($"❌ Cannot increase - max stock reached");
                 ErrorMessage = "Không đủ hàng trong kho";
                 HasError = true;
             }
@@ -227,13 +384,17 @@ namespace my_shop.App.ViewModels
         [RelayCommand]
         public void DecreaseQuantity(CartItemModel item)
         {
+            System.Diagnostics.Debug.WriteLine($"🔵 DecreaseQuantity called for {item.ProductName}");
+            
             if (item.Quantity > 1)
             {
                 item.Quantity--;
+                System.Diagnostics.Debug.WriteLine($"✅ Decreased to {item.Quantity}");
                 UpdateCartTotals();
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine($"✅ Removing item (quantity was 1)");
                 RemoveFromCart(item);
             }
         }
@@ -245,6 +406,66 @@ namespace my_shop.App.ViewModels
             SelectedCustomer = null;
             CustomerName = string.Empty;
             CustomerPhone = string.Empty;
+            VoucherCode = string.Empty;
+            AppliedVoucherResult = null;
+            VoucherMessage = null;
+            HasVoucherError = false;
+            UpdateCartTotals();
+        }
+
+        [RelayCommand]
+        public async Task ApplyVoucherAsync()
+        {
+            if (string.IsNullOrWhiteSpace(VoucherCode))
+            {
+                VoucherMessage = "Vui lòng nhập mã voucher";
+                HasVoucherError = true;
+                return;
+            }
+
+            if (CartTotalQuantity == 0)
+            {
+                VoucherMessage = "Giỏ hàng trống";
+                HasVoucherError = true;
+                return;
+            }
+
+            try
+            {
+                var orderAmount = CartItems.Sum(i => i.Quantity * i.Price);
+                var result = await _voucherService.CheckVoucherAsync(VoucherCode.Trim().ToUpper(), orderAmount);
+
+                if (result != null && result.Success)
+                {
+                    AppliedVoucherResult = result;
+                    UpdateCartTotals();
+                    VoucherMessage = result.Message ?? "Đã áp dụng voucher";
+                    HasVoucherError = false;
+                }
+                else
+                {
+                    AppliedVoucherResult = null;
+                    VoucherMessage = result?.Message ?? "Voucher không hợp lệ hoặc đã hết hạn";
+                    HasVoucherError = true;
+                    UpdateCartTotals();
+                }
+            }
+            catch (Exception ex)
+            {
+                AppliedVoucherResult = null;
+                VoucherMessage = $"Lỗi: {ex.Message}";
+                HasVoucherError = true;
+                UpdateCartTotals();
+            }
+        }
+
+        [RelayCommand]
+        public void RemoveVoucher()
+        {
+            AppliedVoucherResult = null;
+            VoucherCode = string.Empty;
+            VoucherMessage = null;
+            HasVoucherError = false;
             UpdateCartTotals();
         }
 
@@ -278,7 +499,8 @@ namespace my_shop.App.ViewModels
                         Quantity = item.Quantity,
                         Price = item.Price
                     }).ToList(),
-                    FinalPrice = CartTotalPrice
+                    FinalPrice = CartTotalPrice,
+                    VoucherCode = AppliedVoucherResult != null && AppliedVoucherResult.Success ? VoucherCode.Trim().ToUpper() : null
                 };
 
                 var order = await _dataService.CreateOrderAsync(orderModel);
@@ -295,7 +517,8 @@ namespace my_shop.App.ViewModels
                 await LoadDataAsync();
                 System.Diagnostics.Debug.WriteLine("✅ Products reloaded");
 
-                ErrorMessage = $"Đơn hàng #{order.Id} đã được tạo thành công!";
+                var voucherInfo = AppliedVoucherResult != null && AppliedVoucherResult.Success ? $" (Giảm giá: {CartDiscountAmount:N0}đ)" : "";
+                ErrorMessage = $"Đơn hàng #{order.Id} đã được tạo thành công!{voucherInfo}";
                 HasError = false;
             }
             catch (Exception ex)
@@ -432,8 +655,22 @@ namespace my_shop.App.ViewModels
         private void UpdateCartTotals()
         {
             CartTotalQuantity = CartItems.Sum(i => i.Quantity);
-            CartTotalPrice = CartItems.Sum(i => i.Quantity * i.Price);
+            CartOriginalPrice = CartItems.Sum(i => i.Quantity * i.Price);
+            
+            // Calculate discount if voucher is applied
+            if (AppliedVoucherResult != null && AppliedVoucherResult.Success)
+            {
+                CartDiscountAmount = AppliedVoucherResult.DiscountAmount;
+                CartTotalPrice = AppliedVoucherResult.FinalAmount;
+            }
+            else
+            {
+                CartDiscountAmount = 0;
+                CartTotalPrice = CartOriginalPrice;
+            }
+            
             OnPropertyChanged(nameof(HasCartItems));
+            OnPropertyChanged(nameof(HasVoucherApplied));
         }
     }
 }

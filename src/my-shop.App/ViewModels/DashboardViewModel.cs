@@ -12,8 +12,18 @@ namespace my_shop.App.ViewModels
     {
         private readonly IDataService _dataService;
 
-        [ObservableProperty]
-        private DashboardStats? stats;
+        private DashboardStats? _stats;
+        public DashboardStats Stats
+        {
+            get => _stats ?? new DashboardStats
+            {
+                TotalProducts = 0,
+                TodayOrders = 0,
+                TodayRevenue = 0,
+                LowStockCount = 0
+            };
+            set => SetProperty(ref _stats, value);
+        }
 
         [ObservableProperty]
         private ObservableCollection<RecentOrderDto> recentOrders = new();
@@ -36,6 +46,15 @@ namespace my_shop.App.ViewModels
         public DashboardViewModel(IDataService dataService)
         {
             _dataService = dataService;
+            
+            // Force initialize Stats
+            _stats = new DashboardStats
+            {
+                TotalProducts = 0,
+                TodayOrders = 0,
+                TodayRevenue = 0,
+                LowStockCount = 0
+            };
         }
 
         [RelayCommand]

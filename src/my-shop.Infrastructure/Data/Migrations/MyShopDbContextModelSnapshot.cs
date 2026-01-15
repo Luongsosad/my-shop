@@ -110,9 +110,9 @@ namespace my_shop.Infrastructure.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -170,9 +170,27 @@ namespace my_shop.Infrastructure.Data.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("final_price");
 
+                    b.Property<int>("OldPrice")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0)
+                        .HasColumnName("old_price");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("status");
+
+                    b.Property<int?>("VoucherId")
+                        .HasColumnType("integer")
+                        .HasColumnName("voucher_id");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("VoucherId");
 
                     b.ToTable("orders");
                 });
@@ -273,6 +291,74 @@ namespace my_shop.Infrastructure.Data.Migrations
                     b.ToTable("products");
                 });
 
+            modelBuilder.Entity("my_shop.Domain.Entities.Voucher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("voucher_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("description");
+
+                    b.Property<int>("DiscountPercent")
+                        .HasColumnType("integer")
+                        .HasColumnName("discount_percent");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("end_date");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<int>("MaxDiscountAmount")
+                        .HasColumnType("integer")
+                        .HasColumnName("max_discount_amount");
+
+                    b.Property<int>("MinOrderAmount")
+                        .HasColumnType("integer")
+                        .HasColumnName("min_order_amount");
+
+                    b.Property<int>("RemainingQuantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("remaining_quantity");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("start_date");
+
+                    b.Property<int>("TotalQuantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_quantity");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("vouchers");
+                });
+
             modelBuilder.Entity("my_shop.Domain.Entities.Order", b =>
                 {
                     b.HasOne("my_shop.Domain.Entities.Customer", "Customer")
@@ -280,7 +366,14 @@ namespace my_shop.Infrastructure.Data.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("my_shop.Domain.Entities.Voucher", "Voucher")
+                        .WithMany("Orders")
+                        .HasForeignKey("VoucherId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("my_shop.Domain.Entities.OrderItem", b =>
@@ -325,6 +418,11 @@ namespace my_shop.Infrastructure.Data.Migrations
             modelBuilder.Entity("my_shop.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("my_shop.Domain.Entities.Voucher", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

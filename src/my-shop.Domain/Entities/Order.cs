@@ -13,8 +13,14 @@ public class Order
     [Column("customer_id")]
     public int? CustomerId { get; set; }
 
+    [Column("voucher_id")]
+    public int? VoucherId { get; set; }
+
     [Column("created_time")]
     public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
+
+    [Column("old_price")]
+    public int OldPrice { get; set; }
 
     [Column("final_price")]
     public int FinalPrice { get; set; }
@@ -24,6 +30,9 @@ public class Order
 
     [ForeignKey(nameof(CustomerId))]
     public Customer? Customer { get; set; }
+
+    [ForeignKey(nameof(VoucherId))]
+    public Voucher? Voucher { get; set; }
 
     [Column("status")]
     [MaxLength(50)]

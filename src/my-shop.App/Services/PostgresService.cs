@@ -307,6 +307,25 @@ namespace my_shop.App.Services
             }
         }
 
+        public async Task<(List<ProductModel> Products, int TotalCount)> GetProductsWithPagingAsync(int page = 1, int pageSize = 10, string? searchTerm = null, int? categoryId = null)
+        {
+            try
+            {
+                // Get all products first (without paging in GraphQL, we'll do it client-side)
+                var allProducts = await GetProductsAsync(searchTerm, categoryId);
+                
+                var totalCount = allProducts.Count;
+                var skip = (page - 1) * pageSize;
+                var products = allProducts.Skip(skip).Take(pageSize).ToList();
+                
+                return (products, totalCount);
+            }
+            catch (Exception)
+            {
+                return (new List<ProductModel>(), 0);
+            }
+        }
+
         public async Task<ProductModel?> GetProductByIdAsync(int id)
         {
             try
@@ -540,13 +559,14 @@ namespace my_shop.App.Services
                 var mutation = new GraphQLRequest
                 {
                     Query = @"
-                        mutation($customerId: Int, $customerName: String, $customerPhone: String, $items: [OrderItemInput!]!, $finalPrice: Int!) {
+                        mutation($customerId: Int, $customerName: String, $customerPhone: String, $items: [OrderItemInput!]!, $finalPrice: Int!, $voucherCode: String) {
                             createOrder(
                                 customerId: $customerId, 
                                 customerName: $customerName,
                                 customerPhone: $customerPhone,
                                 items: $items, 
-                                finalPrice: $finalPrice
+                                finalPrice: $finalPrice,
+                                voucherCode: $voucherCode
                             ) {
                                 id
                                 customerId
@@ -565,7 +585,8 @@ namespace my_shop.App.Services
                             quantity = i.Quantity,
                             price = i.Price
                         }).ToList(),
-                        finalPrice = model.FinalPrice
+                        finalPrice = model.FinalPrice,
+                        voucherCode = model.VoucherCode
                     }
                 };
 
@@ -632,6 +653,84 @@ namespace my_shop.App.Services
             catch (Exception)
             {
                 return new List<CustomerModel>();
+            }
+        }
+
+        public async Task<(List<CustomerModel> Customers, int TotalCount)> GetCustomersWithPagingAsync(int page = 1, int pageSize = 10, string? searchTerm = null)
+        {
+            try
+            {
+                // Build where condition dynamically
+                string whereClause = "where: { isDeleted: { eq: false } }";
+                object variables = new { };
+
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    whereClause = @"where: { 
+                        and: [
+                            { isDeleted: { eq: false } }
+                            {
+                                or: [
+                                    { name: { contains: $searchTerm } }
+                                    { phone: { contains: $searchTerm } }
+                                ]
+                            }
+                        ]
+                    }";
+                    variables = new { searchTerm };
+                }
+
+                var queryString = !string.IsNullOrWhiteSpace(searchTerm) 
+                    ? $@"query($searchTerm: String) {{
+                            customers({whereClause}) {{
+                                id
+                                name
+                                phone
+                                isDeleted
+                                createdAt
+                            }}
+                        }}"
+                    : $@"query {{
+                            customers({whereClause}) {{
+                                id
+                                name
+                                phone
+                                isDeleted
+                                createdAt
+                            }}
+                        }}";
+
+                var query = new GraphQLRequest
+                {
+                    Query = queryString,
+                    Variables = variables
+                };
+
+                var response = await _graphQLClient.SendQueryAsync<CustomersResponse>(query);
+                
+                if (response.Errors != null && response.Errors.Length > 0)
+                {
+                    return (new List<CustomerModel>(), 0);
+                }
+
+                var allCustomers = response.Data?.Customers ?? new List<CustomerResponse>();
+                var totalCount = allCustomers.Count;
+                
+                var skip = (page - 1) * pageSize;
+                var customers = allCustomers.Skip(skip).Take(pageSize).Select(c => new CustomerModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Phone = c.Phone,
+                    IsDeleted = c.IsDeleted,
+                    CreatedAt = c.CreatedAt
+                }).ToList();
+                
+                return (customers, totalCount);
+            }
+            catch (Exception)
+            {
+                return (new List<CustomerModel>(), 0);
             }
         }
 

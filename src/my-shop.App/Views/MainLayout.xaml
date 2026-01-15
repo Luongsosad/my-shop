@@ -54,6 +54,14 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 
+                <NavigationViewItem 
+                    Content="Vouchers" 
+                    Tag="Vouchers">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8D1;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                
                 <NavigationViewItemSeparator/>
                 
                 <NavigationViewItem 

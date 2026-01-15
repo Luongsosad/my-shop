@@ -14,6 +14,7 @@
 
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
     </Page.Resources>
 
     <Grid>
@@ -79,86 +80,156 @@
                 </Button>
             </Grid>
 
-            <!-- Customers Table -->
-            <Border Grid.Row="1"
-                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                   BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                   BorderThickness="1"
-                   CornerRadius="8"
-                   Padding="0">
+            <!-- Customers Table with Pagination -->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
                 
-                <Grid>
-                    <!-- Data Grid -->
-                    <ListView x:Name="CustomersListView"
-                             ItemsSource="{x:Bind ViewModel.Customers, Mode=OneWay}"
-                             SelectionMode="None"
-                             IsItemClickEnabled="False">
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="models:CustomerModel">
-                                <Grid Padding="16,12" 
-                                     BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
-                                     BorderThickness="0,0,0,1">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="60"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="200"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                <Border Grid.Row="0"
+                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       CornerRadius="8"
+                       Padding="0">
+                    
+                    <Grid>
+                        <!-- Data Grid -->
+                        <ListView x:Name="CustomersListView"
+                                 ItemsSource="{x:Bind ViewModel.Customers, Mode=OneWay}"
+                                 SelectionMode="None"
+                                 IsItemClickEnabled="False">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="models:CustomerModel">
+                                    <Grid Padding="16,12" 
+                                         BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                                         BorderThickness="0,0,0,1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="200"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBlock Grid.Column="0" 
-                                              Text="{x:Bind Id}"
-                                              VerticalAlignment="Center"
-                                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                    
-                                    <TextBlock Grid.Column="1" 
-                                              Text="{x:Bind Name}"
-                                              VerticalAlignment="Center"
-                                              FontWeight="SemiBold"/>
-                                    
-                                    <TextBlock Grid.Column="2" 
-                                              Text="{x:Bind Phone}"
-                                              VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="0" 
+                                                  Text="{x:Bind Id}"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                        
+                                        <TextBlock Grid.Column="1" 
+                                                  Text="{x:Bind Name}"
+                                                  VerticalAlignment="Center"
+                                                  FontWeight="SemiBold"/>
+                                        
+                                        <TextBlock Grid.Column="2" 
+                                                  Text="{x:Bind Phone}"
+                                                  VerticalAlignment="Center"/>
 
-                                    <StackPanel Grid.Column="3" 
-                                               Orientation="Horizontal" 
-                                               Spacing="8">
-                                        <Button Content="Sửa"
-                                               Click="EditButton_Click"
-                                               CommandParameter="{x:Bind}"
-                                               Style="{StaticResource AccentButtonStyle}"/>
-                                        <Button Content="Xóa"
-                                               Click="DeleteButton_Click"
-                                               CommandParameter="{x:Bind}"/>
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                        <StackPanel Grid.Column="3" 
+                                                   Orientation="Horizontal" 
+                                                   Spacing="8">
+                                            <Button Content="Sửa"
+                                                   Click="EditButton_Click"
+                                                   CommandParameter="{x:Bind}"
+                                                   Style="{StaticResource AccentButtonStyle}"/>
+                                            <Button Content="Xóa"
+                                                   Click="DeleteButton_Click"
+                                                   CommandParameter="{x:Bind}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
 
-                    <!-- Empty State -->
-                    <StackPanel VerticalAlignment="Center"
+                        <!-- Empty State -->
+                        <StackPanel VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Spacing="16"
+                                   x:Name="EmptyState"
+                                   Visibility="{x:Bind ViewModel.HasNoCustomers, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <FontIcon Glyph="&#xE716;" FontSize="48" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <TextBlock Text="Chưa có khách hàng" 
+                                      FontSize="16" 
+                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <Button Content="Thêm khách hàng đầu tiên"
+                                   Click="AddNewButton_Click"
+                                   Style="{StaticResource AccentButtonStyle}"/>
+                        </StackPanel>
+
+                        <!-- Loading Indicator -->
+                        <ProgressRing x:Name="LoadingRing"
+                                     IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                                     Width="50"
+                                     Height="50"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Pagination Controls -->
+                <Grid Grid.Row="1" 
+                      Margin="0,16,0,0"
+                      Padding="16"
+                      Background="{ThemeResource LayerFillColorDefaultBrush}"
+                      CornerRadius="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Previous Button -->
+                    <Button Grid.Column="0"
+                           Command="{x:Bind ViewModel.PreviousPageCommand}"
+                           Margin="0,0,16,0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE76B;" FontSize="14"/>
+                            <TextBlock Text="Trang trước"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Page Info -->
+                    <StackPanel Grid.Column="1" 
+                               Orientation="Horizontal" 
                                HorizontalAlignment="Center"
-                               Spacing="16"
-                               x:Name="EmptyState"
-                               Visibility="{x:Bind ViewModel.HasNoCustomers, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <FontIcon Glyph="&#xE716;" FontSize="48" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        <TextBlock Text="Chưa có khách hàng" 
-                                  FontSize="16" 
+                               VerticalAlignment="Center"
+                               Spacing="8">
+                        <TextBlock Text="Trang" 
+                                  VerticalAlignment="Center"
                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        <Button Content="Thêm khách hàng đầu tiên"
-                               Click="AddNewButton_Click"
-                               Style="{StaticResource AccentButtonStyle}"/>
+                        <TextBlock Text="{x:Bind ViewModel.CurrentPage, Mode=OneWay}" 
+                                  FontWeight="SemiBold"
+                                  VerticalAlignment="Center"/>
+                        <TextBlock Text="/" 
+                                  VerticalAlignment="Center"
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="{x:Bind ViewModel.TotalPages, Mode=OneWay}" 
+                                  VerticalAlignment="Center"
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="•" 
+                                  VerticalAlignment="Center"
+                                  Margin="8,0"
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock VerticalAlignment="Center"
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                            <Run Text="Tổng:"/>
+                            <Run Text="{x:Bind ViewModel.TotalCustomers, Mode=OneWay}" FontWeight="SemiBold"/>
+                            <Run Text="khách hàng"/>
+                        </TextBlock>
                     </StackPanel>
 
-                    <!-- Loading Indicator -->
-                    <ProgressRing x:Name="LoadingRing"
-                                 IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                 Width="50"
-                                 Height="50"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"/>
+                    <!-- Next Button -->
+                    <Button Grid.Column="2"
+                           Command="{x:Bind ViewModel.NextPageCommand}"
+                           Margin="16,0,0,0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="Trang sau"/>
+                            <FontIcon Glyph="&#xE76C;" FontSize="14"/>
+                        </StackPanel>
+                    </Button>
                 </Grid>
-            </Border>
+            </Grid>
         </Grid>
     </Grid>
 </Page>

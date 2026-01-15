@@ -15,6 +15,7 @@ namespace my_shop.App.Services
         
         // Product operations
         Task<List<ProductModel>> GetProductsAsync(string? searchTerm = null, int? categoryId = null);
+        Task<(List<ProductModel> Products, int TotalCount)> GetProductsWithPagingAsync(int page = 1, int pageSize = 10, string? searchTerm = null, int? categoryId = null);
         Task<ProductModel?> GetProductByIdAsync(int id);
         Task<ProductModel> CreateProductAsync(CreateProductModel model);
         Task<ProductModel> UpdateProductAsync(UpdateProductModel model);
@@ -25,6 +26,7 @@ namespace my_shop.App.Services
         
         // Customer operations
         Task<List<CustomerModel>> GetCustomersAsync();
+        Task<(List<CustomerModel> Customers, int TotalCount)> GetCustomersWithPagingAsync(int page = 1, int pageSize = 10, string? searchTerm = null);
         Task<CustomerModel?> GetCustomerByIdAsync(int id);
         Task<CustomerModel> CreateCustomerAsync(string name, string phone);
         Task<CustomerModel> UpdateCustomerAsync(int id, string name, string phone);

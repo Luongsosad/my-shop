@@ -56,6 +56,31 @@ public class Query
         return context.Admins;
     }
 
+    // Voucher Queries
+    public async Task<List<VoucherDto>> GetVouchers([Service] IVoucherService voucherService)
+    {
+        var vouchers = await voucherService.GetAllVouchersAsync();
+        return vouchers.ToList();
+    }
+
+    public async Task<VoucherDto?> GetVoucherById(int id, [Service] IVoucherService voucherService)
+    {
+        return await voucherService.GetVoucherByIdAsync(id);
+    }
+
+    public async Task<VoucherDto?> GetVoucherByCode(string code, [Service] IVoucherService voucherService)
+    {
+        return await voucherService.GetVoucherByCodeAsync(code);
+    }
+
+    public async Task<VoucherDiscountResult> CheckVoucher(
+        string code,
+        int orderAmount,
+        [Service] IVoucherService voucherService)
+    {
+        return await voucherService.ApplyVoucherAsync(new ApplyVoucherDto(code, orderAmount));
+    }
+
     // Dashboard Statistics
     public async Task<DashboardStatsDto> GetDashboardStats([Service] IDashboardService dashboardService)
     {
