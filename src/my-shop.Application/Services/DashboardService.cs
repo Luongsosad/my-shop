@@ -51,14 +51,15 @@ public class DashboardService : IDashboardService
     public async Task<List<LowStockProductDto>> GetLowStockProductsAsync(int threshold = 5, int count = 5)
     {
         return await _context.Products
-            .Where(p => p.Count < threshold)
+            .Where(p => p.Count < threshold && !p.IsDeleted)
             .OrderBy(p => p.Count)
             .Take(count)
             .Select(p => new LowStockProductDto
             {
                 Name = p.Name,
                 Sku = p.Sku,
-                Count = p.Count
+                Count = p.Count,
+                Images = p.Images
             })
             .ToListAsync();
     }
@@ -66,6 +67,7 @@ public class DashboardService : IDashboardService
     public async Task<List<BestSellingProductDto>> GetBestSellingProductsAsync(int count = 5)
     {
         var productSales = await _context.OrderItems
+            .Where(oi => !oi.Product.IsDeleted)
             .GroupBy(oi => oi.ProductId)
             .Select(g => new
             {
@@ -93,7 +95,8 @@ public class DashboardService : IDashboardService
                 Name = product.Name,
                 Category = product.Category?.Name ?? "Unknown",
                 SoldCount = ps.TotalSold,
-                SoldPercentage = (double)ps.TotalSold / maxSold * 100
+                SoldPercentage = (double)ps.TotalSold / maxSold * 100,
+                Images = product.Images
             });
         }
 

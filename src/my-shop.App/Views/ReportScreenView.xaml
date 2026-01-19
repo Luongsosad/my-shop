@@ -18,6 +18,7 @@
         <converters:BoolToGreenRedConverter x:Key="BoolToGreenRedConverter"/>
         <converters:DoubleToMarginStatusConverter x:Key="DoubleToMarginStatusConverter"/>
         <converters:DoubleToPercentageConverter x:Key="DoubleToPercentageConverter"/>
+        <converters:StringComparisonToStyleConverter x:Key="StringComparisonToStyleConverter"/>
     </Page.Resources>
 
     <ScrollViewer>
@@ -51,43 +52,56 @@
                         <!-- Quick Date Range Buttons -->
                         <StackPanel Spacing="8">
                             <TextBlock Text="Quick Ranges" FontSize="12" FontWeight="SemiBold"/>
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <Button Content="Today" 
+                            <StackPanel Orientation="Horizontal" Spacing="8" x:Name="QuickRangeButtonsPanel">
+                                <Button x:Name="TodayButton"
+                                       Content="Today" 
                                        Command="{x:Bind ViewModel.SetDateRangeCommand}" 
                                        CommandParameter="today"
-                                       Style="{StaticResource AccentButtonStyle}"
                                        Height="32"
-                                       Padding="12,0"/>
-                                <Button Content="Yesterday" 
+                                       Padding="12,0"
+                                       Tag="today"/>
+                                <Button x:Name="YesterdayButton"
+                                       Content="Yesterday" 
                                        Command="{x:Bind ViewModel.SetDateRangeCommand}" 
                                        CommandParameter="yesterday"
                                        Height="32"
-                                       Padding="12,0"/>
-                                <Button Content="Last 7 Days" 
+                                       Padding="12,0"
+                                       Tag="yesterday"/>
+                                <Button x:Name="Last7DaysButton"
+                                       Content="Last 7 Days" 
                                        Command="{x:Bind ViewModel.SetDateRangeCommand}" 
                                        CommandParameter="last7days"
                                        Height="32"
-                                       Padding="12,0"/>
-                                <Button Content="Last 30 Days" 
+                                       Padding="12,0"
+                                       Tag="last7days"/>
+                                <Button x:Name="Last30DaysButton"
+                                       Content="Last 30 Days" 
                                        Command="{x:Bind ViewModel.SetDateRangeCommand}" 
                                        CommandParameter="last30days"
                                        Height="32"
-                                       Padding="12,0"/>
-                                <Button Content="This Month" 
+                                       Padding="12,0"
+                                       Tag="last30days"/>
+                                <Button x:Name="ThisMonthButton"
+                                       Content="This Month" 
                                        Command="{x:Bind ViewModel.SetDateRangeCommand}" 
                                        CommandParameter="thismonth"
                                        Height="32"
-                                       Padding="12,0"/>
-                                <Button Content="Last Month" 
+                                       Padding="12,0"
+                                       Tag="thismonth"/>
+                                <Button x:Name="LastMonthButton"
+                                       Content="Last Month" 
                                        Command="{x:Bind ViewModel.SetDateRangeCommand}" 
                                        CommandParameter="lastmonth"
                                        Height="32"
-                                       Padding="12,0"/>
-                                <Button Content="This Year" 
+                                       Padding="12,0"
+                                       Tag="lastmonth"/>
+                                <Button x:Name="ThisYearButton"
+                                       Content="This Year" 
                                        Command="{x:Bind ViewModel.SetDateRangeCommand}" 
                                        CommandParameter="thisyear"
                                        Height="32"
-                                       Padding="12,0"/>
+                                       Padding="12,0"
+                                       Tag="thisyear"/>
                             </StackPanel>
                         </StackPanel>
                         

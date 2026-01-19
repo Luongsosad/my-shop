@@ -111,6 +111,7 @@ namespace my_shop.App.Services
                                 name
                                 sku
                                 count
+                                images
                             }
                         }",
                     Variables = new { threshold, count }
@@ -144,6 +145,7 @@ namespace my_shop.App.Services
                                 category
                                 soldCount
                                 soldPercentage
+                                images
                             }
                         }",
                     Variables = new { count }
