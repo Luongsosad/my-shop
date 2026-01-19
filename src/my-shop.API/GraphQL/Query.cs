@@ -56,6 +56,14 @@ public class Query
         return context.Admins;
     }
 
+    public async Task<Admin?> GetAdmin(
+    int adminId,
+    [Service] IApplicationDbContext context)
+    {
+        return await context.Admins
+            .FirstOrDefaultAsync(a => a.Id == adminId);
+    }
+
     // Dashboard Statistics
     public async Task<DashboardStatsDto> GetDashboardStats([Service] IDashboardService dashboardService)
     {

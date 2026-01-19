@@ -6,26 +6,288 @@
     xmlns:vm="using:my_shop.App.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:converters="using:my_shop.App.Converters"
+    mc:Ignorable="d">
 
-    <Grid>
-        <StackPanel Spacing="24" Padding="24">
-            <TextBlock Text="Settings" FontSize="32" FontWeight="Bold"/>
-            <TextBlock Text="Manage your preferences" 
-                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-            
-            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+    <Page.Resources>
+        <converters:BoolToLicenseIconConverter x:Key="BoolToLicenseIconConverter"/>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid Padding="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Spacing="8">
+            <TextBlock Text="Settings" 
+                       FontSize="32" 
+                       FontWeight="SemiBold"/>
+            <TextBlock Text="License and activation management" 
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                       FontSize="14"/>
+        </StackPanel>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="24" Width="800" HorizontalAlignment="Center">
+
+                <!-- License Status Card -->
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="24">
+                    <StackPanel Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE72E;" 
+                                      FontSize="24"
+                                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                            <TextBlock Text="License Status" 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" 
+                                Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+
+                        <!-- Status Display -->
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Status Icon -->
+                            <Border Grid.Column="0"
+                                    Width="64"
+                                    Height="64"
+                                    CornerRadius="32"
+                                    VerticalAlignment="Top">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{ThemeResource SystemAccentColor}" Opacity="0.1"/>
+                                </Border.Background>
+                                <FontIcon Glyph="{x:Bind ViewModel.IsActivated, Mode=OneWay, Converter={StaticResource BoolToLicenseIconConverter}}"
+                                          FontSize="32"
+                                          Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                            </Border>
+
+                            <!-- Status Info -->
+                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Bind ViewModel.LicenseStatus, Mode=OneWay}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"/>
+
+                                <!-- Trial Info -->
+                                <StackPanel Spacing="4" Visibility="{x:Bind ViewModel.IsInTrial, Mode=OneWay}">
+                                    <ProgressBar Value="{x:Bind ViewModel.DaysRemaining, Mode=OneWay}"
+                                                 Maximum="14"
+                                                 Height="4"
+                                                 CornerRadius="2"/>
+                                    <TextBlock FontSize="13"
+                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                                        <Run Text="Trial expires in"/>
+                                        <Run Text="{x:Bind ViewModel.DaysRemaining, Mode=OneWay}" FontWeight="SemiBold"/>
+                                        <Run Text="days"/>
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <!-- Activated Badge -->
+                                <Border Background="{ThemeResource SystemFillColorSuccessBrush}"
+                                        CornerRadius="12"
+                                        Padding="12,6"
+                                        HorizontalAlignment="Left"
+                                        Visibility="{x:Bind ViewModel.IsActivated, Mode=OneWay}">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <FontIcon Glyph="&#xE73E;" 
+                                                  FontSize="12"
+                                                  Foreground="White"/>
+                                        <TextBlock Text="Activated" 
+                                                   FontSize="12"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="White"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Activation Card -->
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="24"
+                        Visibility="{x:Bind ViewModel.IsActivated, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <StackPanel Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE8D7;" 
+                                      FontSize="24"
+                                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                            <TextBlock Text="Activate Software" 
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" 
+                                Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+
+                        <TextBlock Text="Enter your activation code to unlock all features permanently"
+                                   TextWrapping="Wrap"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   FontSize="13"/>
+
+                        <!-- Activation Code Input -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Activation Code" 
+                                       FontSize="13"
+                                       FontWeight="SemiBold"/>
+                            <TextBox Text="{x:Bind ViewModel.ActivationCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     PlaceholderText="XXXXX-XXXXX-XXXXX-XXXXX"
+                                     FontFamily="Consolas"
+                                     FontSize="14"
+                                     MaxLength="23"/>
+                        </StackPanel>
+
+                        <Button Command="{x:Bind ViewModel.ActivateSoftwareCommand}"
+                                Style="{StaticResource AccentButtonStyle}"
+                                HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE73E;" FontSize="16"/>
+                                <TextBlock Text="Activate Now"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Info Panel -->
+                        <InfoBar Severity="Informational"
+                                 IsOpen="True"
+                                 IsClosable="False"
+                                 Title="Need an activation code?"
+                                 Message="Contact support or use the generator below for testing purposes"/>
+
+                        <Button Command="{x:Bind ViewModel.GenerateAndSendCodeCommand}"
+                                        Content="Generate Code"
+                                        Width="132"
+                                        HorizontalAlignment="Right"/>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- Features Info -->
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="24">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="What's Included" 
+                                   FontSize="18" 
+                                   FontWeight="SemiBold"/>
+
+                        <Border Height="1" 
+                                Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+
+                        <ItemsControl>
+                            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
+                                <FontIcon Glyph="&#xE73E;" 
+                                          FontSize="16"
+                                          Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
+                                <TextBlock Text="Full access to order printing (PDF invoices)" FontSize="13"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
+                                <FontIcon Glyph="&#xE73E;" 
+                                          FontSize="16"
+                                          Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
+                                <TextBlock Text="Unlimited orders and products" FontSize="13"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
+                                <FontIcon Glyph="&#xE73E;" 
+                                          FontSize="16"
+                                          Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
+                                <TextBlock Text="No trial restrictions" FontSize="13"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
+                                <FontIcon Glyph="&#xE73E;" 
+                                          FontSize="16"
+                                          Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
+                                <TextBlock Text="Lifetime updates" FontSize="13"/>
+                            </StackPanel>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <!-- Logout Card -->
+                <Border 
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                     BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                     BorderThickness="1"
                     CornerRadius="8"
-                    Padding="24"
-                    Height="400">
-                <TextBlock Text="Settings screen will be implemented here" 
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-            </Border>
-        </StackPanel>
+                    Padding="24">
+                    <StackPanel Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xF3B1;" 
+                                FontSize="24"
+                                Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
+                            <TextBlock 
+                                Text="Account" 
+                                FontSize="20" 
+                                FontWeight="SemiBold"
+                                VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Height="1" 
+                            Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock
+                                Grid.Column="0"
+                                Text="Sign out from your account"
+                                TextWrapping="Wrap"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                FontSize="13"
+                                VerticalAlignment="Center"/>
+
+                            <Button
+                                Grid.Column="1"
+                                Command="{x:Bind ViewModel.LogoutCommand}"
+                                HorizontalAlignment="Right"
+                                Width="132"
+                                Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"
+                                Background="{ThemeResource SystemFillColorCriticalBrush}">
+
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon Glyph="&#xF3B1;" FontSize="16"/>
+                                    <TextBlock Text="Log Out" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Loading Overlay -->
+        <Grid Grid.RowSpan="3"
+              Background="{ThemeResource LayerFillColorDefaultBrush}"
+              Opacity="0.8"
+              Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}">
+            <ProgressRing IsActive="True" Width="48" Height="48"/>
+        </Grid>
     </Grid>
 </Page>

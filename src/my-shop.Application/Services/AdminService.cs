@@ -34,7 +34,9 @@ public class AdminService : IAdminService
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
             Name = name,
             IsActive = true,
-            CreatedAt = DateTimeOffset.UtcNow
+            CreatedAt = DateTimeOffset.UtcNow,
+            TrialStartDate = DateTimeOffset.UtcNow,
+            IsActivated = false
         };
 
         _context.Admins.Add(admin);

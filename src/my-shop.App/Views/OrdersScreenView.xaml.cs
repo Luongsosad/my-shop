@@ -16,11 +16,18 @@ namespace my_shop.App.Views
             this.InitializeComponent();
             ViewModel = App.GetService<OrdersScreenViewModel>();
             this.DataContext = ViewModel;
+            Models.Order.SetViewModel(ViewModel);
 
             this.Loaded += async (s, e) =>
             {
                 ViewModel.XamlRoot = this.XamlRoot;
+                await ViewModel.CheckLicenseStatusAsync();
                 await ViewModel.LoadOrdersCommand.ExecuteAsync(null);
+            };
+
+            ViewModel.ActivateLicenseRequested += () =>
+            {
+                this.Frame.Navigate(typeof(SettingsScreenView));
             };
         }
 
@@ -125,6 +132,20 @@ namespace my_shop.App.Views
             {
                 await ViewModel.PrintOrderCommand.ExecuteAsync(order);
             }
+        }
+
+        public Visibility GetTrialBadgeVisibility(Models.Order order)
+        {
+            bool shouldShow = order.IsPaid && ViewModel.IsInTrial;
+            System.Diagnostics.Debug.WriteLine($"[GetTrialBadge] Order #{order.Id}, IsPaid: {order.IsPaid}, IsInTrial: {ViewModel.IsInTrial}, Result: {shouldShow}");
+            return shouldShow ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public Visibility GetExpiredBadgeVisibility(Models.Order order)
+        {
+            bool shouldShow = order.IsPaid && ViewModel.IsTrialExpired;
+            System.Diagnostics.Debug.WriteLine($"[GetExpiredBadge] Order #{order.Id}, IsPaid: {order.IsPaid}, IsExpired: {ViewModel.IsTrialExpired}, Result: {shouldShow}");
+            return shouldShow ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }
