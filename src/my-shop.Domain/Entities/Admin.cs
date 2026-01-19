@@ -33,5 +33,18 @@ namespace my_shop.Domain.Entities
 
         [Column("updated_at")]
         public DateTimeOffset? UpdatedAt { get; set; }
+
+        [Column("trial_start_date")]
+        public DateTimeOffset? TrialStartDate { get; set; }
+
+        [Column("is_activated")]
+        public bool IsActivated { get; set; } = false;
+
+        [Column("activation_code")]
+        [MaxLength(50)]
+        public string? ActivationCode { get; set; }
+
+        [Column("activated_at")]
+        public DateTimeOffset? ActivatedAt { get; set; }
     }
 }

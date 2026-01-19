@@ -64,6 +64,64 @@ namespace my_shop.App.Models
 
         [ObservableProperty]
         private bool isExpanded;
+
+        private static WeakReference<ViewModels.OrdersScreenViewModel>? _viewModelRef;
+
+        public static void SetViewModel(ViewModels.OrdersScreenViewModel viewModel)
+        {
+            _viewModelRef = new WeakReference<ViewModels.OrdersScreenViewModel>(viewModel);
+            System.Diagnostics.Debug.WriteLine($"[Order] ViewModel set - Instance: {viewModel.GetHashCode()}");
+        }
+
+        public bool ShouldShowTrialBadge
+        {
+            get
+            {
+                if (!IsPaid) return false;
+
+                try
+                {
+                    if (_viewModelRef != null && _viewModelRef.TryGetTarget(out var viewModel))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[ShouldShowTrialBadge] Order #{Id}:");
+                        System.Diagnostics.Debug.WriteLine($"  - ViewModel Instance: {viewModel.GetHashCode()}");
+                        System.Diagnostics.Debug.WriteLine($"  - IsPaid: {IsPaid}");
+                        System.Diagnostics.Debug.WriteLine($"  - ViewModel.IsInTrial: {viewModel.IsInTrial}");
+
+                        return viewModel.IsInTrial;
+                    }
+
+                    System.Diagnostics.Debug.WriteLine($"[ShouldShowTrialBadge] Order #{Id} - ViewModel not found!");
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[ShouldShowTrialBadge] Error: {ex.Message}");
+                    return false;
+                }
+            }
+        }
+
+        public bool ShouldShowExpiredBadge
+        {
+            get
+            {
+                if (!IsPaid) return false;
+
+                try
+                {
+                    if (_viewModelRef != null && _viewModelRef.TryGetTarget(out var viewModel))
+                    {
+                        return viewModel.IsTrialExpired;
+                    }
+                    return false;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
     }
 
 

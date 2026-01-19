@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using my_shop.App.Models;
+using my_shop.App.Services.LicenseService;
 using my_shop.App.Services.OrdersService;
 using my_shop.App.Services.PdfService;
 using System;
@@ -26,6 +27,7 @@ namespace my_shop.App.ViewModels
     {
         public readonly OrderService _orderService;
         private readonly OrderPdfService _pdfService;
+        private readonly LicenseService _licenseService;
 
         [ObservableProperty]
         private ObservableCollection<Models.Order> orders = new();
@@ -69,12 +71,23 @@ namespace my_shop.App.ViewModels
         [ObservableProperty]
         private bool isSearchExpanded = false;
 
-        public XamlRoot? XamlRoot { get; set; }
+        [ObservableProperty]
+        private bool isInTrial;
 
-        public OrdersScreenViewModel(OrderService orderService)
+        [ObservableProperty]
+        private bool isTrialExpired;
+
+        [ObservableProperty]
+        private bool isActivated;
+
+        public XamlRoot? XamlRoot { get; set; }
+        public event Action? ActivateLicenseRequested;
+
+        public OrdersScreenViewModel(OrderService orderService, LicenseService licenseService)
         {
             _orderService = orderService;
             _pdfService = new OrderPdfService();
+            _licenseService = licenseService;
         }
 
         [RelayCommand]
@@ -89,6 +102,7 @@ namespace my_shop.App.ViewModels
             try
             {
                 IsLoading = true;
+                await CheckLicenseStatusAsync();
 
                 var (ordersList, totalCount) = await _orderService.GetOrdersAsync(CurrentPage, PageSize);
 
@@ -1344,11 +1358,129 @@ namespace my_shop.App.ViewModels
             {
                 IsLoading = true;
 
-                // Generate PDF
+                // Check license status
+                var licenseStatus = await _licenseService.CheckLicenseAsync();
+
+                if (!licenseStatus.IsValid)
+                {
+                    // Trial expired - show upgrade dialog
+                    var upgradeDialog = new ContentDialog
+                    {
+                        Title = "🔒 Trial Expired",
+                        PrimaryButtonText = "Go to Settings",
+                        CloseButtonText = "Cancel",
+                        DefaultButton = ContentDialogButton.Primary,
+                        XamlRoot = XamlRoot,
+                        RequestedTheme = ElementTheme.Light
+                    };
+
+                    var content = new StackPanel
+                    {
+                        Spacing = 16,
+                        Children =
+                {
+                    new TextBlock
+                    {
+                        Text = "Your trial period has ended.",
+                        FontSize = 16,
+                        FontWeight = Microsoft.UI.Text.FontWeights.SemiBold
+                    },
+                    new TextBlock
+                    {
+                        Text = "Please activate the software to continue using the print feature.",
+                        TextWrapping = TextWrapping.Wrap,
+                        FontSize = 14,
+                        Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                            Microsoft.UI.Colors.DimGray
+                        )
+                    },
+                    new Border
+                    {
+                        Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                        ),
+                        CornerRadius = new CornerRadius(8),
+                        Padding = new Thickness(16),
+                        Child = new StackPanel
+                        {
+                            Spacing = 8,
+                            Children =
+                            {
+                                new StackPanel
+                                {
+                                    Orientation = Orientation.Horizontal,
+                                    Spacing = 8,
+                                    Children =
+                                    {
+                                        new FontIcon
+                                        {
+                                            Glyph = "\uE735", // Crown
+                                            FontSize = 16,
+                                            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                                            )
+                                        },
+                                        new TextBlock
+                                        {
+                                            Text = "Upgrade to VIP",
+                                            FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
+                                            FontSize = 13
+                                        }
+                                    }
+                                },
+                                new TextBlock
+                                {
+                                    Text = "Activate now to unlock unlimited printing and all premium features!",
+                                    TextWrapping = TextWrapping.Wrap,
+                                    FontSize = 12,
+                                    Opacity = 0.8
+                                }
+                            }
+                        }
+                    }
+                }
+                    };
+
+                    upgradeDialog.Content = content;
+                    var result = await upgradeDialog.ShowAsync();
+
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        // Navigate to Settings - you'll need to implement navigation
+                        // Example: Frame.Navigate(typeof(SettingsScreenView));
+                    }
+                    return;
+                }
+
+                // Show trial reminder if in trial period with <= 5 days
+                if (licenseStatus.IsInTrial && licenseStatus.DaysRemaining <= 5)
+                {
+                    var reminderDialog = new ContentDialog
+                    {
+                        Title = "Trial Reminder",
+                        Content = $"You have {licenseStatus.DaysRemaining} days left in your trial. Activate now to avoid interruption.",
+                        PrimaryButtonText = "Activate Now",
+                        CloseButtonText = "Cancel",
+                        DefaultButton = ContentDialogButton.Primary,
+                        XamlRoot = XamlRoot,
+                        RequestedTheme = ElementTheme.Light
+                    };
+
+                    var reminderResult = await reminderDialog.ShowAsync();
+
+                    if (reminderResult == ContentDialogResult.Primary)
+                    {
+                        ActivateLicenseRequested?.Invoke();
+                        return;
+                    }
+                    else if (reminderResult != ContentDialogResult.None)
+                    {
+                        return;
+                    }
+                }
+
+                // Proceed with printing
                 var pdfBytes = _pdfService.GenerateOrderInvoice(order);
                 var filePath = _pdfService.SavePdfToTemp(pdfBytes, order.Id);
 
-                // Show preview dialog
                 var dialog = new ContentDialog
                 {
                     Title = $"Invoice - Order #{order.Id}",
@@ -1361,24 +1493,23 @@ namespace my_shop.App.ViewModels
                     {
                         Spacing = 16,
                         Children =
+                {
+                    new TextBlock
                     {
-                        new TextBlock
-                        {
-                            Text = $"To open file for more details, click \"Open PDF\"!",
-                            TextWrapping = TextWrapping.Wrap,
-                            FontSize = 14,
-                            Opacity = 0.7
-                        }
+                        Text = "Invoice generated successfully! Click \"Open PDF\" to view the file.",
+                        TextWrapping = TextWrapping.Wrap,
+                        FontSize = 14,
+                        Opacity = 0.7
                     }
+                }
                     }
                 };
 
-                var result = await dialog.ShowAsync();
+                var printResult = await dialog.ShowAsync();
 
-                if (result == ContentDialogResult.Primary)
+                if (printResult == ContentDialogResult.Primary)
                 {
-                    // Open PDF in default viewer
-                    await Launcher.LaunchUriAsync(new Uri(filePath));
+                    await Windows.System.Launcher.LaunchUriAsync(new Uri(filePath));
                 }
             }
             catch (Exception ex)
@@ -1389,6 +1520,27 @@ namespace my_shop.App.ViewModels
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        public async Task CheckLicenseStatusAsync()
+        {
+            try
+            {
+                var status = await _licenseService.CheckLicenseAsync();
+
+                IsActivated = status.IsActivated;
+                IsInTrial = status.IsInTrial;
+                IsTrialExpired = !status.IsValid && !status.IsActivated;
+
+                Debug.WriteLine($"License Status - Activated: {IsActivated}, InTrial: {IsInTrial}, Expired: {IsTrialExpired}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error checking license: {ex.Message}");
+                IsInTrial = false;
+                IsTrialExpired = false;
+                IsActivated = false;
             }
         }
     }

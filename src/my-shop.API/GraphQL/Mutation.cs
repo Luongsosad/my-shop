@@ -264,6 +264,38 @@ public class Mutation
             Token = token
         };
     }
+
+    public async Task<Admin> UpdateAdminLicense(
+    int adminId,
+    DateTimeOffset? trialStartDate,
+    bool isActivated,
+    string? activationCode,
+    DateTimeOffset? activatedAt,
+    [Service] IApplicationDbContext context)
+    {
+        var admin = await context.Admins.FindAsync(adminId);
+        if (admin == null)
+            throw new GraphQLException($"Admin with ID {adminId} not found");
+
+        // Update license fields
+        if (trialStartDate.HasValue)
+            admin.TrialStartDate = trialStartDate.Value;
+
+        admin.IsActivated = isActivated;
+        admin.ActivationCode = activationCode;
+
+        if (activatedAt.HasValue)
+            admin.ActivatedAt = activatedAt.Value;
+
+        admin.UpdatedAt = DateTimeOffset.UtcNow;
+
+        await context.SaveChangesAsync();
+
+        Console.WriteLine($"[UpdateAdminLicense] Admin {adminId} updated. IsActivated: {isActivated}, ActivationCode: {activationCode}");
+
+        return admin;
+    }
+
     public async Task<Order> UpdateOrderStatus(
     int id,
     string status,

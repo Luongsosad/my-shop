@@ -9,6 +9,7 @@
     <Page.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <local:BoolToExpandIconConverter x:Key="BoolToExpandIconConverter"/>
+        <local:BoolToExpandIconConverter x:Key="OrderPrintBadgeVisibilityConverter"/>
     </Page.Resources>
 
     <Grid Padding="12,12,12,0">
@@ -34,17 +35,30 @@
                            Style="{StaticResource TitleTextBlockStyle}"
                            FontSize="28"
                            FontWeight="SemiBold"/>
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="Total:" 
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                               FontSize="14"/>
-                    <TextBlock Text="{x:Bind ViewModel.TotalOrders, Mode=OneWay}" 
-                               FontWeight="SemiBold"
-                               FontSize="14"/>
-                    <TextBlock Text="orders" 
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                               FontSize="14"/>
+                <StackPanel Orientation="Horizontal"
+            Spacing="6"
+            VerticalAlignment="Center">
+
+                    <!-- Icon -->
+                    <FontIcon Glyph="&#xE14C;"
+              FontFamily="Segoe MDL2 Assets"
+              Foreground="{ThemeResource AccentFillColorDefaultBrush}"
+              FontSize="16"/>
+
+                    <!-- Label -->
+                    <TextBlock Text="Total orders:"
+               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+               FontSize="14"
+               VerticalAlignment="Center"/>
+
+                    <!-- Number -->
+                    <TextBlock Text="{x:Bind ViewModel.TotalOrders, Mode=OneWay}"
+               FontWeight="SemiBold"
+               FontSize="16"
+               Margin="4,0,0,0"
+               VerticalAlignment="Center"/>
                 </StackPanel>
+
             </StackPanel>
         </Grid>
 
@@ -211,8 +225,9 @@
                           Foreground="#10B981"/>
                                                             </Button>
 
-                                                            <Button Grid.Column="1" 
-            Click="PrintButton_Click"
+                                                            <Grid Grid.Column="1">
+                                                                <!-- Print Button -->
+                                                                <Button Click="PrintButton_Click"
             Tag="{x:Bind}"
             Width="36"
             Height="36"
@@ -220,25 +235,37 @@
             Margin="0,0,10,0"
             CornerRadius="20"
             BorderBrush="Black"
-            BorderThickness="1"
-            HorizontalAlignment="Left"
-            ToolTipService.ToolTip="Print Invoice">
-                                                                <Button.Visibility>
-                                                                    <Binding Path="IsPaid" Mode="OneWay">
-                                                                        <Binding.Converter>
-                                                                            <local:BoolToVisibilityConverter/>
-                                                                        </Binding.Converter>
-                                                                    </Binding>
-                                                                </Button.Visibility>
-                                                                <Button.Resources>
-                                                                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="DimGray"/>
-                                                                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="DimGray"/>
-                                                                </Button.Resources>
-                                                                <FontIcon Glyph="&#xE749;"
-                  FontFamily="{StaticResource SymbolThemeFontFamily}"
-                  FontSize="12"
-                  Foreground="Black"/>
-                                                            </Button>
+            BorderThickness="1">
+                                                                    <Button.Visibility>
+                                                                        <Binding Path="IsPaid" Mode="OneWay">
+                                                                            <Binding.Converter>
+                                                                                <local:BoolToVisibilityConverter/>
+                                                                            </Binding.Converter>
+                                                                        </Binding>
+                                                                    </Button.Visibility>
+                                                                    <FontIcon Glyph="&#xE749;" FontSize="12" Foreground="Black"/>
+                                                                </Button>
+
+                                                                <!-- Trial Badge -->
+                                                                <Border Width="20" Height="20" CornerRadius="10"
+        Background="#FF9800"
+        HorizontalAlignment="Right" VerticalAlignment="Top"
+        Margin="0,-4,0,0"
+        ToolTipService.ToolTip="Trial Mode"
+        Visibility="{x:Bind ShouldShowTrialBadge, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                                    <FontIcon Glyph="&#xE7C1;" FontSize="10" Foreground="White"/>
+                                                                </Border>
+
+                                                                <!-- VIP Badge -->
+                                                                <Border Width="20" Height="20" CornerRadius="10"
+        Background="#FFD700"
+        HorizontalAlignment="Right" VerticalAlignment="Top"
+        Margin="0,-4,0,0"
+        ToolTipService.ToolTip="Upgrade to VIP"
+        Visibility="{x:Bind ShouldShowExpiredBadge, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                                    <FontIcon Glyph="&#xE735;" FontSize="10" Foreground="White"/>
+                                                                </Border>
+                                                            </Grid>
 
                                                             <!-- Created Status: Pay & Cancel Buttons -->
                                                             <Button Grid.Column="2" 

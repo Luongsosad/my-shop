@@ -11,5 +11,10 @@ namespace my_shop.App.Services.LoginService
     {
         Task<AdminLoginResponseDto> LoginAsync(string email, string password);
         Task LogoutAsync();
+        int CurrentAdminId { get; }
+        string CurrentAdminEmail { get; }
+        string CurrentAdminName { get; }
+        bool IsLoggedIn { get; }
+        Task<bool> InitializeCurrentAdminFromTokenAsync();
     }
 }
