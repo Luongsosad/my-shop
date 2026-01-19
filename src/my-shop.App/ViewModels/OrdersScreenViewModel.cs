@@ -1366,7 +1366,7 @@ namespace my_shop.App.ViewModels
                     // Trial expired - show upgrade dialog
                     var upgradeDialog = new ContentDialog
                     {
-                        Title = "🔒 Trial Expired",
+                        Title = "Trial Expired",
                         PrimaryButtonText = "Go to Settings",
                         CloseButtonText = "Cancel",
                         DefaultButton = ContentDialogButton.Primary,
@@ -1444,8 +1444,9 @@ namespace my_shop.App.ViewModels
 
                     if (result == ContentDialogResult.Primary)
                     {
-                        // Navigate to Settings - you'll need to implement navigation
-                        // Example: Frame.Navigate(typeof(SettingsScreenView));
+                        Debug.WriteLine("Navigate to Settings view!");
+                        ActivateLicenseRequested?.Invoke();
+                        return;
                     }
                     return;
                 }
@@ -1468,6 +1469,7 @@ namespace my_shop.App.ViewModels
 
                     if (reminderResult == ContentDialogResult.Primary)
                     {
+                        Debug.WriteLine("Navigate to Settings view!");
                         ActivateLicenseRequested?.Invoke();
                         return;
                     }
