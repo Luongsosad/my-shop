@@ -26,14 +26,29 @@ namespace my_shop.App.Views
             this.Loaded += (sender, e) =>
             {
                 ViewModel.MainXamlRoot = this.XamlRoot;
+                ForceLightMode();
             };
+        }
+
+        private void ForceLightMode()
+        {
+            try
+            {
+                if (MainWindow.Instance?.Content is FrameworkElement rootElement)
+                {
+                    rootElement.RequestedTheme = ElementTheme.Light;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[LoginScreen] Failed to force light mode: {ex.Message}");
+            }
         }
 
         public void SetNavigationFrame(Frame frame, IHost appHost)
         {
             _navigationFrame = frame;
             _appHost = appHost;
-            Debug.WriteLine($"Navigation frame set. Frame is null: {frame == null}");
         }
 
         private void RevealButton_Click(object sender, RoutedEventArgs e)
@@ -61,7 +76,6 @@ namespace my_shop.App.Views
 
             try
             {
-                // Load user theme before navigating
                 await LoadUserThemeAsync();
                 
                 var page = _appHost.Services.GetService(pageType) as Page;
@@ -70,11 +84,8 @@ namespace my_shop.App.Views
                 {
                     _navigationFrame.Content = page;
                 }
-                else
-                {
-                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -109,14 +120,11 @@ namespace my_shop.App.Views
                 {
                     var userProfile = await dataService.GetUserProfileAsync(adminId);
                     var theme = string.IsNullOrEmpty(userProfile.Theme) ? "Light" : userProfile.Theme;
-                    
                     ApplyTheme(theme);
-                    Debug.WriteLine($"[LoginScreen] Applied user theme after login: {theme}");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.WriteLine($"[LoginScreen] Failed to load user theme: {ex.Message}");
                 ApplyTheme("Light");
             }
         }
@@ -133,7 +141,6 @@ namespace my_shop.App.Views
                 };
 
                 rootElement.RequestedTheme = newTheme;
-                Debug.WriteLine($"[LoginScreen] Theme applied: {newTheme}");
             }
         }
     }

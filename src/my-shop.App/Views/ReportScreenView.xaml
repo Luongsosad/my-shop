@@ -184,8 +184,7 @@
                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                             <TextBlock Text="{x:Bind ViewModel.TotalProfitText, Mode=OneWay}" 
                                       FontSize="20" 
-                                      FontWeight="Bold"
-                                      Foreground="#4CAF50"/>
+                                      FontWeight="Bold"/>
                         </StackPanel>
                         
                         <lvc:CartesianChart Grid.Row="1"
@@ -256,8 +255,7 @@
                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                         <TextBlock Text="{x:Bind ViewModel.ProfitMarginText, Mode=OneWay}" 
                                   FontSize="20" 
-                                  FontWeight="Bold"
-                                  Foreground="#2196F3"/>
+                                  FontWeight="Bold"/>
                     </StackPanel>
                 </Border>
             </Grid>

@@ -87,10 +87,10 @@ namespace my_shop.App.Views
         {
             var dialog = new ContentDialog
             {
-                Title = "Xác nhận đăng xuất / Confirm Logout",
-                Content = "Bạn có chắc chắn muốn đăng xuất? / Are you sure you want to log out?",
-                PrimaryButtonText = "Đăng xuất / Log Out",
-                CloseButtonText = "Hủy / Cancel",
+                Title = "Xác nhận đăng xuất",
+                Content = "Bạn có chắc chắn muốn đăng xuất?",
+                PrimaryButtonText = "Đăng xuất",
+                CloseButtonText = "Hủy",
                 DefaultButton = ContentDialogButton.Close,
                 XamlRoot = this.XamlRoot
             };
@@ -101,67 +101,40 @@ namespace my_shop.App.Views
             {
                 try
                 {
-                    Debug.WriteLine("[SettingsView] Logout confirmed");
+                    ResetToLightMode();
                     
-                    // Execute logout command from MERGE branch
-                    ViewModel.LogoutCommand.Execute(null);
-                    Debug.WriteLine("[SettingsView] Credentials cleared");
+                    await ViewModel.LogoutAsync();
+                    
+                    await Task.Delay(200);
 
-                    // Wait a bit for cleanup
-                    await Task.Delay(100);
-
-                    // HEAD branch: Use OnLogoutRequested action for navigation
-                    if (ViewModel.OnLogoutRequested != null)
+                    this.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () =>
                     {
-                        // Also execute HEAD branch logout
-                        await ViewModel.LogoutAsync();
-                    }
-                    else
-                    {
-                        // MERGE branch: Navigate using MainWindow
-                        this.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () =>
+                        try
                         {
-                            try
+                            if (MainWindow.Instance != null)
                             {
-                                if (MainWindow.Instance != null)
+                                var mainFrame = MainWindow.Instance.GetMainFrame();
+                                if (mainFrame != null)
                                 {
-                                    Debug.WriteLine("[SettingsView] Navigating via MainWindow");
-                                    
-                                    var mainFrame = MainWindow.Instance.GetMainFrame();
-                                    if (mainFrame != null)
-                                    {
-                                        var loginView = App.GetService<LoginScreenView>();
-                                        loginView.SetNavigationFrame(mainFrame, ((App)App.Current).AppHost);
-                                        mainFrame.Content = loginView;
-                                        
-                                        Debug.WriteLine("[SettingsView] ✅ Navigation successful");
-                                    }
-                                    else
-                                    {
-                                        Debug.WriteLine("[SettingsView] ❌ MainFrame is null");
-                                    }
-                                }
-                                else
-                                {
-                                    Debug.WriteLine("[SettingsView] ❌ MainWindow.Instance is null");
+                                    var loginView = App.GetService<LoginScreenView>();
+                                    loginView.SetNavigationFrame(mainFrame, ((App)App.Current).AppHost);
+                                    mainFrame.Content = loginView;
                                 }
                             }
-                            catch (Exception ex)
-                            {
-                                Debug.WriteLine($"[SettingsView] ❌ Navigation error: {ex.Message}");
-                            }
-                        });
-                    }
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"[SettingsView] ❌ Navigation error: {ex.Message}");
+                        }
+                    });
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[SettingsView] ❌ Logout error: {ex.Message}");
-                    
                     var errorDialog = new ContentDialog
                     {
-                        Title = "Lỗi / Error",
-                        Content = $"Đăng xuất thất bại / Logout failed: {ex.Message}",
-                        CloseButtonText = "Đóng / Close",
+                        Title = "Lỗi",
+                        Content = $"Đăng xuất thất bại: {ex.Message}",
+                        CloseButtonText = "Đóng",
                         XamlRoot = this.XamlRoot
                     };
                     await errorDialog.ShowAsync();
@@ -169,13 +142,45 @@ namespace my_shop.App.Views
             }
         }
 
-        // HEAD branch: Navigation to login
+        private void ResetToLightMode()
+        {
+            try
+            {
+                if (MainWindow.Instance?.Content is FrameworkElement rootElement)
+                {
+                    rootElement.RequestedTheme = ElementTheme.Light;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SettingsView] Failed to reset theme: {ex.Message}");
+            }
+        }
+
         private void NavigateToLogin()
         {
-            var app = Microsoft.UI.Xaml.Application.Current as App;
-            var mainWindow = app?.AppHost.Services.GetRequiredService<MainWindow>();
-
-            mainWindow?.PerformLogout();
+            this.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () =>
+            {
+                try
+                {
+                    ResetToLightMode();
+                    
+                    if (MainWindow.Instance != null)
+                    {
+                        var mainFrame = MainWindow.Instance.GetMainFrame();
+                        if (mainFrame != null)
+                        {
+                            var loginView = App.GetService<LoginScreenView>();
+                            loginView.SetNavigationFrame(mainFrame, ((App)App.Current).AppHost);
+                            mainFrame.Content = loginView;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[SettingsView] ❌ NavigateToLogin error: {ex.Message}");
+                }
+            });
         }
     }
 }

@@ -298,9 +298,11 @@ namespace my_shop.App.ViewModels
                             periodData.ContainsKey(period) ? (double)periodData[period] : 0.0
                         ).ToArray();
                         
+                        var truncatedName = TruncateProductName(product.ProductName, 15);
+                        
                         series.Add(new LineSeries<double>
                         {
-                            Name = product.ProductName,
+                            Name = truncatedName,
                             Values = values,
                             LineSmoothness = 0.5,
                             GeometrySize = 4,
@@ -407,7 +409,6 @@ namespace my_shop.App.ViewModels
 
             if (data != null && data.Any())
             {
-                // Calculate total revenue for each product
                 var productRevenues = data.Select(p => new
                 {
                     ProductName = p.ProductName,
@@ -415,32 +416,33 @@ namespace my_shop.App.ViewModels
                 }).OrderByDescending(p => p.TotalRevenue).ToList();
 
                 var totalRevenue = productRevenues.Sum(p => p.TotalRevenue);
-                
-                // Take top 5 products
                 var topProducts = productRevenues.Take(5).ToList();
                 var othersRevenue = productRevenues.Skip(5).Sum(p => p.TotalRevenue);
 
                 var colors = new[]
                 {
-                    SKColor.Parse("#FF6B6B"), // Red
-                    SKColor.Parse("#4ECDC4"), // Teal
-                    SKColor.Parse("#45B7D1"), // Blue
-                    SKColor.Parse("#FFA07A"), // Light Salmon
-                    SKColor.Parse("#98D8C8"), // Mint
-                    SKColor.Parse("#95A5A6")  // Gray for Others
+                    SKColor.Parse("#FF6B6B"),
+                    SKColor.Parse("#4ECDC4"),
+                    SKColor.Parse("#45B7D1"),
+                    SKColor.Parse("#FFA07A"),
+                    SKColor.Parse("#98D8C8"),
+                    SKColor.Parse("#95A5A6")
                 };
+
+                var dataLabelColor = IsDarkTheme() ? SKColors.White : SKColors.Black;
 
                 int colorIndex = 0;
                 foreach (var product in topProducts)
                 {
                     var percentage = totalRevenue > 0 ? (double)product.TotalRevenue / totalRevenue * 100 : 0;
+                    var truncatedName = TruncateProductName(product.ProductName, 15);
                     
                     series.Add(new PieSeries<double>
                     {
-                        Name = $"{product.ProductName} ({percentage:F1}%)",
+                        Name = $"{truncatedName} ({percentage:F1}%)",
                         Values = new[] { (double)product.TotalRevenue },
                         Fill = new SolidColorPaint(colors[colorIndex % colors.Length]),
-                        DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                        DataLabelsPaint = new SolidColorPaint(dataLabelColor),
                         DataLabelsSize = 12,
                         DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle,
                         DataLabelsFormatter = point => $"{percentage:F1}%"
@@ -449,7 +451,6 @@ namespace my_shop.App.ViewModels
                     colorIndex++;
                 }
 
-                // Add "Others" if there are more than 5 products
                 if (othersRevenue > 0)
                 {
                     var othersPercentage = totalRevenue > 0 ? (double)othersRevenue / totalRevenue * 100 : 0;
@@ -459,7 +460,7 @@ namespace my_shop.App.ViewModels
                         Name = $"Others ({othersPercentage:F1}%)",
                         Values = new[] { (double)othersRevenue },
                         Fill = new SolidColorPaint(colors[colorIndex % colors.Length]),
-                        DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                        DataLabelsPaint = new SolidColorPaint(dataLabelColor),
                         DataLabelsSize = 12,
                         DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle,
                         DataLabelsFormatter = point => $"{othersPercentage:F1}%"
@@ -502,6 +503,14 @@ namespace my_shop.App.ViewModels
             return IsDarkTheme()
                 ? SKColors.LightGray.WithAlpha(80)
                 : SKColors.LightGray.WithAlpha(100);
+        }
+
+        private string TruncateProductName(string name, int maxLength)
+        {
+            if (string.IsNullOrEmpty(name) || name.Length <= maxLength)
+                return name;
+            
+            return name.Substring(0, maxLength - 3) + "...";
         }
     }
 
