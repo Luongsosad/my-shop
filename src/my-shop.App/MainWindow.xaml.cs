@@ -57,16 +57,14 @@ namespace my_shop.App
             {
                 var dialog = new ContentDialog
                 {
-                    Title = "Session Expired",
-                    Content = "Your session has expired. Please login again.",
-                    CloseButtonText = "OK",
+                    Title = "Phiên đăng nhập hết hạn",
+                    Content = "Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại.",
+                    CloseButtonText = "Đóng",
                     XamlRoot = Content.XamlRoot
                 };
                 await dialog.ShowAsync();
 
-                var loginView = _appHost.Services.GetRequiredService<LoginScreenView>();
-                MainFrame.Content = loginView;
-                Debug.WriteLine("Forced logout completed, showing login screen");
+                ShowLoginScreen();
             });
         }
 
@@ -131,6 +129,17 @@ namespace my_shop.App
 
         public void ShowLoginScreen()
         {
+            try
+            {
+                if (Content is FrameworkElement rootElement)
+                {
+                    rootElement.RequestedTheme = ElementTheme.Light;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
             var loginView = _appHost.Services.GetRequiredService<LoginScreenView>();
             loginView.SetNavigationFrame(MainFrame, _appHost);
             MainFrame.Content = loginView;

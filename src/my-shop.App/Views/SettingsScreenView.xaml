@@ -51,21 +51,6 @@
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
             <StackPanel Spacing="24" Width="800" HorizontalAlignment="Center">
 
-                <!-- Error/Success Messages -->
-                <InfoBar x:Name="ErrorInfoBar"
-                        IsOpen="{x:Bind ViewModel.ErrorMessage, Mode=OneWay, Converter={StaticResource StringToBoolConverter}}"
-                        Severity="Error"
-                        Title="Lỗi"
-                        Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
-                        IsClosable="True"/>
-
-                <InfoBar x:Name="SuccessInfoBar"
-                        IsOpen="{x:Bind ViewModel.SuccessMessage, Mode=OneWay, Converter={StaticResource StringToBoolConverter}}"
-                        Severity="Success"
-                        Title="Thành công"
-                        Message="{x:Bind ViewModel.SuccessMessage, Mode=OneWay}"
-                        IsClosable="True"/>
-
                 <!-- ===== LICENSE SECTION ===== -->
                 
                 <!-- License Status Card -->
@@ -445,5 +430,28 @@
               Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <ProgressRing IsActive="True" Width="48" Height="48"/>
         </Grid>
+
+        <!-- Floating Notifications -->
+        <StackPanel Grid.Row="2" 
+                    Spacing="8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Margin="0,20,0,0">
+            <InfoBar x:Name="ErrorInfoBar"
+                    IsOpen="{x:Bind ViewModel.ErrorMessage, Mode=OneWay, Converter={StaticResource StringToBoolConverter}}"
+                    Severity="Error"
+                    Title="Lỗi"
+                    Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                    IsClosable="True"
+                    MaxWidth="600"/>
+
+            <InfoBar x:Name="SuccessInfoBar"
+                    IsOpen="{x:Bind ViewModel.SuccessMessage, Mode=OneWay, Converter={StaticResource StringToBoolConverter}}"
+                    Severity="Success"
+                    Title="Thành công"
+                    Message="{x:Bind ViewModel.SuccessMessage, Mode=OneWay}"
+                    IsClosable="True"
+                    MaxWidth="600"/>
+        </StackPanel>
     </Grid>
 </Page>
