@@ -22,7 +22,7 @@ namespace my_shop.App.Models
         public int FinalPrice { get; set; }
 
         [JsonProperty("extensionData")]
-        public string? ExtensionData { get; set; }
+        public string ExtensionData { get; set; }
 
         [ObservableProperty]
         [JsonIgnore]
@@ -37,13 +37,13 @@ namespace my_shop.App.Models
         }
 
         [JsonProperty("orderItems")]
-        public List<OrderItem>? OrderItems { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
 
         [JsonProperty("customerId")]
         public int? CustomerId { get; set; }
 
         [JsonProperty("customer")]
-        public Customer? Customer { get; set; }
+        public Customer Customer { get; set; }
 
         // UI properties
         public string FormattedPrice => FinalPrice.ToString("N0") + " ₫";
@@ -143,7 +143,7 @@ namespace my_shop.App.Models
         public int Price { get; set; }
 
         [JsonProperty("product")]
-        public Product? Product { get; set; }
+        public Product Product { get; set; }
 
         // UI properties
         public string FormattedPrice => Price.ToString("N0") + " ₫";
@@ -169,21 +169,21 @@ namespace my_shop.App.Models
         public int Count { get; set; }
 
         [JsonProperty("description")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [JsonProperty("categoryId")]
         public int? CategoryId { get; set; }
 
         [JsonProperty("category")]
-        public Category? Category { get; set; }
+        public Category Category { get; set; }
 
         [JsonProperty("extensionData")]
-        public string? ExtensionData { get; set; }
+        public string ExtensionData { get; set; }
 
-        private List<string>? _images;
+        private List<string> _images;
 
         [JsonProperty("images")]
-        public List<string>? Images
+        public List<string> Images
         {
             get => _images;
             set
@@ -229,7 +229,7 @@ namespace my_shop.App.Models
         public DateTimeOffset CreatedAt { get; set; }
 
         [JsonProperty("orders")]
-        public List<Order>? Orders { get; set; }
+        public List<Order> Orders { get; set; }
 
         // UI Properties
         [JsonIgnore]

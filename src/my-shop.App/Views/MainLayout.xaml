@@ -86,6 +86,7 @@
                         <FontIcon Glyph="&#xE713;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+              
             </NavigationView.MenuItems>
 
             <NavigationView.PaneFooter>
