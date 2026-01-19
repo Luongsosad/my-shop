@@ -13,11 +13,18 @@
 
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:BoolToArrowConverter x:Key="BoolToArrowConverter"/>
+        <converters:StringToColorConverter x:Key="StringToColorConverter"/>
+        <converters:BoolToGreenRedConverter x:Key="BoolToGreenRedConverter"/>
+        <converters:DoubleToMarginStatusConverter x:Key="DoubleToMarginStatusConverter"/>
+        <converters:DoubleToPercentageConverter x:Key="DoubleToPercentageConverter"/>
     </Page.Resources>
 
     <ScrollViewer>
         <Grid Padding="24">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -142,26 +149,41 @@
                        CornerRadius="8"
                        Padding="16"
                        Margin="0,0,8,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Tổng doanh thu từ tất cả đơn hàng trong khoảng thời gian đã chọn"/>
+                    </ToolTipService.ToolTip>
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="💰 Total Revenue" 
+                                  FontSize="14" 
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="{x:Bind ViewModel.TotalRevenueText, Mode=OneWay}" 
+                                  FontSize="20" 
+                                  FontWeight="Bold"/>
                         
-                        <StackPanel Grid.Row="0" Spacing="8">
-                            <TextBlock Text="💰 Total Revenue" 
-                                      FontSize="14" 
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock Text="{x:Bind ViewModel.TotalRevenueText, Mode=OneWay}" 
-                                      FontSize="20" 
-                                      FontWeight="Bold"/>
+                        <!-- Comparison with previous period -->
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <FontIcon Glyph="{x:Bind ViewModel.RevenueIncreased, Mode=OneWay, Converter={StaticResource BoolToArrowConverter}}" 
+                                     FontSize="12">
+                                <FontIcon.Foreground>
+                                    <SolidColorBrush Color="{x:Bind ViewModel.RevenueStatusColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
+                                </FontIcon.Foreground>
+                            </FontIcon>
+                            <TextBlock Text="{x:Bind ViewModel.RevenueChangeText, Mode=OneWay}" 
+                                      FontSize="12"
+                                      FontWeight="SemiBold">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{x:Bind ViewModel.RevenueStatusColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <TextBlock Text="so với kỳ trước" 
+                                      FontSize="11" 
+                                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                         </StackPanel>
                         
-                        <lvc:CartesianChart Grid.Row="1"
-                                           Series="{x:Bind ViewModel.RevenueSparkline, Mode=OneWay}"
-                                           Height="60"
-                                           Margin="0,8,0,0"/>
-                    </Grid>
+                        <TextBlock Text="Tổng doanh thu" 
+                                  FontSize="11" 
+                                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                    </StackPanel>
                 </Border>
 
                 <!-- Total Profit Card -->
@@ -172,26 +194,41 @@
                        CornerRadius="8"
                        Padding="16"
                        Margin="0,0,8,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Tổng lợi nhuận = Doanh thu - Chi phí nhập hàng"/>
+                    </ToolTipService.ToolTip>
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="📈 Total Profit" 
+                                  FontSize="14" 
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="{x:Bind ViewModel.TotalProfitText, Mode=OneWay}" 
+                                  FontSize="20" 
+                                  FontWeight="Bold"/>
                         
-                        <StackPanel Grid.Row="0" Spacing="8">
-                            <TextBlock Text="📈 Total Profit" 
-                                      FontSize="14" 
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock Text="{x:Bind ViewModel.TotalProfitText, Mode=OneWay}" 
-                                      FontSize="20" 
-                                      FontWeight="Bold"/>
+                        <!-- Comparison with previous period -->
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <FontIcon Glyph="{x:Bind ViewModel.ProfitIncreased, Mode=OneWay, Converter={StaticResource BoolToArrowConverter}}" 
+                                     FontSize="12">
+                                <FontIcon.Foreground>
+                                    <SolidColorBrush Color="{x:Bind ViewModel.ProfitStatusColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
+                                </FontIcon.Foreground>
+                            </FontIcon>
+                            <TextBlock Text="{x:Bind ViewModel.ProfitChangeText, Mode=OneWay}" 
+                                      FontSize="12"
+                                      FontWeight="SemiBold">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{x:Bind ViewModel.ProfitStatusColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <TextBlock Text="so với kỳ trước" 
+                                      FontSize="11" 
+                                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                         </StackPanel>
                         
-                        <lvc:CartesianChart Grid.Row="1"
-                                           Series="{x:Bind ViewModel.ProfitSparkline, Mode=OneWay}"
-                                           Height="60"
-                                           Margin="0,8,0,0"/>
-                    </Grid>
+                        <TextBlock Text="Tổng lợi nhuận" 
+                                  FontSize="11" 
+                                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                    </StackPanel>
                 </Border>
 
                 <!-- Total Orders Card -->
@@ -202,26 +239,41 @@
                        CornerRadius="8"
                        Padding="16"
                        Margin="0,0,8,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Tổng số đơn hàng đã tạo trong khoảng thời gian"/>
+                    </ToolTipService.ToolTip>
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="🛒 Total Orders" 
+                                  FontSize="14" 
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="{x:Bind ViewModel.TotalOrdersText, Mode=OneWay}" 
+                                  FontSize="20" 
+                                  FontWeight="Bold"/>
                         
-                        <StackPanel Grid.Row="0" Spacing="8">
-                            <TextBlock Text="🛒 Total Orders" 
-                                      FontSize="14" 
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock Text="{x:Bind ViewModel.TotalOrdersText, Mode=OneWay}" 
-                                      FontSize="20" 
-                                      FontWeight="Bold"/>
+                        <!-- Comparison with previous period -->
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <FontIcon Glyph="{x:Bind ViewModel.OrdersIncreased, Mode=OneWay, Converter={StaticResource BoolToArrowConverter}}" 
+                                     FontSize="12">
+                                <FontIcon.Foreground>
+                                    <SolidColorBrush Color="{x:Bind ViewModel.OrdersIncreased, Mode=OneWay, Converter={StaticResource BoolToGreenRedConverter}}"/>
+                                </FontIcon.Foreground>
+                            </FontIcon>
+                            <TextBlock Text="{x:Bind ViewModel.OrdersChangeText, Mode=OneWay}" 
+                                      FontSize="12"
+                                      FontWeight="SemiBold">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{x:Bind ViewModel.OrdersIncreased, Mode=OneWay, Converter={StaticResource BoolToGreenRedConverter}}"/>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <TextBlock Text="so với kỳ trước" 
+                                      FontSize="11" 
+                                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                         </StackPanel>
                         
-                        <lvc:CartesianChart Grid.Row="1"
-                                           Series="{x:Bind ViewModel.OrdersSparkline, Mode=OneWay}"
-                                           Height="60"
-                                           Margin="0,8,0,0"/>
-                    </Grid>
+                        <TextBlock Text="Số đơn hàng" 
+                                  FontSize="11" 
+                                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                    </StackPanel>
                 </Border>
 
                 <!-- Average Order Value Card -->
@@ -232,6 +284,9 @@
                        CornerRadius="8"
                        Padding="16"
                        Margin="0,0,8,0">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Giá trị trung bình mỗi đơn hàng = Tổng doanh thu / Số đơn hàng"/>
+                    </ToolTipService.ToolTip>
                     <StackPanel Spacing="8">
                         <TextBlock Text="💵 Avg Order Value" 
                                   FontSize="14" 
@@ -239,16 +294,22 @@
                         <TextBlock Text="{x:Bind ViewModel.AverageOrderValueText, Mode=OneWay}" 
                                   FontSize="20" 
                                   FontWeight="Bold"/>
+                        <TextBlock Text="Giá trị TB/đơn" 
+                                  FontSize="11" 
+                                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                     </StackPanel>
                 </Border>
 
-                <!-- Profit Margin Card -->
+                <!-- Profit Margin Card with Progress Bar -->
                 <Border Grid.Column="4" 
                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                        BorderThickness="1"
                        CornerRadius="8"
                        Padding="16">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Tỷ suất lợi nhuận = (Lợi nhuận / Doanh thu) × 100%"/>
+                    </ToolTipService.ToolTip>
                     <StackPanel Spacing="8">
                         <TextBlock Text="📊 Profit Margin" 
                                   FontSize="14" 
@@ -256,6 +317,33 @@
                         <TextBlock Text="{x:Bind ViewModel.ProfitMarginText, Mode=OneWay}" 
                                   FontSize="20" 
                                   FontWeight="Bold"/>
+                        
+                        <!-- Progress Bar -->
+                        <ProgressBar Value="{x:Bind ViewModel.ProfitMarginValue, Mode=OneWay}" 
+                                    Maximum="100"
+                                    Height="8"
+                                    CornerRadius="4">
+                            <ProgressBar.Foreground>
+                                <SolidColorBrush Color="{x:Bind ViewModel.ProfitMarginStatusColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
+                            </ProgressBar.Foreground>
+                        </ProgressBar>
+                        
+                        <!-- Status indicator -->
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <Ellipse Width="8" Height="8" VerticalAlignment="Center">
+                                <Ellipse.Fill>
+                                    <SolidColorBrush Color="{x:Bind ViewModel.ProfitMarginStatusColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <TextBlock FontSize="11" 
+                                      Foreground="{ThemeResource TextFillColorTertiaryBrush}">
+                                <Run Text="{x:Bind ViewModel.ProfitMarginValue, Mode=OneWay, Converter={StaticResource DoubleToMarginStatusConverter}}"/>
+                            </TextBlock>
+                        </StackPanel>
+                        
+                        <TextBlock Text="Tỷ suất lợi nhuận" 
+                                  FontSize="11" 
+                                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -307,8 +395,123 @@
                 </Border>
             </Grid>
 
+            <!-- Top 5 Products Leaderboard -->
+            <Border Grid.Row="4"
+                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                   BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                   BorderThickness="1"
+                   CornerRadius="8"
+                   Padding="24"
+                   Margin="0,0,0,24">
+                <StackPanel Spacing="16">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <FontIcon Glyph="&#xE734;" 
+                                 FontSize="24"
+                                 Foreground="#FFD700"/>
+                        <TextBlock Text="🏆 Top 5 Products Leaderboard" 
+                                  FontSize="20" 
+                                  FontWeight="SemiBold"
+                                  VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Border Height="1" 
+                           Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+
+                    <!-- Leaderboard Items -->
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.TopProducts, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ProductLeaderboardItem">
+                                <Border Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                                       CornerRadius="8"
+                                       Padding="16"
+                                       Margin="0,0,0,12">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Rank Badge -->
+                                        <Border Grid.Row="0" Grid.Column="0"
+                                               Width="40" Height="40"
+                                               CornerRadius="20"
+                                               Margin="0,0,16,0"
+                                               VerticalAlignment="Center">
+                                            <Border.Background>
+                                                <SolidColorBrush Color="{x:Bind BarColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
+                                            </Border.Background>
+                                            <TextBlock Text="{x:Bind Rank}" 
+                                                      FontSize="18" 
+                                                      FontWeight="Bold"
+                                                      Foreground="White"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                        </Border>
+
+                                        <!-- Product Info -->
+                                        <StackPanel Grid.Row="0" Grid.Column="1" 
+                                                   VerticalAlignment="Center"
+                                                   Spacing="4">
+                                            <TextBlock Text="{x:Bind ProductName}" 
+                                                      FontSize="15" 
+                                                      FontWeight="SemiBold"/>
+                                            <StackPanel Orientation="Horizontal" Spacing="16">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="Sold:" 
+                                                              FontSize="12" 
+                                                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                    <TextBlock Text="{x:Bind QuantitySold}" 
+                                                              FontSize="12" 
+                                                              FontWeight="SemiBold"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="Revenue:" 
+                                                              FontSize="12" 
+                                                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                    <TextBlock Text="{x:Bind RevenueText}" 
+                                                              FontSize="12" 
+                                                              FontWeight="SemiBold"
+                                                              Foreground="#4CAF50"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!-- Percentage -->
+                                        <TextBlock Grid.Row="0" Grid.Column="2"
+                                                  VerticalAlignment="Center"
+                                                  Margin="16,0,0,0">
+                                            <Run Text="{x:Bind ProgressPercentage, Mode=OneWay, Converter={StaticResource DoubleToPercentageConverter}}" 
+                                                 FontSize="16" 
+                                                 FontWeight="Bold"/>
+                                            <Run Text="%" FontSize="12"/>
+                                        </TextBlock>
+
+                                        <!-- Progress Bar -->
+                                        <ProgressBar Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                                    Value="{x:Bind ProgressPercentage, Mode=OneWay}"
+                                                    Maximum="100"
+                                                    Height="8"
+                                                    CornerRadius="4"
+                                                    Margin="0,8,0,0">
+                                            <ProgressBar.Foreground>
+                                                <SolidColorBrush Color="{x:Bind BarColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
+                                            </ProgressBar.Foreground>
+                                        </ProgressBar>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
             <!-- Revenue & Profit Chart -->
-            <Border Grid.Row="3" 
+            <Border Grid.Row="5"
                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                    BorderThickness="1"
@@ -328,7 +531,7 @@
             </Border>
 
             <!-- Loading Overlay -->
-            <Border Grid.Row="0" Grid.RowSpan="4"
+            <Border Grid.Row="0" Grid.RowSpan="6"
                    Background="#80000000"
                    Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                    VerticalAlignment="Stretch"

@@ -47,6 +47,36 @@ namespace my_shop.App.ViewModels
         private string profitMarginText = "0%";
 
         [ObservableProperty]
+        private double profitMarginValue = 0;
+
+        [ObservableProperty]
+        private string revenueChangeText = "";
+
+        [ObservableProperty]
+        private string profitChangeText = "";
+
+        [ObservableProperty]
+        private string ordersChangeText = "";
+
+        [ObservableProperty]
+        private bool revenueIncreased = true;
+
+        [ObservableProperty]
+        private bool profitIncreased = true;
+
+        [ObservableProperty]
+        private bool ordersIncreased = true;
+
+        [ObservableProperty]
+        private string revenueStatusColor = "#4CAF50";
+
+        [ObservableProperty]
+        private string profitStatusColor = "#4CAF50";
+
+        [ObservableProperty]
+        private string profitMarginStatusColor = "#4CAF50";
+
+        [ObservableProperty]
         private ObservableCollection<ISeries> revenueSparkline = new();
 
         [ObservableProperty]
@@ -63,6 +93,23 @@ namespace my_shop.App.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<ISeries> productRevenueDistributionSeries = new();
+
+        // Quick Stats Properties
+        [ObservableProperty]
+        private string bestSellingProduct = "N/A";
+
+        [ObservableProperty]
+        private int bestSellingProductQuantity = 0;
+
+        [ObservableProperty]
+        private string topCustomer = "N/A";
+
+        [ObservableProperty]
+        private int topCustomerOrders = 0;
+
+        // Top 5 Products Leaderboard
+        [ObservableProperty]
+        private ObservableCollection<ProductLeaderboardItem> topProducts = new();
 
         [ObservableProperty]
         private IEnumerable<LiveChartsCore.Kernel.Sketches.ICartesianAxis>? productSalesXAxes;
@@ -126,6 +173,8 @@ namespace my_shop.App.ViewModels
                 UpdateProductSalesChart(productSalesData);
                 UpdateRevenueProfitChart(revenueProfitData);
                 UpdateProductRevenueDistribution(productSalesData);
+                UpdateQuickStats(productSalesData);
+                UpdateTopProductsLeaderboard(productSalesData);
             }
             catch (Exception)
             {
@@ -204,6 +253,59 @@ namespace my_shop.App.ViewModels
             TotalOrdersText = report.TotalOrders.ToString("N0");
             AverageOrderValueText = FormatCurrency((long)report.AverageOrderValue);
             ProfitMarginText = $"{report.ProfitMargin:F2}%";
+            ProfitMarginValue = report.ProfitMargin;
+
+            // Calculate comparison with previous period (mock data for demo)
+            // In real app, you would fetch previous period data and compare
+            var revenueChange = CalculateMockChange(report.TotalRevenue);
+            var profitChange = CalculateMockChange(report.TotalProfit);
+            var ordersChange = CalculateMockChange(report.TotalOrders);
+
+            RevenueChangeText = FormatChangePercentage(revenueChange);
+            ProfitChangeText = FormatChangePercentage(profitChange);
+            OrdersChangeText = FormatChangePercentage(ordersChange);
+
+            RevenueIncreased = revenueChange >= 0;
+            ProfitIncreased = profitChange >= 0;
+            OrdersIncreased = ordersChange >= 0;
+
+            // Color-coded status based on profit margin
+            if (report.ProfitMargin >= 30)
+            {
+                ProfitMarginStatusColor = "#4CAF50"; // Green - Good
+            }
+            else if (report.ProfitMargin >= 15)
+            {
+                ProfitMarginStatusColor = "#FF9800"; // Orange - Medium
+            }
+            else
+            {
+                ProfitMarginStatusColor = "#F44336"; // Red - Low
+            }
+
+            // Status colors for revenue and profit based on change
+            RevenueStatusColor = revenueChange >= 0 ? "#4CAF50" : "#F44336";
+            ProfitStatusColor = profitChange >= 0 ? "#4CAF50" : "#F44336";
+        }
+
+        private double CalculateMockChange(long currentValue)
+        {
+            // Mock calculation: random change between -20% to +30%
+            // In real app, compare with actual previous period data
+            var random = new Random();
+            return (random.NextDouble() * 50) - 20; // Returns value between -20 and +30
+        }
+
+        private double CalculateMockChange(int currentValue)
+        {
+            var random = new Random();
+            return (random.NextDouble() * 50) - 20;
+        }
+
+        private string FormatChangePercentage(double change)
+        {
+            var sign = change >= 0 ? "+" : "";
+            return $"{sign}{change:F1}%";
         }
 
         private void UpdateSparklines(RevenueProfitReport report)
@@ -471,6 +573,73 @@ namespace my_shop.App.ViewModels
             ProductRevenueDistributionSeries = new ObservableCollection<ISeries>(series);
         }
 
+        private void UpdateQuickStats(List<ProductSalesReport> data)
+        {
+            if (data == null || !data.Any())
+            {
+                BestSellingProduct = "N/A";
+                BestSellingProductQuantity = 0;
+                TopCustomer = "Coming Soon";
+                TopCustomerOrders = 0;
+                return;
+            }
+
+            // Best Selling Product
+            var bestProduct = data.OrderByDescending(p => p.TotalQuantitySold).FirstOrDefault();
+            if (bestProduct != null)
+            {
+                BestSellingProduct = TruncateProductName(bestProduct.ProductName, 20);
+                BestSellingProductQuantity = bestProduct.TotalQuantitySold;
+            }
+
+            // Top Customer (Mock data - would need customer data from API)
+            TopCustomer = "Coming Soon";
+            TopCustomerOrders = 0;
+        }
+
+        private void UpdateTopProductsLeaderboard(List<ProductSalesReport> data)
+        {
+            var leaderboard = new ObservableCollection<ProductLeaderboardItem>();
+
+            if (data != null && data.Any())
+            {
+                var maxQuantity = data.Max(p => p.TotalQuantitySold);
+                var topFive = data.OrderByDescending(p => p.TotalQuantitySold).Take(5).ToList();
+
+                int rank = 1;
+                foreach (var product in topFive)
+                {
+                    var percentage = maxQuantity > 0 ? (double)product.TotalQuantitySold / maxQuantity * 100 : 0;
+                    
+                    leaderboard.Add(new ProductLeaderboardItem
+                    {
+                        Rank = rank,
+                        ProductName = TruncateProductName(product.ProductName, 25),
+                        QuantitySold = product.TotalQuantitySold,
+                        Revenue = product.TotalRevenue,
+                        RevenueText = FormatCurrency(product.TotalRevenue),
+                        ProgressPercentage = percentage,
+                        BarColor = GetRankColor(rank)
+                    });
+                    
+                    rank++;
+                }
+            }
+
+            TopProducts = leaderboard;
+        }
+
+        private string GetRankColor(int rank)
+        {
+            return rank switch
+            {
+                1 => "#FFD700", // Gold
+                2 => "#C0C0C0", // Silver
+                3 => "#CD7F32", // Bronze
+                _ => "#4ECDC4"  // Teal
+            };
+        }
+
         private string FormatCurrency(long value)
         {
             return value.ToString("N0") + " ₫";
@@ -518,5 +687,16 @@ namespace my_shop.App.ViewModels
     {
         public string Name { get; set; } = string.Empty;
         public ReportPeriodType Type { get; set; }
+    }
+
+    public class ProductLeaderboardItem
+    {
+        public int Rank { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public int QuantitySold { get; set; }
+        public long Revenue { get; set; }
+        public string RevenueText { get; set; } = string.Empty;
+        public double ProgressPercentage { get; set; }
+        public string BarColor { get; set; } = "#4ECDC4";
     }
 }
