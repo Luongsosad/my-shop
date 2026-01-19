@@ -56,12 +56,12 @@ namespace my_shop.App.Views
             {
                 if (ViewModel.IsManagementMode)
                 {
-                    ToggleModeText.Text = "Chuyển sang bán hàng";
+                    ToggleModeText.Text = "Switch to sales mode";
                     ToggleModeIcon.Glyph = "\uE7BF"; // Cart icon
                 }
                 else
                 {
-                    ToggleModeText.Text = "Chuyển sang quản lý";
+                    ToggleModeText.Text = "Switch to management mode";
                     ToggleModeIcon.Glyph = "\uE74E"; // Settings icon
                 }
             }
@@ -201,9 +201,9 @@ namespace my_shop.App.Views
                     // Show validation error
                     var errorDialog = new ContentDialog
                     {
-                        Title = "Lỗi nhập liệu",
+                        Title = "Input error",
                         Content = errorMessage,
-                        CloseButtonText = "Đóng",
+                        CloseButtonText = "Close",
                         XamlRoot = this.XamlRoot
                     };
                     await errorDialog.ShowAsync();
@@ -237,9 +237,9 @@ namespace my_shop.App.Views
                     // Show error dialog
                     var errorDialog = new ContentDialog
                     {
-                        Title = "Lỗi",
-                        Content = $"Không thể lưu sản phẩm:\n\n{ex.Message}",
-                        CloseButtonText = "Đóng",
+                        Title = "Error",
+                        Content = $"Unable to save product:\n\n{ex.Message}",
+                        CloseButtonText = "Close",
                         XamlRoot = this.XamlRoot
                     };
                     await errorDialog.ShowAsync();
@@ -251,10 +251,10 @@ namespace my_shop.App.Views
         {
             var dialog = new ContentDialog
             {
-                Title = "Xác nhận xóa",
-                Content = $"Bạn có chắc chắn muốn xóa sản phẩm '{product.Name}'?\n\nHành động này không thể hoàn tác.",
-                PrimaryButtonText = "Xóa",
-                CloseButtonText = "Hủy",
+                Title = "Confirm deletion",
+                Content = $"Are you sure you want to delete the product '{product.Name}'?\n\nThis action cannot be undone.",
+                PrimaryButtonText = "Delete",
+                CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Close,
                 XamlRoot = this.XamlRoot
             };
@@ -296,7 +296,7 @@ namespace my_shop.App.Views
                 // Validate cart
                 if (ViewModel.CartItems.Count == 0)
                 {
-                    await ShowErrorDialog("Giỏ hàng trống", "Vui lòng thêm sản phẩm vào giỏ hàng trước khi tạo đơn.");
+                    await ShowErrorDialog("Cart is empty", "Please add products to your shopping cart before placing your order.");
                     return;
                 }
 
@@ -306,7 +306,7 @@ namespace my_shop.App.Views
                     // Existing customer
                     if (ViewModel.SelectedCustomer == null)
                     {
-                        await ShowErrorDialog("Chưa chọn khách hàng", "Vui lòng chọn khách hàng hoặc tạo mới.");
+                        await ShowErrorDialog("Customer has not been selected", "Please select a customer or create a new one.");
                         return;
                     }
                 }
@@ -315,12 +315,12 @@ namespace my_shop.App.Views
                     // New customer
                     if (string.IsNullOrWhiteSpace(ViewModel.CustomerName))
                     {
-                        await ShowErrorDialog("Thiếu thông tin", "Vui lòng nhập tên khách hàng.");
+                        await ShowErrorDialog("Missing information", "Please enter the customer's name.");
                         return;
                     }
                     if (string.IsNullOrWhiteSpace(ViewModel.CustomerPhone))
                     {
-                        await ShowErrorDialog("Thiếu thông tin", "Vui lòng nhập số điện thoại khách hàng.");
+                        await ShowErrorDialog("Missing information", "Please enter the customer's phone number.");
                         return;
                     }
                 }
@@ -341,12 +341,12 @@ namespace my_shop.App.Views
                 }
 
                 // Show success dialog
-                await ShowSuccessDialog("Thành công", "Đơn hàng đã được tạo thành công!");
+                await ShowSuccessDialog("Success", "The order has been successfully created!");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"❌ CreateOrderButton_Click Error: {ex.Message}");
-                await ShowErrorDialog("Lỗi tạo đơn hàng", $"Không thể tạo đơn hàng:\n\n{ex.Message}");
+                await ShowErrorDialog("Error creating order", $"Unable to create order:\n\n{ex.Message}");
             }
         }
 
@@ -356,7 +356,7 @@ namespace my_shop.App.Views
             {
                 Title = title,
                 Content = message,
-                CloseButtonText = "Đóng",
+                CloseButtonText = "Close",
                 XamlRoot = this.XamlRoot
             };
             await dialog.ShowAsync();

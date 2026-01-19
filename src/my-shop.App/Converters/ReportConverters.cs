@@ -80,11 +80,11 @@ namespace my_shop.App.Converters
             if (value is double margin)
             {
                 if (margin >= 30)
-                    return "T?t (?30%)";
+                    return "High (?30%)";
                 else if (margin >= 15)
-                    return "Trung bình (15-30%)";
+                    return "Medium (15-30%)";
                 else
-                    return "Th?p (<15%)";
+                    return "Low (<15%)";
             }
             return "N/A";
         }

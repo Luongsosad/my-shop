@@ -26,7 +26,10 @@ namespace my_shop.App.ViewModels
         
         [ObservableProperty]
         private bool _rememberMe;
-        
+
+        [ObservableProperty]
+        private bool _isLoading;
+
         public ICommand LoginCommand { get; }
         public ICommand ForgotPasswordCommand { get; }
         public ICommand SignupCommand { get; }
@@ -65,13 +68,15 @@ namespace my_shop.App.ViewModels
         private bool CanExecuteLogin()
         {
             return !string.IsNullOrWhiteSpace(Username) &&
-                   !string.IsNullOrWhiteSpace(Password);
+                   !string.IsNullOrWhiteSpace(Password) &&
+                   !IsLoading;
         }
 
         private async Task ExecuteLogin()
         {
             try
             {
+                IsLoading = true;
                 var result = await _authService.LoginAsync(Username, Password);
 
                 if (RememberMe)
@@ -97,6 +102,10 @@ namespace my_shop.App.ViewModels
                     RequestedTheme = ElementTheme.Light
                 };
                 await dialog.ShowAsync();
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -211,5 +220,10 @@ namespace my_shop.App.ViewModels
         {
             (LoginCommand as AsyncRelayCommand)?.NotifyCanExecuteChanged();
         }
+        partial void OnIsLoadingChanged(bool value)
+        {
+            (LoginCommand as AsyncRelayCommand)?.NotifyCanExecuteChanged();
+        }
+
     }
 }

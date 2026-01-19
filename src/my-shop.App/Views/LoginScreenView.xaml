@@ -285,5 +285,24 @@
                        FontSize="12"
                        FontWeight="SemiBold"/>
         </Grid>
+
+        <Grid Grid.ColumnSpan="2"
+              Background="#80000000"
+              Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}">
+            <StackPanel HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Spacing="20">
+                <!-- Spinner -->
+                <ProgressRing IsActive="True"
+                             Width="60"
+                             Height="60"/>
+
+                <TextBlock Text="Signing in…"
+           FontSize="15"
+           FontWeight="Medium"
+           Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+           HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

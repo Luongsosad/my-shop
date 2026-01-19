@@ -35,34 +35,34 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0" Padding="24,24,24,16">
+        <Grid Grid.Row="0" Padding="12,12,12,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0">
-                <TextBlock Text="Quản lý Voucher" 
+                <TextBlock Text="Voucher Management" 
                           Style="{ThemeResource TitleLargeTextBlockStyle}"
-                          FontWeight="SemiBold"/>
-                <TextBlock Text="Tạo và quản lý mã giảm giá cho khách hàng" 
+                          FontWeight="SemiBold"
+                           FontSize="32"/>
+                <TextBlock Text="Create and manage discount codes for customers" 
                           Style="{ThemeResource BodyTextBlockStyle}"
                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                          Margin="0,4,0,0"/>
+                          Margin="0,10,0,0"/>
             </StackPanel>
 
             <Button Grid.Column="1"
                    Command="{x:Bind ViewModel.NewVoucherCommand}"
                    Style="{ThemeResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="8">
-                    <FontIcon Glyph="&#xE710;" FontSize="16"/>
-                    <TextBlock Text="Tạo Voucher"/>
+                    <TextBlock Text="Create Voucher"/>
                 </StackPanel>
             </Button>
         </Grid>
 
         <!-- Main Content -->
-        <Grid Grid.Row="1" Padding="24,0,24,24">
+        <Grid Grid.Row="1" Padding="12,0,12,24">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="3*"/>
@@ -76,11 +76,16 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" 
-                              Text="Danh sách Voucher" 
-                              Style="{ThemeResource SubtitleTextBlockStyle}"
-                              FontWeight="SemiBold"
-                              Margin="0,0,0,16"/>
+                    <StackPanel Grid.Row="0"
+            Orientation="Horizontal"
+            Spacing="16"
+            Margin="0,0,0,16">
+
+                        <TextBlock Text="Voucher"
+               Style="{ThemeResource SubtitleTextBlockStyle}"
+               FontWeight="SemiBold"/>
+                    </StackPanel>
+
 
                     <ProgressRing Grid.Row="1" 
                                  IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
@@ -115,10 +120,20 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Grid.Column="0"
-                                                          Text="{x:Bind Code}"
-                                                          FontWeight="SemiBold"
-                                                          FontSize="16"/>
+                                                <StackPanel Grid.Column="0"
+            Orientation="Horizontal"
+            Spacing="8"
+            VerticalAlignment="Center">
+
+                                                    <!-- Voucher / Ticket icon -->
+                                                    <FontIcon Glyph="&#xE8C7;" FontSize="16"/>
+
+                                                    <!-- Voucher code -->
+                                                    <TextBlock Text="{x:Bind Code}"
+               FontWeight="SemiBold"
+               FontSize="16"/>
+                                                </StackPanel>
+
 
                                                 <Border Grid.Column="1"
                                                        Background="{ThemeResource AccentFillColorDefaultBrush}"
@@ -142,11 +157,11 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
                                             <!-- Info -->
                                             <StackPanel Grid.Row="2" Spacing="4" Margin="0,8,0,0">
                                                 <TextBlock FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
-                                                    <Run Text="Giảm:"/>
+                                                    <Run Text="Discount:"/>
                                                     <Run Text="{x:Bind DisplayDiscount}" FontWeight="SemiBold"/>
                                                 </TextBlock>
                                                 <TextBlock FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
-                                                    <Run Text="Đã dùng:"/>
+                                                    <Run Text="Used:"/>
                                                     <Run Text="{x:Bind DisplayUsage}" FontWeight="SemiBold"/>
                                                 </TextBlock>
                                                 <TextBlock Text="{x:Bind DisplayMinOrder}"
@@ -159,20 +174,20 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
                                                 <Button Click="EditButton_Click"
                                                        Tag="{x:Bind}"
                                                        Style="{ThemeResource SubtleButtonStyle}"
-                                                       ToolTipService.ToolTip="Chỉnh sửa">
+                                                       ToolTipService.ToolTip="Edit">
                                                     <StackPanel Orientation="Horizontal" Spacing="4">
                                                         <FontIcon Glyph="&#xE70F;" FontSize="14"/>
-                                                        <TextBlock Text="Sửa" FontSize="12"/>
+                                                        <TextBlock Text="Edit" FontSize="12"/>
                                                     </StackPanel>
                                                 </Button>
 
                                                 <Button Click="DeleteButton_Click"
                                                        Tag="{x:Bind}"
                                                        Style="{ThemeResource SubtleButtonStyle}"
-                                                       ToolTipService.ToolTip="Xóa">
+                                                       ToolTipService.ToolTip="Clear">
                                                     <StackPanel Orientation="Horizontal" Spacing="4">
                                                         <FontIcon Glyph="&#xE74D;" FontSize="14"/>
-                                                        <TextBlock Text="Xóa" FontSize="12"/>
+                                                        <TextBlock Text="Clear" FontSize="12"/>
                                                     </StackPanel>
                                                 </Button>
                                             </StackPanel>
@@ -189,7 +204,7 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
             <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="12,0,0,0">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Spacing="16">
-                        <TextBlock Text="{x:Bind ViewModel.IsEditMode, Mode=OneWay, Converter={StaticResource BoolToStringConverter}, ConverterParameter='Chỉnh sửa Voucher|Tạo Voucher mới'}"
+                        <TextBlock Text="{x:Bind ViewModel.IsEditMode, Mode=OneWay, Converter={StaticResource BoolToStringConverter}, ConverterParameter='Chỉnh sửa Voucher|Create voucher'}"
                                   Style="{ThemeResource SubtitleTextBlockStyle}"
                                   FontWeight="SemiBold"/>
 
@@ -200,7 +215,7 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
 
                         <!-- Code -->
                         <StackPanel>
-                            <TextBlock Text="Mã Voucher *" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                            <TextBlock Text="Voucher code *" FontWeight="SemiBold" Margin="0,0,0,6"/>
                             <TextBox Text="{x:Bind ViewModel.Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     PlaceholderText="VD: SUMMER2026"
                                     CharacterCasing="Upper"/>
@@ -208,9 +223,9 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
 
                         <!-- Description -->
                         <StackPanel>
-                            <TextBlock Text="Mô tả" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                            <TextBlock Text="Description" FontWeight="SemiBold" Margin="0,0,0,6"/>
                             <TextBox Text="{x:Bind ViewModel.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    PlaceholderText="Mô tả về voucher"
+                                    PlaceholderText="Description something about this voucher"
                                     AcceptsReturn="True"
                                     Height="80"
                                     TextWrapping="Wrap"/>
@@ -225,7 +240,7 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Giảm giá (%) *" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                <TextBlock Text="Discount (%) *" FontWeight="SemiBold" Margin="0,0,0,6"/>
                                 <NumberBox Value="{x:Bind ViewModel.DiscountPercent, Mode=TwoWay}"
                                           SpinButtonPlacementMode="Inline"
                                           Minimum="1"
@@ -233,7 +248,7 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Giảm tối đa (đ) *" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                <TextBlock Text="Maximum reduction (đ) *" FontWeight="SemiBold" Margin="0,0,0,6"/>
                                 <NumberBox Value="{x:Bind ViewModel.MaxDiscountAmount, Mode=TwoWay}"
                                           SpinButtonPlacementMode="Inline"
                                           Minimum="1000"
@@ -244,7 +259,7 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
 
                         <!-- Order Settings -->
                         <StackPanel>
-                            <TextBlock Text="Đơn hàng tối thiểu (đ)" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                            <TextBlock Text="Minimum order value (đ)" FontWeight="SemiBold" Margin="0,0,0,6"/>
                             <NumberBox Value="{x:Bind ViewModel.MinOrderAmount, Mode=TwoWay}"
                                       SpinButtonPlacementMode="Inline"
                                       Minimum="0"
@@ -261,7 +276,7 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Số lượng phát hành *" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                <TextBlock Text="Quantity *" FontWeight="SemiBold" Margin="0,0,0,6"/>
                                 <NumberBox Value="{x:Bind ViewModel.TotalQuantity, Mode=TwoWay}"
                                           SpinButtonPlacementMode="Inline"
                                           Minimum="1"
@@ -269,7 +284,7 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" Visibility="{x:Bind ViewModel.IsEditMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <TextBlock Text="Số lượng còn lại" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                <TextBlock Text="Remains: " FontWeight="SemiBold" Margin="0,0,0,6"/>
                                 <NumberBox Value="{x:Bind ViewModel.RemainingQuantity, Mode=TwoWay}"
                                           SpinButtonPlacementMode="Inline"
                                           Minimum="0"/>
@@ -278,25 +293,25 @@ Background="{ThemeResource LayerFillColorDefaultBrush}">
 
                         <!-- Date Range -->
                         <StackPanel>
-                            <TextBlock Text="Ngày bắt đầu *" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                            <TextBlock Text="Released date *" FontWeight="SemiBold" Margin="0,0,0,6"/>
                             <DatePicker Date="{x:Bind ViewModel.StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                        HorizontalAlignment="Stretch"/>
                         </StackPanel>
 
                         <StackPanel>
-                            <TextBlock Text="Ngày kết thúc *" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                            <TextBlock Text="Expired date *" FontWeight="SemiBold" Margin="0,0,0,6"/>
                             <DatePicker Date="{x:Bind ViewModel.EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                        HorizontalAlignment="Stretch"/>
                         </StackPanel>
 
                         <!-- Action Buttons -->
-                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,8,0,0" HorizontalAlignment="Right">
                             <Button Command="{x:Bind ViewModel.SaveVoucherCommand}"
                                    Style="{ThemeResource AccentButtonStyle}"
                                    IsEnabled="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource InvertedBoolConverter}}">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <FontIcon Glyph="&#xE74E;" FontSize="16"/>
-                                    <TextBlock Text="{x:Bind ViewModel.IsEditMode, Mode=OneWay, Converter={StaticResource BoolToStringConverter}, ConverterParameter='Cập nhật|Tạo mới'}"/>
+                                <StackPanel Orientation="Horizontal" Spacing="8" >
+                                    <FontIcon Glyph="&#xE7C3;" FontSize="16"/>
+                                    <TextBlock Text="{x:Bind ViewModel.IsEditMode, Mode=OneWay, Converter={StaticResource BoolToStringConverter}, ConverterParameter='Update|Create'}"/>
                                 </StackPanel>
                             </Button>
 

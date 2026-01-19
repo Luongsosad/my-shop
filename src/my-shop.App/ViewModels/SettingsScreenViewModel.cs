@@ -8,6 +8,7 @@ using my_shop.App.Services;
 using my_shop.App.Services.EmailService;
 using my_shop.App.Services.LicenseService;
 using my_shop.App.Services.LoginService;
+using my_shop.App.Services.OnboardingService;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace my_shop.App.ViewModels
         private readonly ITokenService _tokenService;
         private readonly ICredentialsService _credentialsService;
         private readonly ITokenExpirationMonitor _tokenMonitor;
+        private readonly IOnboardingService _onboardingService;
 
         // ===== SETTINGS MANAGEMENT DEPENDENCIES (MERGE) =====
         private readonly IDataService _dataService;
@@ -48,6 +50,7 @@ namespace my_shop.App.ViewModels
         private string generatedCodeForAdmin = string.Empty;
 
         public Action? OnLogoutRequested { get; set; }
+        public Action? OnShowTourRequested { get; set; }
         public XamlRoot? XamlRoot { get; set; }
 
         // ===== SETTINGS PROPERTIES (MERGE) =====
@@ -91,7 +94,8 @@ namespace my_shop.App.ViewModels
             ICredentialsService credentialsService,
             ITokenExpirationMonitor tokenMonitor,
             IDataService dataService,
-            IJwtHelper jwtHelper)
+            IJwtHelper jwtHelper,
+            IOnboardingService onboardingService)
         {
             // HEAD dependencies
             _licenseService = licenseService;
@@ -100,6 +104,7 @@ namespace my_shop.App.ViewModels
             _tokenService = tokenService;
             _credentialsService = credentialsService;
             _tokenMonitor = tokenMonitor;
+            _onboardingService = onboardingService;
 
             // MERGE dependencies
             _dataService = dataService;
@@ -145,13 +150,13 @@ namespace my_shop.App.ViewModels
         {
             if (string.IsNullOrWhiteSpace(ActivationCode))
             {
-                await ShowErrorAsync("Vui lòng nhập mã kích hoạt");
+                await ShowErrorAsync("Please enter the activation code");
                 return;
             }
 
             if (!_authService.IsLoggedIn)
             {
-                await ShowErrorAsync("Vui lòng đăng nhập trước");
+                await ShowErrorAsync("Please log in first");
                 return;
             }
 
@@ -162,18 +167,18 @@ namespace my_shop.App.ViewModels
                 var success = await _licenseService.ActivateSoftwareAsync(ActivationCode);
                 if (success)
                 {
-                    await ShowSuccessAsync("Kích hoạt phần mềm thành công!");
+                    await ShowSuccessAsync("Software activation successful!");
                     await LoadLicenseStatusAsync();
                     ActivationCode = string.Empty;
                 }
                 else
                 {
-                    await ShowErrorAsync("Mã kích hoạt không hợp lệ. Vui lòng kiểm tra và thử lại.");
+                    await ShowErrorAsync("Invalid activation code. Please check and try again..");
                 }
             }
             catch (Exception ex)
             {
-                await ShowErrorAsync($"Lỗi kích hoạt: {ex.Message}");
+                await ShowErrorAsync($"Activation error: {ex.Message}");
             }
             finally
             {
@@ -188,7 +193,7 @@ namespace my_shop.App.ViewModels
             {
                 if (!_authService.IsLoggedIn)
                 {
-                    GeneratedCodeForAdmin = "Lỗi: Vui lòng đăng nhập trước";
+                    GeneratedCodeForAdmin = "Error: Please log in first";
                     return;
                 }
 
@@ -197,11 +202,11 @@ namespace my_shop.App.ViewModels
             }
             catch (InvalidOperationException)
             {
-                GeneratedCodeForAdmin = "Lỗi: Không có admin đăng nhập";
+                GeneratedCodeForAdmin = "Error: No admin logged in";
             }
             catch (Exception ex)
             {
-                GeneratedCodeForAdmin = $"Lỗi: {ex.Message}";
+                GeneratedCodeForAdmin = $"Error: {ex.Message}";
             }
         }
 
@@ -214,7 +219,7 @@ namespace my_shop.App.ViewModels
 
                 if (!_authService.IsLoggedIn)
                 {
-                    await ShowErrorAsync("Vui lòng đăng nhập trước");
+                    await ShowErrorAsync("Please log in first!");
                     return;
                 }
 
@@ -232,16 +237,16 @@ namespace my_shop.App.ViewModels
 
                 if (emailOpened)
                 {
-                    await ShowSuccessAsync($"✅ Mã kích hoạt đã được gửi đến {currentAdminEmail}. Vui lòng kiểm tra hộp thư!");
+                    await ShowSuccessAsync($"The activation code has been sent to {currentAdminEmail}. Please check your inbox!");
                 }
                 else
                 {
-                    await ShowErrorAsync("❌ Gửi email thất bại. Vui lòng kiểm tra kết nối internet hoặc cấu hình email.");
+                    await ShowErrorAsync("Email delivery failed. Please check your internet connection or email configuration..");
                 }
             }
             catch (Exception ex)
             {
-                await ShowErrorAsync($"Lỗi: {ex.Message}");
+                await ShowErrorAsync($"Error: {ex.Message}");
             }
             finally
             {
@@ -265,24 +270,73 @@ namespace my_shop.App.ViewModels
         {
             try
             {
+                // Show confirmation dialog
+                if (XamlRoot == null) return;
+
+                var dialog = new ContentDialog
+                {
+                    Title = "Confirm Logout",
+                    Content = "Are you sure you want to log out?",
+                    PrimaryButtonText = "Log Out",
+                    CloseButtonText = "Cancel",
+                    DefaultButton = ContentDialogButton.Close,
+                    XamlRoot = this.XamlRoot,
+                    RequestedTheme = (ElementTheme)Microsoft.UI.Xaml.Application.Current.RequestedTheme
+                };
+
+                var result = await dialog.ShowAsync();
+
+                if (result != ContentDialogResult.Primary)
+                {
+                    return;
+                }
+
                 IsLoading = true;
 
+                // Stop token monitoring
                 _tokenMonitor.StopMonitoring();
+
+                // Clear token
                 await _tokenService.ClearTokenAsync();
+
+                // Clear credentials
                 await _credentialsService.ClearCredentialsAsync();
+
+                // Clear auth_token from LocalSettings
                 Windows.Storage.ApplicationData.Current.LocalSettings.Values.Remove("auth_token");
-                Windows.Storage.ApplicationData.Current.LocalSettings.Values.Remove("admin_id");
+
+                // Logout from AuthService 
                 await _authService.LogoutAsync();
 
+                Debug.WriteLine("🔵 [Logout] All data cleared successfully");
+
+                // Navigate to login screen
                 OnLogoutRequested?.Invoke();
             }
             catch (Exception ex)
             {
-                await ShowErrorAsync($"Đăng xuất thất bại: {ex.Message}");
+                Debug.WriteLine($"❌ [Logout] Error: {ex.Message}");
+                await ShowErrorAsync($"Failed to logout: {ex.Message}");
             }
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task ShowOnboardingTourAsync()
+        {
+            try
+            {
+                Debug.WriteLine("🔵 [Settings] Manually showing onboarding tour");
+
+                OnShowTourRequested?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"❌ [Settings] Error showing tour: {ex.Message}");
+                await ShowErrorAsync($"Failed to show tour: {ex.Message}");
             }
         }
 
@@ -306,7 +360,7 @@ namespace my_shop.App.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.";
+                    ErrorMessage = "User information not found. Please log in again.";
                 }
 
                 var appSettings = await _dataService.GetAppSettingsAsync();
@@ -316,7 +370,7 @@ namespace my_shop.App.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Không thể tải dữ liệu: {ex.Message}";
+                ErrorMessage = $"Data can not loaded: {ex.Message}";
             }
             finally
             {
@@ -334,7 +388,7 @@ namespace my_shop.App.ViewModels
                 SuccessMessage = null;
 
                 await _dataService.UpdateStoreInfoAsync(StoreInfo);
-                SuccessMessage = "Đã lưu thông tin cửa hàng";
+                SuccessMessage = "Store information has been saved";
                 
                 _ = Task.Run(async () =>
                 {
@@ -344,7 +398,7 @@ namespace my_shop.App.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Lưu thông tin thất bại: {ex.Message}";
+                ErrorMessage = $"Saving information failed: {ex.Message}";
                 
                 _ = Task.Run(async () =>
                 {
@@ -371,7 +425,7 @@ namespace my_shop.App.ViewModels
                 if (adminId > 0)
                 {
                     UserProfile = await _dataService.UpdateUserProfileAsync(adminId, UserProfile.Name, null);
-                    SuccessMessage = "Đã cập nhật hồ sơ";
+                    SuccessMessage = "Updated user profile!";
                     
                     _ = Task.Run(async () =>
                     {
@@ -382,7 +436,7 @@ namespace my_shop.App.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Cập nhật hồ sơ thất bại: {ex.Message}";
+                ErrorMessage = $"Update failure user profile: {ex.Message}";
                 
                 _ = Task.Run(async () =>
                 {
@@ -407,7 +461,7 @@ namespace my_shop.App.ViewModels
 
                 if (string.IsNullOrWhiteSpace(passwords.currentPassword))
                 {
-                    ErrorMessage = "Vui lòng nhập mật khẩu hiện tại";
+                    ErrorMessage = "Please enter the current password";
                     
                     _ = Task.Run(async () =>
                     {
@@ -419,7 +473,7 @@ namespace my_shop.App.ViewModels
 
                 if (string.IsNullOrWhiteSpace(passwords.newPassword))
                 {
-                    ErrorMessage = "Vui lòng nhập mật khẩu mới";
+                    ErrorMessage = "Please enter the new password";
                     
                     _ = Task.Run(async () =>
                     {
@@ -431,7 +485,7 @@ namespace my_shop.App.ViewModels
 
                 if (passwords.newPassword != passwords.confirmPassword)
                 {
-                    ErrorMessage = "Mật khẩu xác nhận không khớp";
+                    ErrorMessage = "The verification password does not match.";
                     
                     _ = Task.Run(async () =>
                     {
@@ -443,7 +497,7 @@ namespace my_shop.App.ViewModels
 
                 if (passwords.newPassword.Length < 6)
                 {
-                    ErrorMessage = "Mật khẩu mới phải có ít nhất 6 ký tự";
+                    ErrorMessage = "The new password must have at least 6 characters!";
                     
                     _ = Task.Run(async () =>
                     {
@@ -457,7 +511,7 @@ namespace my_shop.App.ViewModels
                 if (adminId > 0)
                 {
                     await _dataService.ChangePasswordAsync(adminId, passwords.currentPassword, passwords.newPassword);
-                    SuccessMessage = "Đã đổi mật khẩu thành công";
+                    SuccessMessage = "Changed password succesfully";
                     
                     _ = Task.Run(async () =>
                     {
@@ -468,7 +522,7 @@ namespace my_shop.App.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Đổi mật khẩu thất bại: {ex.Message}";
+                ErrorMessage = $"Failed to change password: {ex.Message}";
                 
                 _ = Task.Run(async () =>
                 {
@@ -496,7 +550,7 @@ namespace my_shop.App.ViewModels
                 SaveUserTheme(theme);
                 ApplyTheme(theme);
 
-                SuccessMessage = $"Đã chuyển sang theme {theme}";
+                SuccessMessage = $"Changed to theme {theme}";
                 
                 _ = Task.Run(async () =>
                 {
@@ -506,7 +560,7 @@ namespace my_shop.App.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Thay đổi theme thất bại: {ex.Message}";
+                ErrorMessage = $"Failed to change theme: {ex.Message}";
                 
                 _ = Task.Run(async () =>
                 {
@@ -559,7 +613,7 @@ namespace my_shop.App.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Không thể lưu theme: {ex.Message}";
+                ErrorMessage = $"Can not save theme: {ex.Message}";
             }
         }
 
@@ -628,9 +682,9 @@ namespace my_shop.App.ViewModels
             if (XamlRoot == null) return;
             var dialog = new ContentDialog
             {
-                Title = "Thành công",
+                Title = "Success",
                 Content = message,
-                CloseButtonText = "Đóng",
+                CloseButtonText = "Close",
                 RequestedTheme = ElementTheme.Light,
                 XamlRoot = XamlRoot
             };
@@ -642,9 +696,9 @@ namespace my_shop.App.ViewModels
             if (XamlRoot == null) return;
             var dialog = new ContentDialog
             {
-                Title = "Lỗi",
+                Title = "Error",
                 Content = message,
-                CloseButtonText = "Đóng",
+                CloseButtonText = "Close",
                 RequestedTheme = ElementTheme.Light,
                 XamlRoot = XamlRoot
             };
@@ -656,9 +710,9 @@ namespace my_shop.App.ViewModels
             if (XamlRoot == null) return;
             var dialog = new ContentDialog
             {
-                Title = "Thông báo",
+                Title = "Notification",
                 Content = message,
-                CloseButtonText = "Đóng",
+                CloseButtonText = "Close",
                 RequestedTheme = ElementTheme.Light,
                 XamlRoot = XamlRoot
             };

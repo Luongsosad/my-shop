@@ -33,32 +33,14 @@
             <StackPanel Grid.Column="0" Spacing="8">
                 <TextBlock Text="Orders Management" 
                            Style="{StaticResource TitleTextBlockStyle}"
-                           FontSize="28"
+                           FontSize="32"
                            FontWeight="SemiBold"/>
-                <StackPanel Orientation="Horizontal"
-            Spacing="6"
-            VerticalAlignment="Center">
-
-                    <!-- Icon -->
-                    <FontIcon Glyph="&#xE14C;"
-              FontFamily="Segoe MDL2 Assets"
-              Foreground="{ThemeResource AccentFillColorDefaultBrush}"
-              FontSize="16"/>
-
-                    <!-- Label -->
-                    <TextBlock Text="Total orders:"
-               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-               FontSize="14"
-               VerticalAlignment="Center"/>
-
-                    <!-- Number -->
-                    <TextBlock Text="{x:Bind ViewModel.TotalOrders, Mode=OneWay}"
-               FontWeight="SemiBold"
-               FontSize="16"
-               Margin="4,0,0,0"
-               VerticalAlignment="Center"/>
+                <StackPanel>
+                    <TextBlock Text="View, track, and manage customer orders in one place" 
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               Margin="0,0,0,15"
+                       FontSize="14"/>
                 </StackPanel>
-
             </StackPanel>
         </Grid>
 
@@ -235,7 +217,8 @@
             Margin="0,0,10,0"
             CornerRadius="20"
             BorderBrush="Black"
-            BorderThickness="1">
+            BorderThickness="1"
+                                                                        ToolTipService.ToolTip="Print invoice">
                                                                     <Button.Visibility>
                                                                         <Binding Path="IsPaid" Mode="OneWay">
                                                                             <Binding.Converter>
@@ -279,7 +262,7 @@
                                                                 BorderBrush="#3875c9"
                                                                 BorderThickness="1"
                                                                 HorizontalAlignment="Left"
-                                                                ToolTipService.ToolTip="Thanh toán"
+                                                                ToolTipService.ToolTip="Pay"
                                                                 >
                                                                 <Button.Visibility>
                                                                     <Binding Path="IsCreated" Mode="OneWay">
@@ -309,7 +292,7 @@
                                                                     BorderBrush="#EF4444"
                                                                     BorderThickness="1"
                                                                     HorizontalAlignment="Left"
-                                                                    ToolTipService.ToolTip="Hủy đơn">
+                                                                    ToolTipService.ToolTip="Cancel order">
                                                                 <Button.Visibility>
                                                                     <Binding Path="IsCreated" Mode="OneWay">
                                                                         <Binding.Converter>
@@ -603,7 +586,7 @@
           HorizontalAlignment="Right"
           VerticalAlignment="Top"
           Margin="0,80,12,0"
-          Padding="-100,-40,-12.5,10"
+          Padding="-100,-22,-12.5,10"
           Canvas.ZIndex="999">
             <Expander IsExpanded="{x:Bind ViewModel.IsSearchExpanded, Mode=TwoWay}"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"

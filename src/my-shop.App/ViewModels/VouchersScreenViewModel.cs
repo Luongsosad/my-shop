@@ -86,7 +86,7 @@ public partial class VouchersScreenViewModel : ObservableObject
         catch (Exception ex)
         {
             HasError = true;
-            ErrorMessage = $"Lỗi tải danh sách voucher: {ex.Message}";
+            ErrorMessage = $"Error loading voucher list: {ex.Message}";
         }
         finally
         {
@@ -134,35 +134,35 @@ public partial class VouchersScreenViewModel : ObservableObject
             if (string.IsNullOrWhiteSpace(Code))
             {
                 HasError = true;
-                ErrorMessage = "Vui lòng nhập mã voucher";
+                ErrorMessage = "Please enter the voucher code";
                 return;
             }
 
             if (DiscountPercent <= 0 || DiscountPercent > 100)
             {
                 HasError = true;
-                ErrorMessage = "Phần trăm giảm phải từ 1-100";
+                ErrorMessage = "The percentage reduction must be between 1 and 100";
                 return;
             }
 
             if (MaxDiscountAmount <= 0)
             {
                 HasError = true;
-                ErrorMessage = "Số tiền giảm tối đa phải lớn hơn 0";
+                ErrorMessage = "The maximum discount amount must be greater than 0";
                 return;
             }
 
             if (TotalQuantity <= 0)
             {
                 HasError = true;
-                ErrorMessage = "Số lượng phải lớn hơn 0";
+                ErrorMessage = "The number must be greater than 0";
                 return;
             }
 
             if (EndDate <= StartDate)
             {
                 HasError = true;
-                ErrorMessage = "Ngày kết thúc phải sau ngày bắt đầu";
+                ErrorMessage = "The end date must be after the start date";
                 return;
             }
 
@@ -244,13 +244,13 @@ public partial class VouchersScreenViewModel : ObservableObject
             else
             {
                 HasError = true;
-                ErrorMessage = "Không thể xóa voucher";
+                ErrorMessage = "Vouchers cannot be deleted";
             }
         }
         catch (Exception ex)
         {
             HasError = true;
-            ErrorMessage = $"Lỗi xóa voucher: {ex.Message}";
+            ErrorMessage = $"Error deleting voucher: {ex.Message}";
         }
         finally
         {
@@ -262,11 +262,12 @@ public partial class VouchersScreenViewModel : ObservableObject
     {
         var dialog = new Microsoft.UI.Xaml.Controls.ContentDialog
         {
-            Title = "Xác nhận xóa",
-            Content = $"Bạn có chắc chắn muốn xóa voucher '{voucher.Code}'?\n\nHành động này không thể hoàn tác.",
-            PrimaryButtonText = "Xóa",
-            CloseButtonText = "Hủy",
+            Title = "Confirm deletion",
+            Content = $"Are you sure you want to delete the voucher '{voucher.Code}'?\n\nThis action cannot be undone.",
+            PrimaryButtonText = "Delete",
+            CloseButtonText = "Cancel",
             DefaultButton = Microsoft.UI.Xaml.Controls.ContentDialogButton.Close,
+            RequestedTheme = Microsoft.UI.Xaml.ElementTheme.Light,
             XamlRoot = XamlRoot
         };
 

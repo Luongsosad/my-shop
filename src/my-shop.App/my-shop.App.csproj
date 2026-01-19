@@ -13,6 +13,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Views\SpotlightOverlay.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -61,6 +64,12 @@
   
   <ItemGroup>
     <ProjectReference Include="..\my-shop.Application\my-shop.Application.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Update="Views\SpotlightOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\SignupView.xaml">

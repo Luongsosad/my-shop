@@ -14,19 +14,25 @@
         <converters:BoolToLicenseIconConverter x:Key="BoolToLicenseIconConverter"/>
         <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-        
+
         <!-- Settings Converters -->
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:ThemeConverter x:Key="ThemeConverter"/>
         <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
-        
+
         <Style x:Key="SettingsSectionStyle" TargetType="Border">
             <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
             <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="Padding" Value="20"/>
-            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+
+        <!-- Expander Style -->
+        <Style TargetType="Expander">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
     </Page.Resources>
 
@@ -42,383 +48,435 @@
             <TextBlock Text="Settings" 
                        FontSize="32" 
                        FontWeight="SemiBold"/>
-            <TextBlock Text="Quản lý license, thông tin và tùy chọn ứng dụng" 
+            <TextBlock Text="Manage application licenses, information, and preferences" 
                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                        FontSize="14"/>
         </StackPanel>
 
         <!-- Content -->
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <StackPanel Spacing="24" Width="800" HorizontalAlignment="Center">
+            <StackPanel Spacing="8" Width="800" HorizontalAlignment="Center">
 
-                <!-- ===== LICENSE SECTION ===== -->
-                
-                <!-- License Status Card -->
-                <Border Style="{StaticResource SettingsSectionStyle}">
-                    <StackPanel Spacing="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE72E;" 
-                                      FontSize="24"
-                                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
-                            <TextBlock Text="License Status" 
-                                       FontSize="20" 
-                                       FontWeight="SemiBold"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <Border Height="1" 
-                                Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
-
-                        <!-- Status Display -->
-                        <Grid ColumnSpacing="16">
+                <!-- ===== 1. LICENSE & ACTIVATION EXPANDER ===== -->
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Status Icon -->
-                            <Border Grid.Column="0"
-                                    Width="64"
-                                    Height="64"
-                                    CornerRadius="32"
-                                    VerticalAlignment="Top">
-                                <Border.Background>
-                                    <SolidColorBrush Color="{ThemeResource SystemAccentColor}" Opacity="0.1"/>
-                                </Border.Background>
-                                <FontIcon Glyph="{x:Bind ViewModel.IsActivated, Mode=OneWay, Converter={StaticResource BoolToLicenseIconConverter}}"
-                                          FontSize="32"
-                                          Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                <FontIcon Glyph="&#xE72E;" FontSize="15" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                                <TextBlock Text="License and Activation" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+
+                            <!-- Status Badge -->
+                            <Border Grid.Column="2"
+                                    Background="{ThemeResource SystemFillColorSuccessBrush}"
+                                    CornerRadius="12"
+                                    Padding="12,6"
+                                    Margin="0,0,12,0"
+                                    Visibility="{x:Bind ViewModel.IsActivated, Mode=OneWay}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <FontIcon Glyph="&#xE73E;" FontSize="12" Foreground="White"/>
+                                    <TextBlock Text="Activated" FontSize="12" FontWeight="SemiBold" Foreground="White"/>
+                                </StackPanel>
                             </Border>
 
-                            <!-- Status Info -->
-                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Bind ViewModel.LicenseStatus, Mode=OneWay}"
-                                           FontSize="16"
-                                           FontWeight="SemiBold"/>
-
-                                <!-- Trial Info -->
-                                <StackPanel Spacing="4" Visibility="{x:Bind ViewModel.IsInTrial, Mode=OneWay}">
-                                    <ProgressBar Value="{x:Bind ViewModel.DaysRemaining, Mode=OneWay}"
-                                                 Maximum="14"
-                                                 Height="4"
-                                                 CornerRadius="2"/>
-                                    <TextBlock FontSize="13"
-                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}">
-                                        <Run Text="Trial expires in"/>
-                                        <Run Text="{x:Bind ViewModel.DaysRemaining, Mode=OneWay}" FontWeight="SemiBold"/>
-                                        <Run Text="days"/>
+                            <!-- Trial Badge -->
+                            <Border Grid.Column="2"
+                                    Background="{ThemeResource SystemFillColorCautionBrush}"
+                                    CornerRadius="12"
+                                    Padding="12,6"
+                                    Margin="0,0,12,0"
+                                    Visibility="{x:Bind ViewModel.IsInTrial, Mode=OneWay}">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <FontIcon Glyph="&#xE916;" FontSize="12" Foreground="White"/>
+                                    <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="White">
+                                        <Run Text="{x:Bind ViewModel.DaysRemaining, Mode=OneWay}"/>
+                                        <Run Text="days left"/>
                                     </TextBlock>
                                 </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Expander.Header>
 
-                                <!-- Activated Badge -->
-                                <Border Background="{ThemeResource SystemFillColorSuccessBrush}"
-                                        CornerRadius="12"
-                                        Padding="12,6"
-                                        HorizontalAlignment="Left"
-                                        Visibility="{x:Bind ViewModel.IsActivated, Mode=OneWay}">
-                                    <StackPanel Orientation="Horizontal" Spacing="6">
-                                        <FontIcon Glyph="&#xE73E;" 
-                                                  FontSize="12"
-                                                  Foreground="White"/>
-                                        <TextBlock Text="Activated" 
-                                                   FontSize="12"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="White"/>
+                    <Expander.Content>
+                        <StackPanel Spacing="16" Margin="0,16,0,0">
+
+                            <!-- License Status -->
+                            <Border Style="{StaticResource SettingsSectionStyle}">
+                                <Grid ColumnSpacing="16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0" Width="64" Height="64" CornerRadius="32" VerticalAlignment="Top">
+                                        <Border.Background>
+                                            <SolidColorBrush Color="{ThemeResource SystemAccentColor}" Opacity="0.1"/>
+                                        </Border.Background>
+                                        <FontIcon Glyph="{x:Bind ViewModel.IsActivated, Mode=OneWay, Converter={StaticResource BoolToLicenseIconConverter}}"
+                                                  FontSize="32"
+                                                  Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Bind ViewModel.LicenseStatus, Mode=OneWay}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"/>
+
+                                        <StackPanel Spacing="4" Visibility="{x:Bind ViewModel.IsInTrial, Mode=OneWay}">
+                                            <ProgressBar Value="{x:Bind ViewModel.DaysRemaining, Mode=OneWay}"
+                                                         Maximum="14"
+                                                         Height="4"
+                                                         CornerRadius="2"/>
+                                            <TextBlock FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                                                <Run Text="Trial expires in"/>
+                                                <Run Text="{x:Bind ViewModel.DaysRemaining, Mode=OneWay}" FontWeight="SemiBold"/>
+                                                <Run Text="days"/>
+                                            </TextBlock>
+                                        </StackPanel>
                                     </StackPanel>
-                                </Border>
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
-                </Border>
+                                </Grid>
+                            </Border>
 
-                <!-- Activation Card -->
-                <Border Style="{StaticResource SettingsSectionStyle}"
-                        Visibility="{x:Bind ViewModel.IsActivated, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                    <StackPanel Spacing="16">
+                            <!-- Activation Form -->
+                            <Border Style="{StaticResource SettingsSectionStyle}"
+                                    Visibility="{x:Bind ViewModel.IsActivated, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                <StackPanel Spacing="16">
+                                    <TextBlock Text="Enter your activation code to unlock all features permanently"
+                                               TextWrapping="Wrap"
+                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                               FontSize="13"/>
+
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Text="Activation Code" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBox Text="{x:Bind ViewModel.ActivationCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 PlaceholderText="XXXXX-XXXXX-XXXXX-XXXXX"
+                                                 FontFamily="Consolas"
+                                                 FontSize="14"
+                                                 MaxLength="23"/>
+                                    </StackPanel>
+
+                                    <Button Command="{x:Bind ViewModel.ActivateSoftwareCommand}"
+                                            Style="{StaticResource AccentButtonStyle}"
+                                            HorizontalAlignment="Right">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <FontIcon Glyph="&#xE73E;" FontSize="16"/>
+                                            <TextBlock Text="Activate Now"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <InfoBar Severity="Informational"
+                                             IsOpen="True"
+                                             IsClosable="False"
+                                             Title="Need an activation code?"
+                                             Message="Contact support or use the generator below for testing purposes"/>
+
+                                    <Button Command="{x:Bind ViewModel.GenerateAndSendCodeCommand}"
+                                            Content="Generate Code"
+                                            Width="132"
+                                            HorizontalAlignment="Right"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- What's Included -->
+                            <Border Style="{StaticResource SettingsSectionStyle}">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="What's Included" FontSize="16" FontWeight="SemiBold"/>
+
+                                    <ItemsControl>
+                                        <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
+                                            <FontIcon Glyph="&#xE73E;" FontSize="16" Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
+                                            <TextBlock Text="Full access to order printing (PDF invoices)" FontSize="13"/>
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
+                                            <FontIcon Glyph="&#xE73E;" FontSize="16" Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
+                                            <TextBlock Text="Unlimited orders and products" FontSize="13"/>
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
+                                            <FontIcon Glyph="&#xE73E;" FontSize="16" Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
+                                            <TextBlock Text="No trial restrictions" FontSize="13"/>
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
+                                            <FontIcon Glyph="&#xE73E;" FontSize="16" Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
+                                            <TextBlock Text="Lifetime updates" FontSize="13"/>
+                                        </StackPanel>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </Expander.Content>
+                </Expander>
+
+                <!-- ===== 2. THEME SETTINGS EXPANDER ===== -->
+                <Expander>
+                    <Expander.Header>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE8D7;" 
-                                      FontSize="24"
-                                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
-                            <TextBlock Text="Activate Software" 
-                                       FontSize="20" 
-                                       FontWeight="SemiBold"
-                                       VerticalAlignment="Center"/>
+                            <FontIcon Glyph="&#xE771;" FontSize="15" Foreground="{ThemeResource SystemAccentColor}"/>
+                            <TextBlock Text="Display (Theme)" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
+                    </Expander.Header>
 
-                        <Border Height="1" 
-                                Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+                    <Expander.Content>
+                        <Border Style="{StaticResource SettingsSectionStyle}" Margin="0,16,0,0">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="Choose theme for your application" 
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                          FontSize="13"/>
 
-                        <TextBlock Text="Enter your activation code to unlock all features permanently"
-                                   TextWrapping="Wrap"
-                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                   FontSize="13"/>
-
-                        <!-- Activation Code Input -->
-                        <StackPanel Spacing="8">
-                            <TextBlock Text="Activation Code" 
-                                       FontSize="13"
-                                       FontWeight="SemiBold"/>
-                            <TextBox Text="{x:Bind ViewModel.ActivationCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     PlaceholderText="XXXXX-XXXXX-XXXXX-XXXXX"
-                                     FontFamily="Consolas"
-                                     FontSize="14"
-                                     MaxLength="23"/>
-                        </StackPanel>
-
-                        <Button Command="{x:Bind ViewModel.ActivateSoftwareCommand}"
-                                Style="{StaticResource AccentButtonStyle}"
-                                HorizontalAlignment="Right">
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <FontIcon Glyph="&#xE73E;" FontSize="16"/>
-                                <TextBlock Text="Activate Now"/>
+                                <StackPanel Spacing="8">
+                                    <RadioButton Content="Light" FontWeight="Medium"
+                                               GroupName="ThemeGroup"
+                                               IsChecked="{x:Bind ViewModel.SelectedTheme, Mode=OneWay, Converter={StaticResource ThemeConverter}, ConverterParameter=Light}"
+                                               Click="ThemeRadioButton_Click"
+                                               Tag="Light"/>
+                                    <RadioButton Content="Dark" FontWeight="Medium"
+                                               GroupName="ThemeGroup"
+                                               IsChecked="{x:Bind ViewModel.SelectedTheme, Mode=OneWay, Converter={StaticResource ThemeConverter}, ConverterParameter=Dark}"
+                                               Click="ThemeRadioButton_Click"
+                                               Tag="Dark"/>
+                                    <RadioButton Content="Default (System)" FontWeight="Medium"
+                                               GroupName="ThemeGroup"
+                                               IsChecked="{x:Bind ViewModel.SelectedTheme, Mode=OneWay, Converter={StaticResource ThemeConverter}, ConverterParameter=System}"
+                                               Click="ThemeRadioButton_Click"
+                                               Tag="System"/>
+                                </StackPanel>
                             </StackPanel>
-                        </Button>
+                        </Border>
+                    </Expander.Content>
+                </Expander>
 
-                        <!-- Info Panel -->
-                        <InfoBar Severity="Informational"
-                                 IsOpen="True"
-                                 IsClosable="False"
-                                 Title="Need an activation code?"
-                                 Message="Contact support or use the generator below for testing purposes"/>
+                <!-- ===== 3. STORE INFORMATION EXPANDER ===== -->
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE8D4;" FontSize="15" Foreground="#10B981"/>
+                            <TextBlock Text="Store Information" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Expander.Header>
 
-                        <Button Command="{x:Bind ViewModel.GenerateAndSendCodeCommand}"
-                                Content="Generate Code"
-                                Width="132"
-                                HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </Border>
+                    <Expander.Content>
+                        <Border Style="{StaticResource SettingsSectionStyle}" Margin="0,16,0,0">
+                            <StackPanel Spacing="16">
+                                <TextBlock Text="Information displayed on invoices and reports." 
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                          FontSize="13"/>
 
-                <!-- Features Info -->
-                <Border Style="{StaticResource SettingsSectionStyle}">
-                    <StackPanel Spacing="16">
-                        <TextBlock Text="What's Included" 
-                                   FontSize="18" 
-                                   FontWeight="SemiBold"/>
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Store Name" FontWeight="SemiBold"/>
+                                    <TextBox FontSize="13"
+                                            Text="{x:Bind ViewModel.StoreInfo.StoreName, Mode=TwoWay}"
+                                            PlaceholderText="Enter store name"/>
+                                </StackPanel>
 
-                        <Border Height="1" 
-                                Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Address" FontWeight="SemiBold"/>
+                                    <TextBox FontSize="13"
+                                            Text="{x:Bind ViewModel.StoreInfo.Address, Mode=TwoWay}"
+                                            PlaceholderText="Enter store address"/>
+                                </StackPanel>
 
-                        <ItemsControl>
-                            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
-                                <FontIcon Glyph="&#xE73E;" 
-                                          FontSize="16"
-                                          Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
-                                <TextBlock Text="Full access to order printing (PDF invoices)" FontSize="13"/>
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Phone Number" FontWeight="SemiBold"/>
+                                    <TextBox FontSize="13"
+                                            Text="{x:Bind ViewModel.StoreInfo.Phone, Mode=TwoWay}"
+                                            PlaceholderText="Enter phone number"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Email Address" FontWeight="SemiBold"/>
+                                    <TextBox FontSize="13"
+                                            Text="{x:Bind ViewModel.StoreInfo.Email, Mode=TwoWay}"
+                                            PlaceholderText="Enter email address"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Tax Code" FontWeight="SemiBold"/>
+                                    <TextBox FontSize="13"
+                                            Text="{x:Bind ViewModel.StoreInfo.TaxCode, Mode=TwoWay}"
+                                            PlaceholderText="Enter tax code"/>
+                                </StackPanel>
+
+                                <Button Command="{x:Bind ViewModel.SaveStoreInfoCommand}"
+        Style="{StaticResource AccentButtonStyle}"
+        HorizontalAlignment="Right"
+        Margin="0,8,0,0">
+
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE77B;" FontSize="16" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Save Changes" FontWeight="SemiBold"/>
+                                    </StackPanel>
+
+                                </Button>
+
                             </StackPanel>
+                        </Border>
+                    </Expander.Content>
+                </Expander>
 
-                            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
-                                <FontIcon Glyph="&#xE73E;" 
-                                          FontSize="16"
-                                          Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
-                                <TextBlock Text="Unlimited orders and products" FontSize="13"/>
+                <!-- ===== 4. USER PROFILE EXPANDER ===== -->
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE77B;" FontSize="15" Foreground="#3B82F6"/>
+                            <TextBlock Text="User Profile" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <Expander.Content>
+                        <Border Style="{StaticResource SettingsSectionStyle}" Margin="0,16,0,0">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="Full Name" FontWeight="SemiBold"/>
+                                <TextBox FontSize="13"
+                                        Text="{x:Bind ViewModel.UserProfile.Name, Mode=TwoWay}"
+                                        PlaceholderText="Enter full name"/>
+
+                                <TextBlock Text="Email" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                                <TextBox Text="{x:Bind ViewModel.UserProfile.Email, Mode=OneWay}"
+                                        IsReadOnly="True"
+                                        IsEnabled="False"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0" Spacing="10">
+                                    <TextBlock Text="Created date:" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                    <TextBlock Text="{x:Bind ViewModel.UserProfile.CreatedAt, Mode=OneWay}" FontWeight="SemiBold"/>
+                                </StackPanel>
+
+                                <Button Command="{x:Bind ViewModel.SaveUserProfileCommand}"
+                                       Style="{StaticResource AccentButtonStyle}"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,8,0,0">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE70F;" FontSize="16" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Update Profile" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
+                        </Border>
+                    </Expander.Content>
+                </Expander>
 
-                            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
-                                <FontIcon Glyph="&#xE73E;" 
-                                          FontSize="16"
-                                          Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
-                                <TextBlock Text="No trial restrictions" FontSize="13"/>
+                <!-- ===== 5. CHANGE PASSWORD EXPANDER ===== -->
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE72E;" FontSize="15" Foreground="#F59E0B"/>
+                            <TextBlock Text="Change Password" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <Expander.Content>
+                        <Border Style="{StaticResource SettingsSectionStyle}" Margin="0,16,0,0">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="Ensure your account is secure by changing your password regularly." 
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                          FontSize="13"/>
+
+                                <TextBlock Text="Current Password" FontWeight="SemiBold" Margin="0,4,0,0"/>
+                                <PasswordBox x:Name="CurrentPasswordBox" PlaceholderText="Enter current password"/>
+
+                                <TextBlock Text="New Password" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                                <PasswordBox x:Name="NewPasswordBox" PlaceholderText="Enter new password (at least 6 characters)"/>
+
+                                <TextBlock Text="Confirm New Password" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                                <PasswordBox x:Name="ConfirmPasswordBox" PlaceholderText="Re-enter new password"/>
+
+                                <Button Click="ChangePasswordButton_Click"
+                                       Style="{StaticResource AccentButtonStyle}"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,8,0,0">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE70F;" FontSize="16" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Change Password" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
+                        </Border>
+                    </Expander.Content>
+                </Expander>
 
-                            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,4">
-                                <FontIcon Glyph="&#xE73E;" 
-                                          FontSize="16"
-                                          Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
-                                <TextBlock Text="Lifetime updates" FontSize="13"/>
+                <!-- ===== 6. HELP & SUPPORT EXPANDER ===== -->
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE897;" FontSize="15" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                            <TextBlock Text="Help and Support" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <Expander.Content>
+                        <Border Style="{StaticResource SettingsSectionStyle}" Margin="0,16,0,0">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Need help getting started or want to review the features?"
+                                          TextWrapping="Wrap"
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                          FontSize="13"/>
+
+                                <Button Grid.Column="1" Command="{x:Bind ViewModel.ShowOnboardingTourCommand}"
+                                       HorizontalAlignment="Right"
+                                        Margin="0,30,0,0">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE897;" FontSize="16" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Show Help" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </Expander.Content>
+                </Expander>
+
+                <!-- ===== 7. ACCOUNT & LOGOUT EXPANDER ===== -->
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xF3B1;" FontSize="15" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
+                            <TextBlock Text="Account" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Expander.Header>
+
+                    <Expander.Content>
+                        <Border Style="{StaticResource SettingsSectionStyle}" Margin="0,16,0,0">
+                            <StackPanel Spacing="12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="Version:" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1" Text="{x:Bind ViewModel.AppVersion, Mode=OneWay}" FontWeight="SemiBold"/>
+                                </Grid>
+
+                                <TextBlock Text="My Shop - Smart Store Management Application" FontWeight="SemiBold"/>
+
+                                <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" Margin="0,4"/>
+
+                                <Button Command="{x:Bind ViewModel.LogoutCommand}" HorizontalAlignment="Right">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xF3B1;" Foreground="White" FontSize="16" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Log Out" Foreground="White" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                    <Button.Resources>
+                                        <SolidColorBrush x:Key="ButtonBackground" Color="#DC2626"/>
+                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#B91C1C"/>
+                                        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#991B1B"/>
+                                    </Button.Resources>
+                                </Button>
                             </StackPanel>
-                        </ItemsControl>
-                    </StackPanel>
-                </Border>
-
-                <!-- ===== SETTINGS SECTION ===== -->
-                
-                <!-- Theme Settings -->
-                <Border Style="{StaticResource SettingsSectionStyle}">
-                    <StackPanel Spacing="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE771;" FontSize="24" Foreground="{ThemeResource SystemAccentColor}"/>
-                            <TextBlock Text="Giao diện" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <TextBlock Text="Chọn theme cho ứng dụng" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                  FontSize="13"/>
-
-                        <StackPanel Spacing="8">
-                            <RadioButton Content="Sáng (Light)" 
-                                       GroupName="ThemeGroup"
-                                       IsChecked="{x:Bind ViewModel.SelectedTheme, Mode=OneWay, Converter={StaticResource ThemeConverter}, ConverterParameter=Light}"
-                                       Click="ThemeRadioButton_Click"
-                                       Tag="Light"/>
-                            <RadioButton Content="Tối (Dark)" 
-                                       GroupName="ThemeGroup"
-                                       IsChecked="{x:Bind ViewModel.SelectedTheme, Mode=OneWay, Converter={StaticResource ThemeConverter}, ConverterParameter=Dark}"
-                                       Click="ThemeRadioButton_Click"
-                                       Tag="Dark"/>
-                            <RadioButton Content="Theo hệ thống (System)" 
-                                       GroupName="ThemeGroup"
-                                       IsChecked="{x:Bind ViewModel.SelectedTheme, Mode=OneWay, Converter={StaticResource ThemeConverter}, ConverterParameter=System}"
-                                       Click="ThemeRadioButton_Click"
-                                       Tag="System"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- Store Information -->
-                <Border Style="{StaticResource SettingsSectionStyle}">
-                    <StackPanel Spacing="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE8D4;" FontSize="24" Foreground="#10B981"/>
-                            <TextBlock Text="Thông tin cửa hàng" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <TextBlock Text="Thông tin hiển thị trên hóa đơn và báo cáo" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                  FontSize="13"/>
-
-                        <StackPanel Spacing="12">
-                            <TextBox Header="Tên cửa hàng"
-                                    Text="{x:Bind ViewModel.StoreInfo.StoreName, Mode=TwoWay}"
-                                    PlaceholderText="Nhập tên cửa hàng"/>
-                            
-                            <TextBox Header="Địa chỉ"
-                                    Text="{x:Bind ViewModel.StoreInfo.Address, Mode=TwoWay}"
-                                    PlaceholderText="Nhập địa chỉ"/>
-                            
-                            <TextBox Header="Số điện thoại"
-                                    Text="{x:Bind ViewModel.StoreInfo.Phone, Mode=TwoWay}"
-                                    PlaceholderText="Nhập số điện thoại"/>
-                            
-                            <TextBox Header="Email"
-                                    Text="{x:Bind ViewModel.StoreInfo.Email, Mode=TwoWay}"
-                                    PlaceholderText="Nhập email"/>
-                            
-                            <TextBox Header="Mã số thuế"
-                                    Text="{x:Bind ViewModel.StoreInfo.TaxCode, Mode=TwoWay}"
-                                    PlaceholderText="Nhập mã số thuế"/>
-
-                            <Button Content="Lưu thông tin"
-                                   Command="{x:Bind ViewModel.SaveStoreInfoCommand}"
-                                   Style="{StaticResource AccentButtonStyle}"
-                                   HorizontalAlignment="Right"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- User Profile -->
-                <Border Style="{StaticResource SettingsSectionStyle}">
-                    <StackPanel Spacing="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE77B;" FontSize="24" Foreground="#3B82F6"/>
-                            <TextBlock Text="Hồ sơ người dùng" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <StackPanel Spacing="12">
-                            <TextBox Header="Họ tên"
-                                    Text="{x:Bind ViewModel.UserProfile.Name, Mode=TwoWay}"
-                                    PlaceholderText="Nhập họ tên"/>
-                            
-                            <TextBox Header="Email"
-                                    Text="{x:Bind ViewModel.UserProfile.Email, Mode=OneWay}"
-                                    IsReadOnly="True"
-                                    IsEnabled="False"/>
-                            
-                            <TextBlock Text="Ngày tạo tài khoản" FontSize="13" FontWeight="SemiBold"/>
-                            <TextBlock Text="{x:Bind ViewModel.UserProfile.CreatedAt, Mode=OneWay}"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-
-                            <Button Content="Cập nhật hồ sơ"
-                                   Command="{x:Bind ViewModel.SaveUserProfileCommand}"
-                                   Style="{StaticResource AccentButtonStyle}"
-                                   HorizontalAlignment="Right"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- Change Password -->
-                <Border Style="{StaticResource SettingsSectionStyle}">
-                    <StackPanel Spacing="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE72E;" FontSize="24" Foreground="#F59E0B"/>
-                            <TextBlock Text="Đổi mật khẩu" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <TextBlock Text="Đảm bảo tài khoản của bạn an toàn bằng cách thay đổi mật khẩu định kỳ" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                  FontSize="13"/>
-
-                        <StackPanel Spacing="12">
-                            <PasswordBox x:Name="CurrentPasswordBox"
-                                        Header="Mật khẩu hiện tại"
-                                        PlaceholderText="Nhập mật khẩu hiện tại"/>
-                            
-                            <PasswordBox x:Name="NewPasswordBox"
-                                        Header="Mật khẩu mới"
-                                        PlaceholderText="Nhập mật khẩu mới (tối thiểu 6 ký tự)"/>
-                            
-                            <PasswordBox x:Name="ConfirmPasswordBox"
-                                        Header="Xác nhận mật khẩu mới"
-                                        PlaceholderText="Nhập lại mật khẩu mới"/>
-
-                            <Button Content="Đổi mật khẩu"
-                                   Click="ChangePasswordButton_Click"
-                                   Style="{StaticResource AccentButtonStyle}"
-                                   HorizontalAlignment="Right"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- Account & Logout -->
-                <Border Style="{StaticResource SettingsSectionStyle}">
-                    <StackPanel Spacing="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xF3B1;" 
-                                FontSize="24"
-                                Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
-                            <TextBlock 
-                                Text="Tài khoản" 
-                                FontSize="20" 
-                                FontWeight="SemiBold"
-                                VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <Border Height="1" 
-                            Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
-
-                        <Grid ColumnSpacing="12">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0" 
-                                      Text="Phiên bản:" 
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock Grid.Column="1" 
-                                      Text="{x:Bind ViewModel.AppVersion, Mode=OneWay}"
-                                      FontWeight="SemiBold"/>
-                        </Grid>
-
-                        <TextBlock Text="My Shop - Quản lý cửa hàng thông minh" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-
-                        <Border Height="1" 
-                               Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
-
-                        <Button Content="Đăng xuất / Log Out"
-                               Click="LogoutButton_Click"
-                               HorizontalAlignment="Stretch">
-                            <Button.Resources>
-                                <SolidColorBrush x:Key="ButtonBackground" Color="#DC2626"/>
-                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#B91C1C"/>
-                                <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#991B1B"/>
-                                <SolidColorBrush x:Key="ButtonForeground" Color="White"/>
-                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
-                                <SolidColorBrush x:Key="ButtonForegroundPressed" Color="White"/>
-                            </Button.Resources>
-                        </Button>
-                    </StackPanel>
-                </Border>
+                        </Border>
+                    </Expander.Content>
+                </Expander>
 
             </StackPanel>
         </ScrollViewer>
@@ -440,7 +498,7 @@
             <InfoBar x:Name="ErrorInfoBar"
                     IsOpen="{x:Bind ViewModel.ErrorMessage, Mode=OneWay, Converter={StaticResource StringToBoolConverter}}"
                     Severity="Error"
-                    Title="Lỗi"
+                    Title="Error"
                     Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
                     IsClosable="True"
                     MaxWidth="600"/>
@@ -448,7 +506,7 @@
             <InfoBar x:Name="SuccessInfoBar"
                     IsOpen="{x:Bind ViewModel.SuccessMessage, Mode=OneWay, Converter={StaticResource StringToBoolConverter}}"
                     Severity="Success"
-                    Title="Thành công"
+                    Title="Success"
                     Message="{x:Bind ViewModel.SuccessMessage, Mode=OneWay}"
                     IsClosable="True"
                     MaxWidth="600"/>
