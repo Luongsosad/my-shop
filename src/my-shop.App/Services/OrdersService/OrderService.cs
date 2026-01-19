@@ -23,6 +23,7 @@ namespace my_shop.App.Services.OrdersService
             );
         }
 
+        // Update the GraphQL query in GetOrdersAsync method
         public async Task<(List<Order> Orders, int TotalCount)> GetOrdersAsync(int page = 1, int pageSize = 10)
         {
             try
@@ -31,44 +32,53 @@ namespace my_shop.App.Services.OrdersService
                 var query = new GraphQLRequest
                 {
                     Query = @"
-                        query {
-                            orders(order: { createdTime: DESC }) {
+                query {
+                    orders(order: { createdTime: DESC }) {
+                        id
+                        createdTime
+                        finalPrice
+                        oldPrice
+                        status
+                        customerId
+                        customer {
+                            id
+                            name
+                            phone
+                            isDeleted
+                            createdAt
+                        }
+                        voucherId
+                        voucher {
+                            id
+                            code
+                            discountPercent
+                            maxDiscountAmount
+                            description
+                        }
+                        extensionData
+                        orderItems {
+                            id
+                            productId
+                            quantity
+                            price
+                            product {
                                 id
-                                createdTime
-                                finalPrice
-                                status
-                                customerId
-                                customer {
+                                name
+                                sku
+                                importPrice
+                                count
+                                description
+                                categoryId
+                                category {
                                     id
                                     name
-                                    phone
-                                    isDeleted
-                                    createdAt
-                                }    
-                                extensionData
-                                orderItems {
-                                    id
-                                    productId
-                                    quantity
-                                    price
-                                    product {
-                                        id
-                                        name
-                                        sku
-                                        importPrice
-                                        count
-                                        description
-                                        categoryId
-                                        category {
-                                            id
-                                            name
-                                        }
-                                        extensionData
-                                        images
-                                    }
                                 }
+                                extensionData
+                                images
                             }
-                        }"
+                        }
+                    }
+                }"
                 };
 
                 var response = await _graphQLClient.SendQueryAsync<OrdersResponse>(query);

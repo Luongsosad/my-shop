@@ -358,22 +358,85 @@
                                                             </Border>
                                                         </Grid>
                                                     </StackPanel>
+                                                    <!-- Total Price Section -->
                                                     <Border 
-                                                                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
-                                                                CornerRadius="6"
-                                                                Padding="16,12"
-                                                                Margin="0,10,0,0"
-                                                                HorizontalAlignment="Right">
+            CornerRadius="6"
+            Margin="0,10,0,0"
+            HorizontalAlignment="Right">
+                                                        <StackPanel Spacing="8">
+                                                            <!-- Show original price if voucher applied -->
                                                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                                                  <TextBlock Text="Total:" 
-                                                                             FontSize="13"
-                                                                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                                                             VerticalAlignment="Center"/>
-                                                                  <TextBlock Text="{x:Bind FormattedPrice}" 
-                                                                             FontSize="13" 
-                                                                             FontWeight="SemiBold"
-                                                                             VerticalAlignment="Center"/>
-                                                             </StackPanel>
+                                                                <StackPanel.Visibility>
+                                                                    <Binding Path="HasVoucher" Mode="OneWay">
+                                                                        <Binding.Converter>
+                                                                            <local:BoolToVisibilityConverter/>
+                                                                        </Binding.Converter>
+                                                                    </Binding>
+                                                                </StackPanel.Visibility>
+
+                                                                <TextBlock Text="Original:" 
+                           FontSize="13"
+                           Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                           VerticalAlignment="Center"/>
+                                                                <TextBlock FontSize="13" 
+                           VerticalAlignment="Center"
+                           TextDecorations="Strikethrough">
+                    <Run Text="{x:Bind FormattedOldPrice}"/>
+                                                                </TextBlock>
+                                                            </StackPanel>
+
+                                                            <!-- Voucher Info -->
+                                                            <StackPanel Spacing="4" HorizontalAlignment="Right">
+                                                                <StackPanel.Visibility>
+                                                                    <Binding Path="HasVoucher" Mode="OneWay">
+                                                                        <Binding.Converter>
+                                                                            <local:BoolToVisibilityConverter/>
+                                                                        </Binding.Converter>
+                                                                    </Binding>
+                                                                </StackPanel.Visibility>
+
+                                                                <Border HorizontalAlignment="Right"
+                        CornerRadius="4"
+                        >
+                                                                    <StackPanel Spacing="2">
+                                                                        <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,8,0">
+                                                                            <FontIcon Glyph="&#xE8C7;" 
+                                      FontSize="15"
+                                      />
+                                                                            <TextBlock Text="{x:Bind Voucher.Code}" 
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       />
+                                                                            <TextBlock FontSize="13"
+                                       >
+                                <Run Text="-"/>
+                                <Run Text="{x:Bind Voucher.DiscountPercent}"/>
+                                <Run Text="%"/>
+                                                                            </TextBlock>
+                                                                        </StackPanel>
+
+                                                                        <TextBlock FontSize="12" HorizontalAlignment="Right" Margin="0,5,10,0"
+                                   Opacity="0.9">
+                            <Run Text="Saved:"/>
+                            <Run Text="{x:Bind FormattedDiscountAmount}" FontWeight="SemiBold"/>
+                                                                        </TextBlock>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </StackPanel>
+
+                                                            <!-- Final Total -->
+                                                            <StackPanel Orientation="Horizontal" CornerRadius="10" Spacing="8" HorizontalAlignment="Right" Padding="12" Background="{ThemeResource SubtleFillColorSecondaryBrush}">
+                                                                <TextBlock Text="Total:" 
+                           FontSize="13"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           VerticalAlignment="Center"/>
+                                                                <TextBlock Text="{x:Bind FormattedPrice}" 
+                           FontSize="13" 
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"
+                           />
+                                                            </StackPanel>
+                                                        </StackPanel>
                                                     </Border>
                                                 </StackPanel>
                                             </Grid>

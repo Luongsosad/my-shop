@@ -21,6 +21,9 @@ namespace my_shop.App.Models
         [JsonProperty("finalPrice")]
         public int FinalPrice { get; set; }
 
+        [JsonProperty("oldPrice")]
+        public int OldPrice { get; set; }
+
         [JsonProperty("extensionData")]
         public string ExtensionData { get; set; }
 
@@ -45,11 +48,22 @@ namespace my_shop.App.Models
         [JsonProperty("customer")]
         public Customer Customer { get; set; }
 
+        [JsonProperty("voucherId")]
+        public int? VoucherId { get; set; }
+
+        [JsonProperty("voucher")]
+        public Voucher Voucher { get; set; }
+
         // UI properties
         public string FormattedPrice => FinalPrice.ToString("N0") + " ₫";
+        public string FormattedOldPrice => OldPrice.ToString("N0") + " ₫";
+
         public string FormattedDate => CreatedTime.ToString("dd/MM/yyyy HH:mm");
         public int TotalItems => OrderItems?.Count ?? 0;
 
+        public bool HasVoucher => Voucher != null;
+        public int DiscountAmount => OldPrice - FinalPrice;
+        public string FormattedDiscountAmount => DiscountAmount.ToString("N0") + " ₫";
         public string StatusDisplay => Status switch
         {
             "created" => "Created",
@@ -124,6 +138,23 @@ namespace my_shop.App.Models
         }
     }
 
+    public class Voucher
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("code")]
+        public string Code { get; set; }
+
+        [JsonProperty("discountPercent")]
+        public int DiscountPercent { get; set; }
+
+        [JsonProperty("maxDiscountAmount")]
+        public int? MaxDiscountAmount { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+    }
 
     public class OrderItem
     {
