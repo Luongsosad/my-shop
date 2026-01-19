@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using my_shop.App.Models;
 using my_shop.App.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -485,8 +484,6 @@ namespace my_shop.App.ViewModels
 
             try
             {
-                System.Diagnostics.Debug.WriteLine($"🔵 Creating order with {CartItems.Count} items");
-                
                 var orderModel = new CreateOrderModel
                 {
                     CustomerId = SelectedCustomer?.Id,
@@ -505,17 +502,11 @@ namespace my_shop.App.ViewModels
 
                 var order = await _dataService.CreateOrderAsync(orderModel);
                 
-                System.Diagnostics.Debug.WriteLine($"✅ Order created: #{order.Id}");
-                
                 // Clear cart IMMEDIATELY after successful order
-                System.Diagnostics.Debug.WriteLine("🔵 Clearing cart...");
                 ClearCart();
-                System.Diagnostics.Debug.WriteLine($"✅ Cart cleared. Items: {CartItems.Count}");
                 
                 // Reload products to update stock
-                System.Diagnostics.Debug.WriteLine("🔵 Reloading products...");
                 await LoadDataAsync();
-                System.Diagnostics.Debug.WriteLine("✅ Products reloaded");
 
                 var voucherInfo = AppliedVoucherResult != null && AppliedVoucherResult.Success ? $" (Giảm giá: {CartDiscountAmount:N0}đ)" : "";
                 ErrorMessage = $"Đơn hàng #{order.Id} đã được tạo thành công!{voucherInfo}";
@@ -523,7 +514,6 @@ namespace my_shop.App.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Create order error: {ex.Message}");
                 HasError = true;
                 ErrorMessage = $"Không thể tạo đơn hàng: {ex.Message}";
                 throw; // Re-throw để code-behind có thể catch
@@ -583,19 +573,7 @@ namespace my_shop.App.ViewModels
 
             try
             {
-                System.Diagnostics.Debug.WriteLine($"🔵 Updating product: {model.Name}");
-                System.Diagnostics.Debug.WriteLine($"🔵 Images count: {model.Images?.Count ?? 0}");
-                if (model.Images != null && model.Images.Count > 0)
-                {
-                    foreach (var img in model.Images)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"🔵 Image URL: {img}");
-                    }
-                }
-                
                 var updatedProduct = await _dataService.UpdateProductAsync(model);
-                
-                System.Diagnostics.Debug.WriteLine($"✅ Product updated successfully. Images in response: {updatedProduct.Images?.Count ?? 0}");
                 
                 // Update in list
                 var existingProduct = Products.FirstOrDefault(p => p.Id == updatedProduct.Id);
@@ -610,8 +588,6 @@ namespace my_shop.App.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Update product error: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"❌ Stack trace: {ex.StackTrace}");
                 HasError = true;
                 ErrorMessage = $"Không thể cập nhật sản phẩm: {ex.Message}";
             }

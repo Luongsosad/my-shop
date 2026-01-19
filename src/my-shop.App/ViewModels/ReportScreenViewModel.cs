@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
 
 namespace my_shop.App.ViewModels
 {
@@ -46,10 +47,22 @@ namespace my_shop.App.ViewModels
         private string profitMarginText = "0%";
 
         [ObservableProperty]
+        private ObservableCollection<ISeries> revenueSparkline = new();
+
+        [ObservableProperty]
+        private ObservableCollection<ISeries> profitSparkline = new();
+
+        [ObservableProperty]
+        private ObservableCollection<ISeries> ordersSparkline = new();
+
+        [ObservableProperty]
         private ObservableCollection<ISeries> productSalesSeriesCollection = new();
 
         [ObservableProperty]
         private ObservableCollection<ISeries> revenueProfitSeriesCollection = new();
+
+        [ObservableProperty]
+        private ObservableCollection<ISeries> productRevenueDistributionSeries = new();
 
         [ObservableProperty]
         private IEnumerable<LiveChartsCore.Kernel.Sketches.ICartesianAxis>? productSalesXAxes;
@@ -82,12 +95,6 @@ namespace my_shop.App.ViewModels
             SelectedPeriodItem = PeriodTypes.First(p => p.Type == ReportPeriodType.Daily);
             SelectedPeriodType = ReportPeriodType.Daily;
             
-            System.Diagnostics.Debug.WriteLine("=== ReportScreenViewModel Constructor Called ===");
-            System.Diagnostics.Debug.WriteLine($"DataService: {_dataService?.GetType().Name ?? "NULL"}");
-            System.Diagnostics.Debug.WriteLine($"StartDate: {StartDate}");
-            System.Diagnostics.Debug.WriteLine($"EndDate: {EndDate}");
-            System.Diagnostics.Debug.WriteLine($"SelectedPeriodType: {SelectedPeriodType}");
-            
             _ = LoadReportDataAsync();
         }
 
@@ -102,14 +109,10 @@ namespace my_shop.App.ViewModels
         [RelayCommand]
         private async Task LoadReportDataAsync()
         {
-            System.Diagnostics.Debug.WriteLine("=== LoadReportDataAsync Started ===");
             IsLoading = true;
 
             try
             {
-                System.Diagnostics.Debug.WriteLine($"Loading reports from {StartDate.Date:yyyy-MM-dd} to {EndDate.Date:yyyy-MM-dd}");
-                
-                // Load both reports in parallel
                 var productSalesTask = _dataService.GetProductSalesReportAsync(StartDate.Date, EndDate.Date, SelectedPeriodType, 5);
                 var revenueProfitTask = _dataService.GetRevenueProfitReportAsync(StartDate.Date, EndDate.Date, SelectedPeriodType);
 
@@ -118,23 +121,14 @@ namespace my_shop.App.ViewModels
                 var productSalesData = await productSalesTask;
                 var revenueProfitData = await revenueProfitTask;
 
-                System.Diagnostics.Debug.WriteLine($"Product Sales Data Count: {productSalesData?.Count ?? 0}");
-                System.Diagnostics.Debug.WriteLine($"Revenue/Profit Data Points: {revenueProfitData?.DataPoints?.Count ?? 0}");
-                System.Diagnostics.Debug.WriteLine($"Total Revenue: {revenueProfitData?.TotalRevenue ?? 0}");
-                System.Diagnostics.Debug.WriteLine($"Total Profit: {revenueProfitData?.TotalProfit ?? 0}");
-
                 UpdateSummaryCards(revenueProfitData);
+                UpdateSparklines(revenueProfitData);
                 UpdateProductSalesChart(productSalesData);
                 UpdateRevenueProfitChart(revenueProfitData);
-                
-                System.Diagnostics.Debug.WriteLine("=== LoadReportDataAsync Completed Successfully ===");
+                UpdateProductRevenueDistribution(productSalesData);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                System.Diagnostics.Debug.WriteLine($"!!! ERROR loading report: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"!!! Stack Trace: {ex.StackTrace}");
-                
-                // Set default values on error
                 TotalRevenueText = "Error";
                 TotalProfitText = "Error";
                 TotalOrdersText = "0";
@@ -142,14 +136,59 @@ namespace my_shop.App.ViewModels
             finally
             {
                 IsLoading = false;
-                System.Diagnostics.Debug.WriteLine($"IsLoading set to false");
             }
         }
 
         [RelayCommand]
         private async Task ApplyFilterAsync()
         {
-            System.Diagnostics.Debug.WriteLine("=== ApplyFilter Clicked ===");
+            await LoadReportDataAsync();
+        }
+
+        [RelayCommand]
+        private async Task SetDateRangeAsync(string range)
+        {
+            var now = DateTimeOffset.Now;
+            
+            switch (range.ToLower())
+            {
+                case "today":
+                    StartDate = now.Date;
+                    EndDate = now;
+                    break;
+                    
+                case "yesterday":
+                    StartDate = now.AddDays(-1).Date;
+                    EndDate = now.AddDays(-1).Date.AddDays(1).AddTicks(-1);
+                    break;
+                    
+                case "last7days":
+                    StartDate = now.AddDays(-7).Date;
+                    EndDate = now;
+                    break;
+                    
+                case "last30days":
+                    StartDate = now.AddDays(-30).Date;
+                    EndDate = now;
+                    break;
+                    
+                case "thismonth":
+                    StartDate = new DateTimeOffset(now.Year, now.Month, 1, 0, 0, 0, now.Offset);
+                    EndDate = now;
+                    break;
+                    
+                case "lastmonth":
+                    var lastMonth = now.AddMonths(-1);
+                    StartDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, 1, 0, 0, 0, now.Offset);
+                    EndDate = new DateTimeOffset(now.Year, now.Month, 1, 0, 0, 0, now.Offset).AddTicks(-1);
+                    break;
+                    
+                case "thisyear":
+                    StartDate = new DateTimeOffset(now.Year, 1, 1, 0, 0, 0, now.Offset);
+                    EndDate = now;
+                    break;
+            }
+            
             await LoadReportDataAsync();
         }
 
@@ -157,7 +196,6 @@ namespace my_shop.App.ViewModels
         {
             if (report == null)
             {
-                System.Diagnostics.Debug.WriteLine("!!! WARNING: RevenueProfitReport is null");
                 return;
             }
             
@@ -166,40 +204,88 @@ namespace my_shop.App.ViewModels
             TotalOrdersText = report.TotalOrders.ToString("N0");
             AverageOrderValueText = FormatCurrency((long)report.AverageOrderValue);
             ProfitMarginText = $"{report.ProfitMargin:F2}%";
-            
-            System.Diagnostics.Debug.WriteLine($"Updated Summary Cards:");
-            System.Diagnostics.Debug.WriteLine($"  Revenue: {TotalRevenueText}");
-            System.Diagnostics.Debug.WriteLine($"  Profit: {TotalProfitText}");
-            System.Diagnostics.Debug.WriteLine($"  Orders: {TotalOrdersText}");
+        }
+
+        private void UpdateSparklines(RevenueProfitReport report)
+        {
+            if (report?.DataPoints == null || !report.DataPoints.Any())
+            {
+                RevenueSparkline = new ObservableCollection<ISeries>();
+                ProfitSparkline = new ObservableCollection<ISeries>();
+                OrdersSparkline = new ObservableCollection<ISeries>();
+                return;
+            }
+
+            var revenueValues = report.DataPoints.Select(dp => (double)dp.Revenue).ToArray();
+            var profitValues = report.DataPoints.Select(dp => (double)dp.Profit).ToArray();
+            var orderValues = report.DataPoints.Select(dp => (double)dp.OrderCount).ToArray();
+
+            RevenueSparkline = new ObservableCollection<ISeries>
+            {
+                new LineSeries<double>
+                {
+                    Values = revenueValues,
+                    Stroke = new SolidColorPaint(SKColor.Parse("#4CAF50")) { StrokeThickness = 2 },
+                    Fill = new LinearGradientPaint(
+                        new SKColor[] { SKColor.Parse("#4CAF50").WithAlpha(100), SKColors.Transparent },
+                        new SKPoint(0, 0),
+                        new SKPoint(0, 1)),
+                    GeometrySize = 0,
+                    LineSmoothness = 0.5
+                }
+            };
+
+            ProfitSparkline = new ObservableCollection<ISeries>
+            {
+                new LineSeries<double>
+                {
+                    Values = profitValues,
+                    Stroke = new SolidColorPaint(SKColor.Parse("#2196F3")) { StrokeThickness = 2 },
+                    Fill = new LinearGradientPaint(
+                        new SKColor[] { SKColor.Parse("#2196F3").WithAlpha(100), SKColors.Transparent },
+                        new SKPoint(0, 0),
+                        new SKPoint(0, 1)),
+                    GeometrySize = 0,
+                    LineSmoothness = 0.5
+                }
+            };
+
+            OrdersSparkline = new ObservableCollection<ISeries>
+            {
+                new LineSeries<double>
+                {
+                    Values = orderValues,
+                    Stroke = new SolidColorPaint(SKColor.Parse("#FF9800")) { StrokeThickness = 2 },
+                    Fill = new LinearGradientPaint(
+                        new SKColor[] { SKColor.Parse("#FF9800").WithAlpha(100), SKColors.Transparent },
+                        new SKPoint(0, 0),
+                        new SKPoint(0, 1)),
+                    GeometrySize = 0,
+                    LineSmoothness = 0.5
+                }
+            };
         }
 
         private void UpdateProductSalesChart(List<ProductSalesReport> data)
         {
-            System.Diagnostics.Debug.WriteLine($"=== UpdateProductSalesChart: {data?.Count ?? 0} products ===");
-            
             var series = new List<ISeries>();
 
             if (data != null && data.Any())
             {
-                // Define colors for each product series
                 var colors = new[]
                 {
-                    SKColor.Parse("#FF6B6B"), // Red
-                    SKColor.Parse("#4ECDC4"), // Teal
-                    SKColor.Parse("#45B7D1"), // Blue
-                    SKColor.Parse("#FFA07A"), // Light Salmon
-                    SKColor.Parse("#98D8C8")  // Mint
+                    SKColor.Parse("#FF6B6B"),
+                    SKColor.Parse("#4ECDC4"),
+                    SKColor.Parse("#45B7D1"),
+                    SKColor.Parse("#FFA07A"),
+                    SKColor.Parse("#98D8C8")
                 };
 
-                // Get all unique periods from all products
                 var allPeriods = data
                     .SelectMany(p => p.DataPoints.Select(dp => dp.Period))
                     .Distinct()
                     .OrderBy(p => p)
                     .ToList();
-
-                System.Diagnostics.Debug.WriteLine($"Unique periods count: {allPeriods.Count}");
-                System.Diagnostics.Debug.WriteLine($"Periods: [{string.Join(", ", allPeriods)}]");
 
                 if (allPeriods.Any())
                 {
@@ -207,29 +293,26 @@ namespace my_shop.App.ViewModels
                     {
                         var product = data[i];
                         var color = colors[i % colors.Length];
-                        
-                        // Create a dictionary for quick lookup
                         var periodData = product.DataPoints.ToDictionary(dp => dp.Period, dp => dp.QuantitySold);
-                        
-                        // Fill values for all periods (0 if no data for that period)
                         var values = allPeriods.Select(period => 
                             periodData.ContainsKey(period) ? (double)periodData[period] : 0.0
                         ).ToArray();
-                        
-                        System.Diagnostics.Debug.WriteLine($"Product: {product.ProductName}, Values: [{string.Join(", ", values)}]");
                         
                         series.Add(new LineSeries<double>
                         {
                             Name = product.ProductName,
                             Values = values,
                             LineSmoothness = 0.5,
-                            GeometrySize = 4, // Smaller points
-                            GeometryFill = new SolidColorPaint(color), // Fill color for points
-                            GeometryStroke = new SolidColorPaint(SKColors.White.WithAlpha(200)), // White border for points
-                            Stroke = new SolidColorPaint(color.WithAlpha(180)), // Line color with some transparency
+                            GeometrySize = 4,
+                            GeometryFill = new SolidColorPaint(color),
+                            GeometryStroke = new SolidColorPaint(SKColors.White.WithAlpha(200)),
+                            Stroke = new SolidColorPaint(color.WithAlpha(180)),
                             Fill = null
                         });
                     }
+
+                    var textColor = GetChartTextColor();
+                    var separatorColor = GetChartSeparatorColor();
 
                     ProductSalesXAxes = new Axis[]
                     {
@@ -238,7 +321,8 @@ namespace my_shop.App.ViewModels
                             Labels = allPeriods.ToArray(),
                             LabelsRotation = -45,
                             TextSize = 12,
-                            SeparatorsPaint = new SolidColorPaint(SKColors.LightGray.WithAlpha(100))
+                            LabelsPaint = new SolidColorPaint(textColor),
+                            SeparatorsPaint = new SolidColorPaint(separatorColor)
                         }
                     };
 
@@ -248,24 +332,19 @@ namespace my_shop.App.ViewModels
                         {
                             Name = "Quantity Sold",
                             TextSize = 12,
-                            SeparatorsPaint = new SolidColorPaint(SKColors.LightGray.WithAlpha(100))
+                            LabelsPaint = new SolidColorPaint(textColor),
+                            NamePaint = new SolidColorPaint(textColor),
+                            SeparatorsPaint = new SolidColorPaint(separatorColor)
                         }
                     };
                 }
             }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("!!! No product sales data to display");
-            }
 
             ProductSalesSeriesCollection = new ObservableCollection<ISeries>(series);
-            System.Diagnostics.Debug.WriteLine($"ProductSalesSeriesCollection updated with {series.Count} series");
         }
 
         private void UpdateRevenueProfitChart(RevenueProfitReport report)
         {
-            System.Diagnostics.Debug.WriteLine($"=== UpdateRevenueProfitChart: {report?.DataPoints?.Count ?? 0} data points ===");
-            
             var series = new List<ISeries>();
 
             if (report?.DataPoints != null && report.DataPoints.Any())
@@ -273,10 +352,6 @@ namespace my_shop.App.ViewModels
                 var labels = report.DataPoints.Select(dp => dp.Period).ToArray();
                 var revenueValues = report.DataPoints.Select(dp => (double)dp.Revenue).ToArray();
                 var profitValues = report.DataPoints.Select(dp => (double)dp.Profit).ToArray();
-
-                System.Diagnostics.Debug.WriteLine($"Labels: [{string.Join(", ", labels)}]");
-                System.Diagnostics.Debug.WriteLine($"Revenue: [{string.Join(", ", revenueValues)}]");
-                System.Diagnostics.Debug.WriteLine($"Profit: [{string.Join(", ", profitValues)}]");
 
                 series.Add(new ColumnSeries<double>
                 {
@@ -294,6 +369,9 @@ namespace my_shop.App.ViewModels
                     MaxBarWidth = 50
                 });
 
+                var textColor = GetChartTextColor();
+                var separatorColor = GetChartSeparatorColor();
+
                 RevenueProfitXAxes = new Axis[]
                 {
                     new Axis
@@ -301,7 +379,8 @@ namespace my_shop.App.ViewModels
                         Labels = labels,
                         LabelsRotation = -45,
                         TextSize = 12,
-                        SeparatorsPaint = new SolidColorPaint(SKColors.LightGray.WithAlpha(100))
+                        LabelsPaint = new SolidColorPaint(textColor),
+                        SeparatorsPaint = new SolidColorPaint(separatorColor)
                     }
                 };
 
@@ -312,22 +391,117 @@ namespace my_shop.App.ViewModels
                         Name = "Amount (₫)",
                         TextSize = 12,
                         Labeler = value => FormatCurrency((long)value),
-                        SeparatorsPaint = new SolidColorPaint(SKColors.LightGray.WithAlpha(100))
+                        LabelsPaint = new SolidColorPaint(textColor),
+                        NamePaint = new SolidColorPaint(textColor),
+                        SeparatorsPaint = new SolidColorPaint(separatorColor)
                     }
                 };
             }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("!!! No revenue/profit data to display");
-            }
 
             RevenueProfitSeriesCollection = new ObservableCollection<ISeries>(series);
-            System.Diagnostics.Debug.WriteLine($"RevenueProfitSeriesCollection updated with {series.Count} series");
+        }
+
+        private void UpdateProductRevenueDistribution(List<ProductSalesReport> data)
+        {
+            var series = new List<ISeries>();
+
+            if (data != null && data.Any())
+            {
+                // Calculate total revenue for each product
+                var productRevenues = data.Select(p => new
+                {
+                    ProductName = p.ProductName,
+                    TotalRevenue = p.TotalRevenue
+                }).OrderByDescending(p => p.TotalRevenue).ToList();
+
+                var totalRevenue = productRevenues.Sum(p => p.TotalRevenue);
+                
+                // Take top 5 products
+                var topProducts = productRevenues.Take(5).ToList();
+                var othersRevenue = productRevenues.Skip(5).Sum(p => p.TotalRevenue);
+
+                var colors = new[]
+                {
+                    SKColor.Parse("#FF6B6B"), // Red
+                    SKColor.Parse("#4ECDC4"), // Teal
+                    SKColor.Parse("#45B7D1"), // Blue
+                    SKColor.Parse("#FFA07A"), // Light Salmon
+                    SKColor.Parse("#98D8C8"), // Mint
+                    SKColor.Parse("#95A5A6")  // Gray for Others
+                };
+
+                int colorIndex = 0;
+                foreach (var product in topProducts)
+                {
+                    var percentage = totalRevenue > 0 ? (double)product.TotalRevenue / totalRevenue * 100 : 0;
+                    
+                    series.Add(new PieSeries<double>
+                    {
+                        Name = $"{product.ProductName} ({percentage:F1}%)",
+                        Values = new[] { (double)product.TotalRevenue },
+                        Fill = new SolidColorPaint(colors[colorIndex % colors.Length]),
+                        DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                        DataLabelsSize = 12,
+                        DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle,
+                        DataLabelsFormatter = point => $"{percentage:F1}%"
+                    });
+                    
+                    colorIndex++;
+                }
+
+                // Add "Others" if there are more than 5 products
+                if (othersRevenue > 0)
+                {
+                    var othersPercentage = totalRevenue > 0 ? (double)othersRevenue / totalRevenue * 100 : 0;
+                    
+                    series.Add(new PieSeries<double>
+                    {
+                        Name = $"Others ({othersPercentage:F1}%)",
+                        Values = new[] { (double)othersRevenue },
+                        Fill = new SolidColorPaint(colors[colorIndex % colors.Length]),
+                        DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                        DataLabelsSize = 12,
+                        DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle,
+                        DataLabelsFormatter = point => $"{othersPercentage:F1}%"
+                    });
+                }
+            }
+
+            ProductRevenueDistributionSeries = new ObservableCollection<ISeries>(series);
         }
 
         private string FormatCurrency(long value)
         {
             return value.ToString("N0") + " ₫";
+        }
+
+        private bool IsDarkTheme()
+        {
+            try
+            {
+                if (MainWindow.Instance?.Content is FrameworkElement rootElement)
+                {
+                    return rootElement.ActualTheme == ElementTheme.Dark;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return false;
+        }
+
+        private SKColor GetChartTextColor()
+        {
+            return IsDarkTheme() 
+                ? SKColor.Parse("#E0E0E0")
+                : SKColor.Parse("#424242");
+        }
+
+        private SKColor GetChartSeparatorColor()
+        {
+            return IsDarkTheme()
+                ? SKColors.LightGray.WithAlpha(80)
+                : SKColors.LightGray.WithAlpha(100);
         }
     }
 

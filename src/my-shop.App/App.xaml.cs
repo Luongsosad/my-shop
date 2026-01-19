@@ -12,7 +12,9 @@ using my_shop.App.ViewModels;
 using my_shop.App.Views;
 using my_shop.Application.Interfaces;
 using my_shop.Application.Services;
+using my_shop.Infrastructure.Services;
 using System;
+using System.IO;
 using System.Net.Http;
 
 namespace my_shop.App
@@ -36,7 +38,6 @@ namespace my_shop.App
 
                 if (System.IO.File.Exists(envPath))
                 {
-                    System.Diagnostics.Debug.WriteLine("🔵 App: .env file found, loading...");
                     foreach (var line in System.IO.File.ReadAllLines(envPath))
                     {
                         if (string.IsNullOrWhiteSpace(line) || line.StartsWith('#')) continue;
@@ -44,7 +45,6 @@ namespace my_shop.App
                         if (parts.Length == 2)
                         {
                             Environment.SetEnvironmentVariable(parts[0].Trim(), parts[1].Trim());
-                            System.Diagnostics.Debug.WriteLine($"🔵 App: Set env var: {parts[0].Trim()}");
                         }
                     }
                 }
@@ -75,7 +75,6 @@ namespace my_shop.App
                     services.AddTransient<MainWindow>();
                     services.AddTransient<MainLayout>();
 
-                    // Add View Services
                     services.AddTransient<ConfigScreenView>();
                     services.AddTransient<CustomersScreenView>();
                     services.AddTransient<DashboardView>();
@@ -86,7 +85,6 @@ namespace my_shop.App
                     services.AddTransient<SettingsScreenView>();
                     services.AddTransient<SignupView>();
 
-                    // Add ViewModel Services
                     services.AddTransient<ConfigScreenViewModel>();
                     services.AddTransient<CustomersScreenViewModel>();
                     services.AddTransient<DashboardViewModel>();
@@ -154,9 +152,7 @@ namespace my_shop.App
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ App Constructor Error: {ex.GetType().Name}");
-                System.Diagnostics.Debug.WriteLine($"❌ Message: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"❌ Stack Trace: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine($"❌ App Constructor Error: {ex.Message}");
                 throw;
             }
         }

@@ -25,6 +25,10 @@ namespace my_shop.Domain.Entities
         [Column("name")]
         public string? Name { get; set; }
 
+        [MaxLength(20)]
+        [Column("theme")]
+        public string Theme { get; set; } = "Light";  // Default to Light theme
+
         [Column("is_active")]
         public bool IsActive { get; set; } = true;
 

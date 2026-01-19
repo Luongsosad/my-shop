@@ -7,6 +7,7 @@ xmlns:vm="using:my_shop.App.ViewModels"
 xmlns:converters="using:my_shop.App.Converters"
 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+xmlns:System="using:System"
 mc:Ignorable="d"
 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -14,6 +15,9 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 <converters:CurrencyConverter x:Key="CurrencyConverter"/>
 <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 <converters:InvertedBoolToOpacityConverter x:Key="InvertedBoolToOpacityConverter"/>
+<converters:MonthlyTotalRevenueConverter x:Key="MonthlyTotalRevenueConverter"/>
+<converters:MonthlyTotalOrdersConverter x:Key="MonthlyTotalOrdersConverter"/>
+<converters:MonthlyAvgRevenueConverter x:Key="MonthlyAvgRevenueConverter"/>
     <Style x:Key="StatCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
             <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
@@ -232,10 +236,176 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <!-- Revenue Chart Placeholder -->
             <Border Style="{StaticResource StatCardStyle}">
                 <StackPanel>
-                    <TextBlock Text="Revenue This Month" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                    <TextBlock Text="Chart will be implemented with a charting library" 
-                              Foreground="{ThemeResource TextFillColorSecondaryBrush}" 
-                              HorizontalAlignment="Center" Margin="0,40"/>
+                    <!-- Header with Month/Year Picker -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE9D9;" FontSize="24" Foreground="{ThemeResource SystemAccentColor}"/>
+                            <StackPanel>
+                                <TextBlock Text="Doanh thu theo ngày" FontSize="20" FontWeight="SemiBold"/>
+                                <TextBlock FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                                    <Run Text="Tháng "/>
+                                    <Run Text="{x:Bind ViewModel.SelectedMonth, Mode=OneWay}"/>
+                                    <Run Text="/"/>
+                                    <Run Text="{x:Bind ViewModel.SelectedYear, Mode=OneWay}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <!-- Month/Year Picker -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE787;" FontSize="16" 
+                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                     VerticalAlignment="Center"/>
+                            
+                            <ComboBox x:Name="MonthComboBox"
+                                     PlaceholderText="Tháng"
+                                     SelectionChanged="MonthComboBox_SelectionChanged"
+                                     Width="120"
+                                     MinWidth="120">
+                                <ComboBoxItem Content="Tháng 1" Tag="1"/>
+                                <ComboBoxItem Content="Tháng 2" Tag="2"/>
+                                <ComboBoxItem Content="Tháng 3" Tag="3"/>
+                                <ComboBoxItem Content="Tháng 4" Tag="4"/>
+                                <ComboBoxItem Content="Tháng 5" Tag="5"/>
+                                <ComboBoxItem Content="Tháng 6" Tag="6"/>
+                                <ComboBoxItem Content="Tháng 7" Tag="7"/>
+                                <ComboBoxItem Content="Tháng 8" Tag="8"/>
+                                <ComboBoxItem Content="Tháng 9" Tag="9"/>
+                                <ComboBoxItem Content="Tháng 10" Tag="10"/>
+                                <ComboBoxItem Content="Tháng 11" Tag="11"/>
+                                <ComboBoxItem Content="Tháng 12" Tag="12"/>
+                            </ComboBox>
+                            
+                            <ComboBox x:Name="YearComboBox"
+                                     PlaceholderText="Năm"
+                                     SelectionChanged="YearComboBox_SelectionChanged"
+                                     Width="100"
+                                     MinWidth="100">
+                                <!-- Years will be populated in code-behind -->
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- Chart Container -->
+                    <Grid Height="320" Margin="0,8,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Chart Canvas -->
+                        <Border Grid.Row="0" Background="{ThemeResource LayerFillColorDefaultBrush}" 
+                               CornerRadius="8" Padding="16">
+                            <Grid>
+                                <Canvas x:Name="RevenueChartCanvas"
+                                       PointerMoved="RevenueChartCanvas_PointerMoved"
+                                       PointerExited="RevenueChartCanvas_PointerExited">
+                                    <Canvas.Resources>
+                                        <Storyboard x:Name="ChartAnimationStoryboard"/>
+                                    </Canvas.Resources>
+                                </Canvas>
+                                
+                                <!-- Tooltip Popup -->
+                                <Popup x:Name="ChartTooltipPopup"
+                                      IsLightDismissEnabled="False">
+                                    <Border Background="{ThemeResource LayerFillColorDefaultBrush}"
+                                           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                           BorderThickness="1"
+                                           CornerRadius="8"
+                                           Padding="12"
+                                           MaxWidth="250">
+                                        <Border.Shadow>
+                                            <ThemeShadow/>
+                                        </Border.Shadow>
+                                        <StackPanel Spacing="8">
+                                            <TextBlock x:Name="TooltipDate" 
+                                                      FontWeight="SemiBold" 
+                                                      FontSize="14"/>
+                                            <StackPanel Spacing="4">
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <Border Width="12" Height="12" Background="#3B82F6" CornerRadius="2"/>
+                                                    <TextBlock Text="Doanh thu:" FontSize="12" 
+                                                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                    <TextBlock x:Name="TooltipRevenue" 
+                                                              FontSize="12" 
+                                                              FontWeight="SemiBold"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <Border Width="12" Height="12" Background="#10B981" CornerRadius="2"/>
+                                                    <TextBlock Text="Đơn hàng:" FontSize="12" 
+                                                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                    <TextBlock x:Name="TooltipOrders" 
+                                                              FontSize="12" 
+                                                              FontWeight="SemiBold"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                        
+                        <!-- Legend -->
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
+                                   Spacing="24" Margin="0,16,0,0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Border Width="16" Height="16" Background="#3B82F6" CornerRadius="4"/>
+                                <TextBlock Text="Doanh thu" FontSize="12" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Border Width="16" Height="16" Background="#10B981" CornerRadius="4"/>
+                                <TextBlock Text="Đơn hàng" FontSize="12" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- Stats Summary -->
+                    <Grid Margin="0,16,0,0" ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Border Grid.Column="0" Background="{ThemeResource LayerFillColorDefaultBrush}" 
+                               Padding="12" CornerRadius="8">
+                            <StackPanel>
+                                <TextBlock Text="Tổng doanh thu" FontSize="11" 
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,4,0,0">
+                                    <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyTotalRevenueConverter}}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        
+                        <Border Grid.Column="1" Background="{ThemeResource LayerFillColorDefaultBrush}" 
+                               Padding="12" CornerRadius="8">
+                            <StackPanel>
+                                <TextBlock Text="Tổng đơn hàng" FontSize="11" 
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,4,0,0">
+                                    <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyTotalOrdersConverter}}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        
+                        <Border Grid.Column="2" Background="{ThemeResource LayerFillColorDefaultBrush}" 
+                               Padding="12" CornerRadius="8">
+                            <StackPanel>
+                                <TextBlock Text="TB doanh thu/ngày" FontSize="11" 
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,4,0,0">
+                                    <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyAvgRevenueConverter}}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
                 </StackPanel>
             </Border>
         </StackPanel>

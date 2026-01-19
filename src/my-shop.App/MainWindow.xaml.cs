@@ -17,6 +17,10 @@ namespace my_shop.App
         private readonly ICredentialsService _credentialsService;
         private readonly IAuthService _authService;
 
+        public static MainWindow Instance { get; private set; }
+        
+        public Frame GetMainFrame() => MainFrame;
+
         public MainWindow(
             IHost appHost,
             ITokenService tokenService,
@@ -25,6 +29,8 @@ namespace my_shop.App
             IAuthService authService)
         {
             InitializeComponent();
+            Instance = this;
+            
             _appHost = appHost;
             _tokenService = tokenService;
             _tokenMonitor = tokenMonitor;
@@ -45,7 +51,6 @@ namespace my_shop.App
             }
         }
 
-        // Handle token expiration - FORCE LOGOUT
         private void OnTokenExpired()
         {
             DispatcherQueue.TryEnqueue(async () =>
@@ -85,6 +90,7 @@ namespace my_shop.App
                     if (adminInitialized)
                     {
                         Debug.WriteLine($"🔵 [InitializeAsync] Admin initialized successfully. IsLoggedIn: {_authService.IsLoggedIn}");
+                        await LoadUserThemeAsync();
                         _tokenMonitor.StartMonitoring();
                         var mainLayout = _appHost.Services.GetRequiredService<MainLayout>();
                         MainFrame.Content = mainLayout;
@@ -135,7 +141,58 @@ namespace my_shop.App
             ShowLoginScreen();
         }
 
+        private async System.Threading.Tasks.Task LoadUserThemeAsync()
+        {
+            try
+            {
+                var jwtHelper = _appHost.Services.GetRequiredService<Helpers.IJwtHelper>();
+                var dataService = _appHost.Services.GetRequiredService<Services.IDataService>();
+                
+                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                if (!localSettings.Values.TryGetValue("auth_token", out var token) || token is not string jwtToken)
+                {
+                    return;
+                }
 
+                var payload = jwtHelper.DecodeToken(jwtToken);
+                if (payload == null) return;
 
+                int adminId = 0;
+                if (!string.IsNullOrEmpty(payload.AdminId) && int.TryParse(payload.AdminId, out var id1))
+                {
+                    adminId = id1;
+                }
+                else if (!string.IsNullOrEmpty(payload.Sub) && int.TryParse(payload.Sub, out var id2))
+                {
+                    adminId = id2;
+                }
+
+                if (adminId > 0)
+                {
+                    var userProfile = await dataService.GetUserProfileAsync(adminId);
+                    var theme = string.IsNullOrEmpty(userProfile.Theme) ? "Light" : userProfile.Theme;
+                    ApplyTheme(theme);
+                }
+            }
+            catch (Exception)
+            {
+                ApplyTheme("Light");
+            }
+        }
+
+        private void ApplyTheme(string theme)
+        {
+            if (Content is FrameworkElement rootElement)
+            {
+                var newTheme = theme switch
+                {
+                    "Light" => ElementTheme.Light,
+                    "Dark" => ElementTheme.Dark,
+                    _ => ElementTheme.Default
+                };
+
+                rootElement.RequestedTheme = newTheme;
+            }
+        }
     }
 }

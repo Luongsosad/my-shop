@@ -99,4 +99,36 @@ public class DashboardService : IDashboardService
 
         return result;
     }
+
+    public async Task<List<DailyRevenueDto>> GetMonthlyRevenueChartAsync(int year, int month)
+    {
+        var startDate = new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Utc);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+        var daysInMonth = DateTime.DaysInMonth(year, month);
+
+        var ordersData = await _context.Orders
+            .Where(o => o.CreatedTime >= startDate && o.CreatedTime <= endDate)
+            .GroupBy(o => o.CreatedTime.Day)
+            .Select(g => new
+            {
+                Day = g.Key,
+                Revenue = g.Sum(o => (long)o.FinalPrice),
+                OrderCount = g.Count()
+            })
+            .ToListAsync();
+
+        var result = new List<DailyRevenueDto>();
+        for (int day = 1; day <= daysInMonth; day++)
+        {
+            var dayData = ordersData.FirstOrDefault(d => d.Day == day);
+            result.Add(new DailyRevenueDto
+            {
+                Day = day,
+                Revenue = dayData?.Revenue ?? 0,
+                OrderCount = dayData?.OrderCount ?? 0
+            });
+        }
+
+        return result;
+    }
 }

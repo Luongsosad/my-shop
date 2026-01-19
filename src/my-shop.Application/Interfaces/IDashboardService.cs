@@ -8,4 +8,5 @@ public interface IDashboardService
     Task<List<RecentOrderDto>> GetRecentOrdersAsync(int count = 3);
     Task<List<LowStockProductDto>> GetLowStockProductsAsync(int threshold = 5, int count = 5);
     Task<List<BestSellingProductDto>> GetBestSellingProductsAsync(int count = 5);
+    Task<List<DailyRevenueDto>> GetMonthlyRevenueChartAsync(int year, int month);
 }
