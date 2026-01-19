@@ -1,10 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using my_shop.App.Helpers;
+using my_shop.App.Models;
+using my_shop.App.Services;
+using my_shop.App.Services.EmailService;
 using my_shop.App.Services.LicenseService;
 using my_shop.App.Services.LoginService;
-using my_shop.App.Services.EmailService;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -13,6 +16,7 @@ namespace my_shop.App.ViewModels
 {
     public partial class SettingsScreenViewModel : ObservableObject
     {
+        // ===== LICENSE MANAGEMENT DEPENDENCIES (HEAD) =====
         private readonly LicenseService _licenseService;
         private readonly IAuthService _authService;
         private readonly IEmailService _emailService;
@@ -20,6 +24,11 @@ namespace my_shop.App.ViewModels
         private readonly ICredentialsService _credentialsService;
         private readonly ITokenExpirationMonitor _tokenMonitor;
 
+        // ===== SETTINGS MANAGEMENT DEPENDENCIES (MERGE) =====
+        private readonly IDataService _dataService;
+        private readonly IJwtHelper _jwtHelper;
+
+        // ===== LICENSE PROPERTIES (HEAD) =====
         [ObservableProperty]
         private bool isActivated;
 
@@ -38,30 +47,66 @@ namespace my_shop.App.ViewModels
         [ObservableProperty]
         private string generatedCodeForAdmin = string.Empty;
 
+        public Action? OnLogoutRequested { get; set; }
+        public XamlRoot? XamlRoot { get; set; }
+
+        // ===== SETTINGS PROPERTIES (MERGE) =====
+        [ObservableProperty]
+        private StoreInfoModel _storeInfo = new();
+
+        [ObservableProperty]
+        private UserProfileModel _userProfile = new();
+
+        [ObservableProperty]
+        private string _selectedTheme = "System";
+
+        [ObservableProperty]
+        private int _lowStockThreshold = 5;
+
+        [ObservableProperty]
+        private bool _notificationsEnabled = true;
+
+        [ObservableProperty]
+        private bool _soundEffectsEnabled = true;
+
+        [ObservableProperty]
+        private string _appVersion = "1.0.0";
+
+        // ===== SHARED PROPERTIES =====
         [ObservableProperty]
         private bool isLoading;
 
-        public Action? OnLogoutRequested { get; set; }
+        [ObservableProperty]
+        private string? _errorMessage;
 
+        [ObservableProperty]
+        private string? _successMessage;
 
-        public XamlRoot? XamlRoot { get; set; }
-
+        // Constructor with merged dependencies
         public SettingsScreenViewModel(
             LicenseService licenseService,
             IAuthService authService,
             IEmailService emailService,
             ITokenService tokenService,
             ICredentialsService credentialsService,
-            ITokenExpirationMonitor tokenMonitor)
+            ITokenExpirationMonitor tokenMonitor,
+            IDataService dataService,
+            IJwtHelper jwtHelper)
         {
+            // HEAD dependencies
             _licenseService = licenseService;
             _authService = authService;
             _emailService = emailService;
             _tokenService = tokenService;
             _credentialsService = credentialsService;
             _tokenMonitor = tokenMonitor;
+
+            // MERGE dependencies
+            _dataService = dataService;
+            _jwtHelper = jwtHelper;
         }
 
+        // ===== LICENSE METHODS (HEAD) =====
         public async Task LoadLicenseStatusAsync()
         {
             try
@@ -177,17 +222,14 @@ namespace my_shop.App.ViewModels
                     return;
                 }
 
-                // Get current admin info
                 var currentAdminEmail = _authService.CurrentAdminEmail;
                 var currentAdminName = _authService.CurrentAdminName;
 
-                // Generate activation code
                 var activationCode = _licenseService.GenerateActivationCode(currentAdminEmail);
                 GeneratedCodeForAdmin = activationCode;
 
                 Debug.WriteLine($"🔵 Generated code for {currentAdminEmail}: {activationCode}");
 
-                // Open email client with pre-filled content
                 var emailOpened = await _emailService.SendActivationCodeAsync(
                     currentAdminEmail,
                     currentAdminName,
@@ -226,30 +268,11 @@ namespace my_shop.App.ViewModels
         }
 
         [RelayCommand]
-        private async Task LogoutAsync()
+        public async Task LogoutAsync()
         {
             try
             {
-                // Show confirmation dialog
                 if (XamlRoot == null) return;
-
-                var dialog = new ContentDialog
-                {
-                    Title = "Confirm Logout",
-                    Content = "Are you sure you want to log out?",
-                    PrimaryButtonText = "Log Out",
-                    CloseButtonText = "Cancel",
-                    DefaultButton = ContentDialogButton.Close,
-                    XamlRoot = this.XamlRoot,
-                    RequestedTheme = (ElementTheme)Microsoft.UI.Xaml.Application.Current.RequestedTheme
-                };
-
-                var result = await dialog.ShowAsync();
-
-                if (result != ContentDialogResult.Primary)
-                {
-                    return;
-                }
 
                 IsLoading = true;
 
@@ -281,6 +304,277 @@ namespace my_shop.App.ViewModels
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        // ===== SETTINGS METHODS (MERGE) =====
+        [RelayCommand]
+        public async Task LoadDataAsync()
+        {
+            IsLoading = true;
+            ErrorMessage = null;
+
+            try
+            {
+                StoreInfo = await _dataService.GetStoreInfoAsync();
+
+                var adminId = GetCurrentAdminId();
+                
+                if (adminId > 0)
+                {
+                    UserProfile = await _dataService.GetUserProfileAsync(adminId);
+                    LoadUserTheme();
+                }
+                else
+                {
+                    ErrorMessage = "Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.";
+                }
+
+                var appSettings = await _dataService.GetAppSettingsAsync();
+                LowStockThreshold = appSettings.LowStockThreshold;
+                NotificationsEnabled = appSettings.NotificationsEnabled;
+                SoundEffectsEnabled = appSettings.SoundEffectsEnabled;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Không thể tải dữ liệu: {ex.Message}";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        public async Task SaveStoreInfoAsync()
+        {
+            try
+            {
+                IsLoading = true;
+                ErrorMessage = null;
+                SuccessMessage = null;
+
+                await _dataService.UpdateStoreInfoAsync(StoreInfo);
+                SuccessMessage = "Đã lưu thông tin cửa hàng";
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Lưu thông tin thất bại: {ex.Message}";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        public async Task SaveUserProfileAsync()
+        {
+            try
+            {
+                IsLoading = true;
+                ErrorMessage = null;
+                SuccessMessage = null;
+
+                var adminId = GetCurrentAdminId();
+                if (adminId > 0)
+                {
+                    UserProfile = await _dataService.UpdateUserProfileAsync(adminId, UserProfile.Name, null);
+                    SuccessMessage = "Đã cập nhật hồ sơ";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Cập nhật hồ sơ thất bại: {ex.Message}";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        public async Task ChangePasswordAsync((string currentPassword, string newPassword, string confirmPassword) passwords)
+        {
+            try
+            {
+                IsLoading = true;
+                ErrorMessage = null;
+                SuccessMessage = null;
+
+                if (string.IsNullOrWhiteSpace(passwords.currentPassword))
+                {
+                    ErrorMessage = "Vui lòng nhập mật khẩu hiện tại";
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(passwords.newPassword))
+                {
+                    ErrorMessage = "Vui lòng nhập mật khẩu mới";
+                    return;
+                }
+
+                if (passwords.newPassword != passwords.confirmPassword)
+                {
+                    ErrorMessage = "Mật khẩu xác nhận không khớp";
+                    return;
+                }
+
+                if (passwords.newPassword.Length < 6)
+                {
+                    ErrorMessage = "Mật khẩu mới phải có ít nhất 6 ký tự";
+                    return;
+                }
+
+                var adminId = GetCurrentAdminId();
+                if (adminId > 0)
+                {
+                    await _dataService.ChangePasswordAsync(adminId, passwords.currentPassword, passwords.newPassword);
+                    SuccessMessage = "Đã đổi mật khẩu thành công";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Đổi mật khẩu thất bại: {ex.Message}";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        public void ChangeTheme(string theme)
+        {
+            try
+            {
+                if (SelectedTheme == theme)
+                {
+                    return;
+                }
+
+                SelectedTheme = theme;
+                SaveUserTheme(theme);
+                ApplyTheme(theme);
+
+                SuccessMessage = $"Đã chuyển sang theme {theme}";
+                
+                Task.Run(async () =>
+                {
+                    await Task.Delay(2000);
+                    SuccessMessage = null;
+                });
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Thay đổi theme thất bại: {ex.Message}";
+            }
+        }
+
+        // ===== HELPER METHODS =====
+        private void LoadUserTheme()
+        {
+            var adminId = GetCurrentAdminId();
+            if (adminId == 0)
+            {
+                var newTheme = "Light";
+                if (SelectedTheme != newTheme)
+                {
+                    SelectedTheme = newTheme;
+                    ApplyTheme(newTheme);
+                }
+                return;
+            }
+
+            string themeToApply = "Light";
+            if (UserProfile != null && !string.IsNullOrEmpty(UserProfile.Theme))
+            {
+                themeToApply = UserProfile.Theme;
+            }
+            
+            if (SelectedTheme != themeToApply)
+            {
+                SelectedTheme = themeToApply;
+                ApplyTheme(themeToApply);
+            }
+        }
+
+        private async void SaveUserTheme(string theme)
+        {
+            var adminId = GetCurrentAdminId();
+            if (adminId == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                await _dataService.UpdateUserProfileAsync(adminId, UserProfile.Name, theme);
+                UserProfile.Theme = theme;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Không thể lưu theme: {ex.Message}";
+            }
+        }
+
+        private void ApplyTheme(string theme)
+        {
+            try
+            {
+                if (MainWindow.Instance?.Content is FrameworkElement rootElement)
+                {
+                    var newTheme = theme switch
+                    {
+                        "Light" => ElementTheme.Light,
+                        "Dark" => ElementTheme.Dark,
+                        _ => ElementTheme.Default
+                    };
+
+                    rootElement.RequestedTheme = newTheme;
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private int GetCurrentAdminId()
+        {
+            try
+            {
+                var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                
+                if (localSettings.Values.TryGetValue("auth_token", out var token) && token is string jwtToken)
+                {
+                    var payload = _jwtHelper.DecodeToken(jwtToken);
+                    
+                    if (payload != null)
+                    {
+                        if (!string.IsNullOrEmpty(payload.AdminId) && int.TryParse(payload.AdminId, out var adminIdFromClaim))
+                        {
+                            localSettings.Values["admin_id"] = adminIdFromClaim;
+                            return adminIdFromClaim;
+                        }
+
+                        if (!string.IsNullOrEmpty(payload.Sub) && int.TryParse(payload.Sub, out var adminIdFromSub))
+                        {
+                            localSettings.Values["admin_id"] = adminIdFromSub;
+                            return adminIdFromSub;
+                        }
+                    }
+                }
+
+                if (localSettings.Values.TryGetValue("admin_id", out var savedAdminId))
+                {
+                    return Convert.ToInt32(savedAdminId);
+                }
+
+                return 0;
+            }
+            catch (Exception)
+            {
+                return 0;
             }
         }
 

@@ -368,6 +368,37 @@ public class Mutation
         await voucherService.DeleteVoucherAsync(id);
         return true;
     }
+
+    // Settings Mutations
+    public async Task<StoreInfoDto> UpdateStoreInfo(
+        UpdateStoreInfoDto input,
+        [Service] ISettingsService settingsService)
+    {
+        return await settingsService.UpdateStoreInfoAsync(input);
+    }
+
+    public async Task<UserProfileDto> UpdateUserProfile(
+        int adminId,
+        UpdateProfileDto input,
+        [Service] ISettingsService settingsService)
+    {
+        return await settingsService.UpdateUserProfileAsync(adminId, input);
+    }
+
+    public async Task<bool> ChangePassword(
+        int adminId,
+        ChangePasswordDto input,
+        [Service] ISettingsService settingsService)
+    {
+        return await settingsService.ChangePasswordAsync(adminId, input);
+    }
+
+    public async Task<AppSettingsDto> UpdateAppSettings(
+        UpdateAppSettingsDto input,
+        [Service] ISettingsService settingsService)
+    {
+        return await settingsService.UpdateAppSettingsAsync(input);
+    }
 }
 
 // Input types

@@ -12,6 +12,7 @@ namespace my_shop.App.Services
         Task<List<RecentOrderDto>> GetRecentOrdersAsync(int count = 3);
         Task<List<LowStockProductDto>> GetLowStockProductsAsync(int threshold = 5, int count = 5);
         Task<List<BestSellingProductDto>> GetBestSellingProductsAsync(int count = 5);
+        Task<List<DailyRevenueDto>> GetMonthlyRevenueChartAsync(int year, int month);
         
         // Product operations
         Task<List<ProductModel>> GetProductsAsync(string? searchTerm = null, int? categoryId = null);
@@ -38,5 +39,14 @@ namespace my_shop.App.Services
         // Report methods
         Task<List<ProductSalesReport>> GetProductSalesReportAsync(DateTime startDate, DateTime endDate, ReportPeriodType periodType, int topProducts = 10);
         Task<RevenueProfitReport> GetRevenueProfitReportAsync(DateTime startDate, DateTime endDate, ReportPeriodType periodType);
+        
+        // Settings methods
+        Task<StoreInfoModel> GetStoreInfoAsync();
+        Task<StoreInfoModel> UpdateStoreInfoAsync(StoreInfoModel model);
+        Task<UserProfileModel> GetUserProfileAsync(int adminId);
+        Task<UserProfileModel> UpdateUserProfileAsync(int adminId, string name, string? theme = null);
+        Task<bool> ChangePasswordAsync(int adminId, string currentPassword, string newPassword);
+        Task<AppSettingsModel> GetAppSettingsAsync();
+        Task<AppSettingsModel> UpdateAppSettingsAsync(AppSettingsModel model);
     }
 }

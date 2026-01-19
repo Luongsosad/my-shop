@@ -133,6 +133,9 @@ namespace my_shop.App.ViewModels
                     RequestedTheme = ElementTheme.Light
                 };
 
+                bool signupSuccess = false;
+                string errorMessage = string.Empty;
+
                 dialog.PrimaryButtonClick += async (_, args) =>
                 {
                     var deferral = args.GetDeferral();
@@ -140,39 +143,50 @@ namespace my_shop.App.ViewModels
                     try
                     {
                         await vm.SignupCommand.ExecuteAsync(null);
-                        deferral.Complete();
-                        await Task.Delay(100);
-                        
-                        var successDialog = new ContentDialog
-                        {
-                            Title = "Signup Successful",
-                            Content = "Your account has been created successfully! Please login.",
-                            CloseButtonText = "OK",
-                            XamlRoot = MainXamlRoot,
-                            RequestedTheme = ElementTheme.Light
-                        };
-                        
-                        await successDialog.ShowAsync();
+                        signupSuccess = true;
                     }
                     catch (Exception ex)
                     {
                         args.Cancel = true;
+                        errorMessage = ex.Message;
+                    }
+                    finally
+                    {
                         deferral.Complete();
-                        await Task.Delay(100);
-                        
-                        var errorDialog = new ContentDialog
-                        {
-                            Title = "Signup Failed",
-                            Content = $"Failed to create account:\n\n{ex.Message}",
-                            CloseButtonText = "OK",
-                            XamlRoot = MainXamlRoot,
-                            RequestedTheme = ElementTheme.Light
-                        };
-                        await errorDialog.ShowAsync();
                     }
                 };
 
-                await dialog.ShowAsync();
+                var result = await dialog.ShowAsync();
+
+                // Wait a moment for the dialog to fully close
+                await Task.Delay(100);
+
+                // Show success or error dialog AFTER the first dialog is closed
+                if (signupSuccess && result == ContentDialogResult.Primary)
+                {
+                    var successDialog = new ContentDialog
+                    {
+                        Title = "Signup Successful",
+                        Content = "Your account has been created successfully! Please login.",
+                        CloseButtonText = "OK",
+                        XamlRoot = MainXamlRoot,
+                        RequestedTheme = ElementTheme.Light
+                    };
+                    
+                    await successDialog.ShowAsync();
+                }
+                else if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    var errorDialog = new ContentDialog
+                    {
+                        Title = "Signup Failed",
+                        Content = $"Failed to create account:\n\n{errorMessage}",
+                        CloseButtonText = "OK",
+                        XamlRoot = MainXamlRoot,
+                        RequestedTheme = ElementTheme.Light
+                    };
+                    await errorDialog.ShowAsync();
+                }
             }
             catch (Exception ex)
             {

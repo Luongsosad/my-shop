@@ -35,6 +35,9 @@ namespace my_shop.App.ViewModels
         private ObservableCollection<BestSellingProductDto> bestSellingProducts = new();
 
         [ObservableProperty]
+        private ObservableCollection<DailyRevenueDto> monthlyRevenueData = new();
+
+        [ObservableProperty]
         private bool isLoading;
 
         [ObservableProperty]
@@ -42,6 +45,15 @@ namespace my_shop.App.ViewModels
 
         [ObservableProperty]
         private bool hasError;
+
+        [ObservableProperty]
+        private DateTimeOffset _selectedDate = DateTimeOffset.Now;
+
+        [ObservableProperty]
+        private int _selectedMonth = DateTime.Now.Month;
+
+        [ObservableProperty]
+        private int _selectedYear = DateTime.Now.Year;
 
         public DashboardViewModel(IDataService dataService)
         {
@@ -66,13 +78,13 @@ namespace my_shop.App.ViewModels
 
             try
             {
-                // Load all dashboard data
                 var statsTask = _dataService.GetDashboardStatsAsync();
                 var ordersTask = _dataService.GetRecentOrdersAsync(3);
                 var lowStockTask = _dataService.GetLowStockProductsAsync(5, 5);
                 var bestSellingTask = _dataService.GetBestSellingProductsAsync(5);
+                var revenueChartTask = _dataService.GetMonthlyRevenueChartAsync(SelectedYear, SelectedMonth);
 
-                await Task.WhenAll(statsTask, ordersTask, lowStockTask, bestSellingTask);
+                await Task.WhenAll(statsTask, ordersTask, lowStockTask, bestSellingTask, revenueChartTask);
 
                 Stats = await statsTask;
                 
@@ -93,13 +105,25 @@ namespace my_shop.App.ViewModels
                 {
                     BestSellingProducts.Add(product);
                 }
+
+                MonthlyRevenueData.Clear();
+                var revenueDataList = await revenueChartTask;
+                
+                if (revenueDataList != null)
+                {
+                    foreach (var data in revenueDataList)
+                    {
+                        MonthlyRevenueData.Add(data);
+                    }
+                }
+                
+                OnPropertyChanged(nameof(MonthlyRevenueData));
             }
             catch (Exception ex)
             {
                 HasError = true;
                 ErrorMessage = $"Không thể tải dữ liệu: {ex.Message}";
                 
-                // Set default values on error
                 Stats = new DashboardStats
                 {
                     TotalProducts = 0,
@@ -112,6 +136,37 @@ namespace my_shop.App.ViewModels
             {
                 IsLoading = false;
             }
+        }
+
+        [RelayCommand]
+        public async Task LoadMonthlyRevenueAsync()
+        {
+            try
+            {
+                var revenueData = await _dataService.GetMonthlyRevenueChartAsync(SelectedYear, SelectedMonth);
+                
+                MonthlyRevenueData.Clear();
+                if (revenueData != null)
+                {
+                    foreach (var data in revenueData)
+                    {
+                        MonthlyRevenueData.Add(data);
+                    }
+                }
+                
+                OnPropertyChanged(nameof(MonthlyRevenueData));
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Không thể tải dữ liệu biểu đồ: {ex.Message}";
+            }
+        }
+
+        public void UpdateSelectedDate(int year, int month)
+        {
+            SelectedYear = year;
+            SelectedMonth = month;
+            SelectedDate = new DateTimeOffset(new DateTime(year, month, 1));
         }
     }
 }

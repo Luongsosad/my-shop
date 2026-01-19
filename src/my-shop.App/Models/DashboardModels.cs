@@ -59,4 +59,16 @@ namespace my_shop.App.Models
         [JsonProperty("soldPercentage")]
         public double SoldPercentage { get; set; }
     }
+
+    public class DailyRevenueDto
+    {
+        [JsonProperty("day")]
+        public int Day { get; set; }
+        
+        [JsonProperty("revenue")]
+        public long Revenue { get; set; }
+        
+        [JsonProperty("orderCount")]
+        public int OrderCount { get; set; }
+    }
 }

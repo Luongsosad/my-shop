@@ -164,6 +164,38 @@ namespace my_shop.App.Services
             }
         }
 
+        public async Task<List<DailyRevenueDto>> GetMonthlyRevenueChartAsync(int year, int month)
+        {
+            try
+            {
+                var query = new GraphQLRequest
+                {
+                    Query = @"
+                        query($year: Int!, $month: Int!) {
+                            monthlyRevenueChart(year: $year, month: $month) {
+                                day
+                                revenue
+                                orderCount
+                            }
+                        }",
+                    Variables = new { year, month }
+                };
+
+                var response = await _graphQLClient.SendQueryAsync<MonthlyRevenueChartResponse>(query);
+                
+                if (response.Errors != null && response.Errors.Length > 0)
+                {
+                    return new List<DailyRevenueDto>();
+                }
+
+                return response.Data?.MonthlyRevenueChart ?? new List<DailyRevenueDto>();
+            }
+            catch (Exception)
+            {
+                return new List<DailyRevenueDto>();
+            }
+        }
+
         public async Task<List<ProductModel>> GetProductsAsync(string? searchTerm = null, int? categoryId = null)
         {
             try
@@ -1053,6 +1085,247 @@ namespace my_shop.App.Services
             };
         }
 
+        // Settings Methods
+        public async Task<StoreInfoModel> GetStoreInfoAsync()
+        {
+            try
+            {
+                var query = new GraphQLRequest
+                {
+                    Query = @"
+                        query {
+                            storeInfo {
+                                storeName
+                                address
+                                phone
+                                email
+                                taxCode
+                                logoUrl
+                            }
+                        }"
+                };
+
+                var response = await _graphQLClient.SendQueryAsync<StoreInfoResponse>(query);
+                
+                if (response.Errors != null && response.Errors.Length > 0 || response.Data?.StoreInfo == null)
+                {
+                    return new StoreInfoModel();
+                }
+
+                return response.Data.StoreInfo;
+            }
+            catch (Exception)
+            {
+                return new StoreInfoModel();
+            }
+        }
+
+        public async Task<StoreInfoModel> UpdateStoreInfoAsync(StoreInfoModel model)
+        {
+            try
+            {
+                var mutation = new GraphQLRequest
+                {
+                    Query = @"
+                        mutation($input: UpdateStoreInfoDtoInput!) {
+                            updateStoreInfo(input: $input) {
+                                storeName
+                                address
+                                phone
+                                email
+                                taxCode
+                                logoUrl
+                            }
+                        }",
+                    Variables = new { input = model }
+                };
+
+                var response = await _graphQLClient.SendMutationAsync<UpdateStoreInfoResponse>(mutation);
+                
+                if (response.Errors != null && response.Errors.Length > 0)
+                {
+                    throw new Exception(response.Errors[0].Message);
+                }
+
+                return response.Data?.UpdateStoreInfo ?? model;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Update store info failed: {ex.Message}");
+            }
+        }
+
+        public async Task<UserProfileModel> GetUserProfileAsync(int adminId)
+        {
+            try
+            {
+                var query = new GraphQLRequest
+                {
+                    Query = @"
+                        query($adminId: Int!) {
+                            userProfile(adminId: $adminId) {
+                                id
+                                email
+                                name
+                                theme
+                                isActive
+                                createdAt
+                            }
+                        }",
+                    Variables = new { adminId }
+                };
+
+                var response = await _graphQLClient.SendQueryAsync<UserProfileResponse>(query);
+                
+                if (response.Errors != null && response.Errors.Length > 0 || response.Data?.UserProfile == null)
+                {
+                    return new UserProfileModel();
+                }
+
+                return response.Data.UserProfile;
+            }
+            catch (Exception)
+            {
+                return new UserProfileModel();
+            }
+        }
+
+        public async Task<UserProfileModel> UpdateUserProfileAsync(int adminId, string name, string? theme = null)
+        {
+            try
+            {
+                var input = new { name, theme };
+                
+                var mutation = new GraphQLRequest
+                {
+                    Query = @"
+                        mutation($adminId: Int!, $input: UpdateProfileDtoInput!) {
+                            updateUserProfile(adminId: $adminId, input: $input) {
+                                id
+                                email
+                                name
+                                theme
+                                isActive
+                                createdAt
+                            }
+                        }",
+                    Variables = new { 
+                        adminId, 
+                        input 
+                    }
+                };
+
+                var response = await _graphQLClient.SendMutationAsync<UpdateUserProfileResponse>(mutation);
+                
+                if (response.Errors != null && response.Errors.Length > 0)
+                {
+                    throw new Exception(response.Errors[0].Message);
+                }
+
+                return response.Data?.UpdateUserProfile ?? new UserProfileModel();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Update profile failed: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> ChangePasswordAsync(int adminId, string currentPassword, string newPassword)
+        {
+            try
+            {
+                var mutation = new GraphQLRequest
+                {
+                    Query = @"
+                        mutation($adminId: Int!, $input: ChangePasswordDtoInput!) {
+                            changePassword(adminId: $adminId, input: $input)
+                        }",
+                    Variables = new { 
+                        adminId, 
+                        input = new { currentPassword, newPassword } 
+                    }
+                };
+
+                var response = await _graphQLClient.SendMutationAsync<ChangePasswordResponse>(mutation);
+                
+                if (response.Errors != null && response.Errors.Length > 0)
+                {
+                    throw new Exception(response.Errors[0].Message);
+                }
+
+                return response.Data?.ChangePassword ?? false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Change password failed: {ex.Message}");
+            }
+        }
+
+        public async Task<AppSettingsModel> GetAppSettingsAsync()
+        {
+            try
+            {
+                var query = new GraphQLRequest
+                {
+                    Query = @"
+                        query {
+                            appSettings {
+                                theme
+                                lowStockThreshold
+                                notificationsEnabled
+                                soundEffectsEnabled
+                            }
+                        }"
+                };
+
+                var response = await _graphQLClient.SendQueryAsync<AppSettingsResponse>(query);
+                
+                if (response.Errors != null && response.Errors.Length > 0 || response.Data?.AppSettings == null)
+                {
+                    return new AppSettingsModel();
+                }
+
+                return response.Data.AppSettings;
+            }
+            catch (Exception)
+            {
+                return new AppSettingsModel();
+            }
+        }
+
+        public async Task<AppSettingsModel> UpdateAppSettingsAsync(AppSettingsModel model)
+        {
+            try
+            {
+                var mutation = new GraphQLRequest
+                {
+                    Query = @"
+                        mutation($input: UpdateAppSettingsDtoInput!) {
+                            updateAppSettings(input: $input) {
+                                theme
+                                lowStockThreshold
+                                notificationsEnabled
+                                soundEffectsEnabled
+                            }
+                        }",
+                    Variables = new { input = model }
+                };
+
+                var response = await _graphQLClient.SendMutationAsync<UpdateAppSettingsResponse>(mutation);
+                
+                if (response.Errors != null && response.Errors.Length > 0)
+                {
+                    throw new Exception(response.Errors[0].Message);
+                }
+
+                return response.Data?.UpdateAppSettings ?? model;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Update app settings failed: {ex.Message}");
+            }
+        }
+
         private string FormatCurrency(string value)
         {
             if (int.TryParse(value, out int amount))
@@ -1085,6 +1358,12 @@ namespace my_shop.App.Services
         {
             [Newtonsoft.Json.JsonProperty("bestSellingProducts")]
             public List<BestSellingProductDto>? BestSellingProducts { get; set; }
+        }
+
+        private class MonthlyRevenueChartResponse
+        {
+            [Newtonsoft.Json.JsonProperty("monthlyRevenueChart")]
+            public List<DailyRevenueDto>? MonthlyRevenueChart { get; set; }
         }
 
         private class ProductsResponse
@@ -1235,6 +1514,48 @@ namespace my_shop.App.Services
         {
             [Newtonsoft.Json.JsonProperty("revenueProfitReport")]
             public RevenueProfitReport? RevenueProfitReport { get; set; }
+        }
+
+        private class StoreInfoResponse
+        {
+            [Newtonsoft.Json.JsonProperty("storeInfo")]
+            public StoreInfoModel? StoreInfo { get; set; }
+        }
+
+        private class UpdateStoreInfoResponse
+        {
+            [Newtonsoft.Json.JsonProperty("updateStoreInfo")]
+            public StoreInfoModel? UpdateStoreInfo { get; set; }
+        }
+
+        private class UserProfileResponse
+        {
+            [Newtonsoft.Json.JsonProperty("userProfile")]
+            public UserProfileModel? UserProfile { get; set; }
+        }
+
+        private class UpdateUserProfileResponse
+        {
+            [Newtonsoft.Json.JsonProperty("updateUserProfile")]
+            public UserProfileModel? UpdateUserProfile { get; set; }
+        }
+
+        private class ChangePasswordResponse
+        {
+            [Newtonsoft.Json.JsonProperty("changePassword")]
+            public bool ChangePassword { get; set; }
+        }
+
+        private class AppSettingsResponse
+        {
+            [Newtonsoft.Json.JsonProperty("appSettings")]
+            public AppSettingsModel? AppSettings { get; set; }
+        }
+
+        private class UpdateAppSettingsResponse
+        {
+            [Newtonsoft.Json.JsonProperty("updateAppSettings")]
+            public AppSettingsModel? UpdateAppSettings { get; set; }
         }
     }
 }

@@ -120,6 +120,33 @@ public class Query
         return await dashboardService.GetBestSellingProductsAsync(count);
     }
 
+    // Monthly Revenue Chart
+    public async Task<List<DailyRevenueDto>> GetMonthlyRevenueChart(
+        [Service] IDashboardService dashboardService,
+        int year,
+        int month)
+    {
+        return await dashboardService.GetMonthlyRevenueChartAsync(year, month);
+    }
+
+    // Settings Queries
+    public async Task<StoreInfoDto> GetStoreInfo([Service] ISettingsService settingsService)
+    {
+        return await settingsService.GetStoreInfoAsync();
+    }
+
+    public async Task<UserProfileDto> GetUserProfile(
+        [Service] ISettingsService settingsService,
+        int adminId)
+    {
+        return await settingsService.GetUserProfileAsync(adminId);
+    }
+
+    public async Task<AppSettingsDto> GetAppSettings([Service] ISettingsService settingsService)
+    {
+        return await settingsService.GetAppSettingsAsync();
+    }
+
     // Report Queries
     public async Task<List<ProductSalesReportDto>> GetProductSalesReport(
         [Service] IReportService reportService,

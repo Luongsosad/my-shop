@@ -80,6 +80,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
+builder.Services.AddScoped<ISettingsService, SettingsService>();
 
 builder.Services
     .AddGraphQLServer()

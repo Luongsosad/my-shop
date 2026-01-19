@@ -40,41 +40,87 @@
                        BorderThickness="1"
                        CornerRadius="8"
                        Padding="16">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                            <TextBlock Text="Start Date" FontSize="12" Margin="0,0,0,4"/>
-                            <CalendarDatePicker Date="{x:Bind ViewModel.StartDate, Mode=TwoWay}" 
-                                              Width="150"/>
+                    <StackPanel Spacing="16">
+                        <!-- Quick Date Range Buttons -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Quick Ranges" FontSize="12" FontWeight="SemiBold"/>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Button Content="Today" 
+                                       Command="{x:Bind ViewModel.SetDateRangeCommand}" 
+                                       CommandParameter="today"
+                                       Style="{StaticResource AccentButtonStyle}"
+                                       Height="32"
+                                       Padding="12,0"/>
+                                <Button Content="Yesterday" 
+                                       Command="{x:Bind ViewModel.SetDateRangeCommand}" 
+                                       CommandParameter="yesterday"
+                                       Height="32"
+                                       Padding="12,0"/>
+                                <Button Content="Last 7 Days" 
+                                       Command="{x:Bind ViewModel.SetDateRangeCommand}" 
+                                       CommandParameter="last7days"
+                                       Height="32"
+                                       Padding="12,0"/>
+                                <Button Content="Last 30 Days" 
+                                       Command="{x:Bind ViewModel.SetDateRangeCommand}" 
+                                       CommandParameter="last30days"
+                                       Height="32"
+                                       Padding="12,0"/>
+                                <Button Content="This Month" 
+                                       Command="{x:Bind ViewModel.SetDateRangeCommand}" 
+                                       CommandParameter="thismonth"
+                                       Height="32"
+                                       Padding="12,0"/>
+                                <Button Content="Last Month" 
+                                       Command="{x:Bind ViewModel.SetDateRangeCommand}" 
+                                       CommandParameter="lastmonth"
+                                       Height="32"
+                                       Padding="12,0"/>
+                                <Button Content="This Year" 
+                                       Command="{x:Bind ViewModel.SetDateRangeCommand}" 
+                                       CommandParameter="thisyear"
+                                       Height="32"
+                                       Padding="12,0"/>
+                            </StackPanel>
                         </StackPanel>
+                        
+                        <!-- Custom Date Range -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="1" Margin="0,0,16,0">
-                            <TextBlock Text="End Date" FontSize="12" Margin="0,0,0,4"/>
-                            <CalendarDatePicker Date="{x:Bind ViewModel.EndDate, Mode=TwoWay}" 
-                                              Width="150"/>
-                        </StackPanel>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Start Date" FontSize="12" Margin="0,0,0,4"/>
+                                <CalendarDatePicker Date="{x:Bind ViewModel.StartDate, Mode=TwoWay}" 
+                                                  Width="150"/>
+                            </StackPanel>
 
-                        <StackPanel Grid.Column="2" Margin="0,0,16,0">
-                            <TextBlock Text="Period" FontSize="12" Margin="0,0,0,4"/>
-                            <ComboBox ItemsSource="{x:Bind ViewModel.PeriodTypes}"
-                                     SelectedItem="{x:Bind ViewModel.SelectedPeriodItem, Mode=TwoWay}"
-                                     DisplayMemberPath="Name"
-                                     Width="120"/>
-                        </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                                <TextBlock Text="End Date" FontSize="12" Margin="0,0,0,4"/>
+                                <CalendarDatePicker Date="{x:Bind ViewModel.EndDate, Mode=TwoWay}" 
+                                                  Width="150"/>
+                            </StackPanel>
 
-                        <Button Grid.Column="3" 
-                               Content="Apply Filter"
-                               Command="{x:Bind ViewModel.ApplyFilterCommand}"
-                               VerticalAlignment="Bottom"
-                               Style="{StaticResource AccentButtonStyle}"/>
-                    </Grid>
+                            <StackPanel Grid.Column="2" Margin="0,0,16,0">
+                                <TextBlock Text="Period" FontSize="12" Margin="0,0,0,4"/>
+                                <ComboBox ItemsSource="{x:Bind ViewModel.PeriodTypes}"
+                                         SelectedItem="{x:Bind ViewModel.SelectedPeriodItem, Mode=TwoWay}"
+                                         DisplayMemberPath="Name"
+                                         Width="120"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="3" 
+                                   Content="Apply Filter"
+                                   Command="{x:Bind ViewModel.ApplyFilterCommand}"
+                                   VerticalAlignment="Bottom"
+                                   Style="{StaticResource AccentButtonStyle}"/>
+                        </Grid>
+                    </StackPanel>
                 </Border>
             </StackPanel>
 
@@ -96,14 +142,26 @@
                        CornerRadius="8"
                        Padding="16"
                        Margin="0,0,8,0">
-                    <StackPanel Spacing="8">
-                        <TextBlock Text="💰 Total Revenue" 
-                                  FontSize="14" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        <TextBlock Text="{x:Bind ViewModel.TotalRevenueText, Mode=OneWay}" 
-                                  FontSize="20" 
-                                  FontWeight="Bold"/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <StackPanel Grid.Row="0" Spacing="8">
+                            <TextBlock Text="💰 Total Revenue" 
+                                      FontSize="14" 
+                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <TextBlock Text="{x:Bind ViewModel.TotalRevenueText, Mode=OneWay}" 
+                                      FontSize="20" 
+                                      FontWeight="Bold"/>
+                        </StackPanel>
+                        
+                        <lvc:CartesianChart Grid.Row="1"
+                                           Series="{x:Bind ViewModel.RevenueSparkline, Mode=OneWay}"
+                                           Height="60"
+                                           Margin="0,8,0,0"/>
+                    </Grid>
                 </Border>
 
                 <!-- Total Profit Card -->
@@ -114,15 +172,27 @@
                        CornerRadius="8"
                        Padding="16"
                        Margin="0,0,8,0">
-                    <StackPanel Spacing="8">
-                        <TextBlock Text="📈 Total Profit" 
-                                  FontSize="14" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        <TextBlock Text="{x:Bind ViewModel.TotalProfitText, Mode=OneWay}" 
-                                  FontSize="20" 
-                                  FontWeight="Bold"
-                                  Foreground="#4CAF50"/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <StackPanel Grid.Row="0" Spacing="8">
+                            <TextBlock Text="📈 Total Profit" 
+                                      FontSize="14" 
+                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <TextBlock Text="{x:Bind ViewModel.TotalProfitText, Mode=OneWay}" 
+                                      FontSize="20" 
+                                      FontWeight="Bold"
+                                      Foreground="#4CAF50"/>
+                        </StackPanel>
+                        
+                        <lvc:CartesianChart Grid.Row="1"
+                                           Series="{x:Bind ViewModel.ProfitSparkline, Mode=OneWay}"
+                                           Height="60"
+                                           Margin="0,8,0,0"/>
+                    </Grid>
                 </Border>
 
                 <!-- Total Orders Card -->
@@ -133,14 +203,26 @@
                        CornerRadius="8"
                        Padding="16"
                        Margin="0,0,8,0">
-                    <StackPanel Spacing="8">
-                        <TextBlock Text="🛒 Total Orders" 
-                                  FontSize="14" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        <TextBlock Text="{x:Bind ViewModel.TotalOrdersText, Mode=OneWay}" 
-                                  FontSize="20" 
-                                  FontWeight="Bold"/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <StackPanel Grid.Row="0" Spacing="8">
+                            <TextBlock Text="🛒 Total Orders" 
+                                      FontSize="14" 
+                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <TextBlock Text="{x:Bind ViewModel.TotalOrdersText, Mode=OneWay}" 
+                                      FontSize="20" 
+                                      FontWeight="Bold"/>
+                        </StackPanel>
+                        
+                        <lvc:CartesianChart Grid.Row="1"
+                                           Series="{x:Bind ViewModel.OrdersSparkline, Mode=OneWay}"
+                                           Height="60"
+                                           Margin="0,8,0,0"/>
+                    </Grid>
                 </Border>
 
                 <!-- Average Order Value Card -->
@@ -181,25 +263,51 @@
             </Grid>
 
             <!-- Product Sales Chart -->
-            <Border Grid.Row="2" 
-                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                   BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                   BorderThickness="1"
-                   CornerRadius="8"
-                   Padding="24"
-                   Margin="0,0,0,24">
-                <StackPanel Spacing="16">
-                    <TextBlock Text="📦 Product Sales Over Time" 
-                              FontSize="20" 
-                              FontWeight="SemiBold"/>
-                    
-                    <lvc:CartesianChart Series="{x:Bind ViewModel.ProductSalesSeriesCollection, Mode=OneWay}"
-                                       XAxes="{x:Bind ViewModel.ProductSalesXAxes, Mode=OneWay}"
-                                       YAxes="{x:Bind ViewModel.ProductSalesYAxes, Mode=OneWay}"
-                                       Height="400"
-                                       LegendPosition="Right"/>
-                </StackPanel>
-            </Border>
+            <Grid Grid.Row="2" Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Line Chart -->
+                <Border Grid.Column="0"
+                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       CornerRadius="8"
+                       Padding="24"
+                       Margin="0,0,12,0">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="📦 Product Sales Over Time" 
+                                  FontSize="20" 
+                                  FontWeight="SemiBold"/>
+                        
+                        <lvc:CartesianChart Series="{x:Bind ViewModel.ProductSalesSeriesCollection, Mode=OneWay}"
+                                           XAxes="{x:Bind ViewModel.ProductSalesXAxes, Mode=OneWay}"
+                                           YAxes="{x:Bind ViewModel.ProductSalesYAxes, Mode=OneWay}"
+                                           Height="400"
+                                           LegendPosition="Right"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Pie Chart -->
+                <Border Grid.Column="1"
+                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       CornerRadius="8"
+                       Padding="24">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="🥧 Revenue Distribution" 
+                                  FontSize="20" 
+                                  FontWeight="SemiBold"/>
+                        
+                        <lvc:PieChart Series="{x:Bind ViewModel.ProductRevenueDistributionSeries, Mode=OneWay}"
+                                     Height="400"
+                                     LegendPosition="Bottom"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
 
             <!-- Revenue & Profit Chart -->
             <Border Grid.Row="3" 
