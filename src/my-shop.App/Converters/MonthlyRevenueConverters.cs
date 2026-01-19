@@ -14,9 +14,9 @@ namespace my_shop.App.Converters
             if (value is ObservableCollection<DailyRevenueDto> data && data.Any())
             {
                 var total = data.Sum(d => d.Revenue);
-                return total.ToString("N0", new CultureInfo("vi-VN")) + " ?";
+                return total.ToString("N0", new CultureInfo("vi-VN")) + " ₫";
             }
-            return "0 ?";
+            return "0 ₫";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -50,12 +50,12 @@ namespace my_shop.App.Converters
             if (value is ObservableCollection<DailyRevenueDto> data && data.Any())
             {
                 var daysWithOrders = data.Count(d => d.Revenue > 0);
-                if (daysWithOrders == 0) return "0 ?";
+                if (daysWithOrders == 0) return "0 ₫";
                 
                 var avg = data.Sum(d => d.Revenue) / daysWithOrders;
-                return avg.ToString("N0", new CultureInfo("vi-VN")) + " ?";
+                return avg.ToString("N0", new CultureInfo("vi-VN")) + " ₫";
             }
-            return "0 ?";
+            return "0 ₫";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

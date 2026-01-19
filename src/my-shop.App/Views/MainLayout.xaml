@@ -71,14 +71,6 @@
                         <FontIcon Glyph="&#xE9F9;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                
-                <NavigationViewItem 
-                    Content="Configuration" 
-                    Tag="Config">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE713;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <NavigationView.PaneFooter>

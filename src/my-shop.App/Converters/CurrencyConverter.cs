@@ -10,13 +10,13 @@ namespace my_shop.App.Converters
         {
             if (value is int amount)
             {
-                return amount.ToString("N0", new CultureInfo("vi-VN")) + " ?";
+                return amount.ToString("N0", new CultureInfo("vi-VN")) + " ₫";
             }
             if (value is long longAmount)
             {
-                return longAmount.ToString("N0", new CultureInfo("vi-VN")) + " ?";
+                return longAmount.ToString("N0", new CultureInfo("vi-VN")) + " ₫";
             }
-            return value?.ToString() ?? "0 ?";
+            return value?.ToString() ?? "0 ₫";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

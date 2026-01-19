@@ -190,7 +190,6 @@ namespace my_shop.App
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            Windows.Storage.ApplicationData.Current.LocalSettings.Values.Remove("auth_token");
             var tokenService = AppHost.Services.GetRequiredService<ITokenService>();
             var jwtHelper = AppHost.Services.GetRequiredService<IJwtHelper>();
             var credentialsService = AppHost.Services.GetRequiredService<ICredentialsService>();

@@ -12,7 +12,7 @@ public partial class VoucherModel : ObservableObject
     private string _code = string.Empty;
 
     [ObservableProperty]
-    private string? _description;
+    private string _description;
 
     [ObservableProperty]
     private int _discountPercent;

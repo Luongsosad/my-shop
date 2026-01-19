@@ -22,16 +22,16 @@ namespace my_shop.App.Models
         public int Count { get; set; }
 
         [JsonProperty("description")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [JsonProperty("categoryId")]
         public int? CategoryId { get; set; }
 
         [JsonProperty("categoryName")]
-        public string? CategoryName { get; set; }
+        public string CategoryName { get; set; }
 
         [JsonProperty("images")]
-        public List<string>? Images { get; set; }
+        public List<string> Images { get; set; }
     }
 
     public class CreateProductModel
@@ -40,9 +40,9 @@ namespace my_shop.App.Models
         public string Name { get; set; } = string.Empty;
         public int ImportPrice { get; set; }
         public int Count { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; }
         public int? CategoryId { get; set; }
-        public List<string>? Images { get; set; }
+        public List<string> Images { get; set; }
     }
 
     public class UpdateProductModel
@@ -52,9 +52,9 @@ namespace my_shop.App.Models
         public string Name { get; set; } = string.Empty;
         public int ImportPrice { get; set; }
         public int Count { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; }
         public int? CategoryId { get; set; }
-        public List<string>? Images { get; set; }
+        public List<string> Images { get; set; }
     }
 
     public class CategoryModel
@@ -66,7 +66,7 @@ namespace my_shop.App.Models
         public string Name { get; set; } = string.Empty;
 
         [JsonProperty("description")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [JsonProperty("productCount")]
         public int ProductCount { get; set; }
@@ -130,12 +130,12 @@ namespace my_shop.App.Models
         }
         private int _quantity;
         
-        public string? ImageUrl
+        public string ImageUrl
         {
             get => _imageUrl;
             set => SetProperty(ref _imageUrl, value);
         }
-        private string? _imageUrl;
+        private string _imageUrl;
         
         public int Subtotal => Quantity * Price;
     }
@@ -151,11 +151,11 @@ namespace my_shop.App.Models
     public class CreateOrderModel
     {
         public int? CustomerId { get; set; }
-        public string? CustomerName { get; set; }
-        public string? CustomerPhone { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerPhone { get; set; }
         public List<OrderItemModel> Items { get; set; } = new();
         public int FinalPrice { get; set; }
-        public string? VoucherCode { get; set; }
+        public string VoucherCode { get; set; }
     }
 
     public class OrderModel
@@ -173,6 +173,6 @@ namespace my_shop.App.Models
         public int FinalPrice { get; set; }
 
         [JsonProperty("items")]
-        public List<OrderItemModel>? Items { get; set; }
+        public List<OrderItemModel> Items { get; set; }
     }
 }
