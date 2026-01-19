@@ -5,6 +5,9 @@ using my_shop.App.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
+using my_shop.App.Views;
 
 namespace my_shop.App.Views
 {
@@ -21,7 +24,8 @@ namespace my_shop.App.Views
                 
                 // Set up for license management (HEAD)
                 ViewModel.OnLogoutRequested = NavigateToLogin;
-                
+                ViewModel.OnShowTourRequested = ShowTour;
+
                 this.DataContext = ViewModel;
                 
                 this.Loaded += SettingsScreenView_Loaded;
@@ -35,6 +39,45 @@ namespace my_shop.App.Views
                 }
                 throw;
             }
+        }
+
+        private void ShowTour()
+        {
+            try
+            {
+                Debug.WriteLine("🔵 [SettingsScreenView] Finding MainLayout to show tour");
+
+                // Find MainLayout in visual tree
+                var mainLayout = FindMainLayout(this);
+
+                if (mainLayout != null)
+                {
+                    Debug.WriteLine("✅ [SettingsScreenView] MainLayout found, starting tour");
+                    _ = mainLayout.StartOnboardingTourAsync();
+                }
+                else
+                {
+                    Debug.WriteLine("❌ [SettingsScreenView] MainLayout not found");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"❌ [SettingsScreenView] Error showing tour: {ex.Message}");
+            }
+        }
+
+        // ✅ THÊM HELPER METHOD
+        private MainLayout? FindMainLayout(Microsoft.UI.Xaml.DependencyObject child)
+        {
+            var parent = VisualTreeHelper.GetParent(child);
+
+            if (parent == null)
+                return null;
+
+            if (parent is MainLayout layout)
+                return layout;
+
+            return FindMainLayout(parent);
         }
 
         private async void SettingsScreenView_Loaded(object sender, RoutedEventArgs e)
@@ -159,28 +202,18 @@ namespace my_shop.App.Views
 
         private void NavigateToLogin()
         {
-            this.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () =>
+            var mainWindow = my_shop.App.App.GetMainWindow();
+
+            if (mainWindow != null)
             {
-                try
+                this.DispatcherQueue.TryEnqueue(() =>
                 {
-                    ResetToLightMode();
-                    
-                    if (MainWindow.Instance != null)
-                    {
-                        var mainFrame = MainWindow.Instance.GetMainFrame();
-                        if (mainFrame != null)
-                        {
-                            var loginView = App.GetService<LoginScreenView>();
-                            loginView.SetNavigationFrame(mainFrame, ((App)App.Current).AppHost);
-                            mainFrame.Content = loginView;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"[SettingsView] ❌ NavigateToLogin error: {ex.Message}");
-                }
-            });
+                    mainWindow.PerformLogout();
+                });
+            }
+            else
+            {
+            }
         }
     }
 }

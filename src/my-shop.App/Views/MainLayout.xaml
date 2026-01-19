@@ -10,6 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <!-- Main Content -->
         <NavigationView
             x:Name="NavView"
             IsBackButtonVisible="Collapsed"
@@ -17,9 +18,10 @@
             PaneDisplayMode="Left"
             IsPaneToggleButtonVisible="True"
             SelectionChanged="NavView_SelectionChanged">
-            
+
             <NavigationView.MenuItems>
                 <NavigationViewItem 
+                    x:Name="DashboardNavItem"
                     Content="Dashboard" 
                     Tag="Dashboard"
                     Icon="Home">
@@ -27,32 +29,37 @@
                         <InfoBadge/>
                     </NavigationViewItem.InfoBadge>
                 </NavigationViewItem>
-                
+
                 <NavigationViewItemSeparator/>
-                
+
                 <NavigationViewItem 
+                    x:Name="ProductsNavItem"
                     Content="Products" 
                     Tag="Products">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7B8;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                
+
                 <NavigationViewItem 
+                    x:Name="OrdersNavItem"
                     Content="Orders" 
                     Tag="Orders">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7BF;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                
+
                 <NavigationViewItem 
+                    x:Name="CustomersNavItem"
                     Content="Customers" 
                     Tag="Customers">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE716;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+
+                <NavigationViewItemSeparator/>
                 
                 <NavigationViewItem 
                     Content="Vouchers" 
@@ -61,16 +68,25 @@
                         <FontIcon Glyph="&#xE8D1;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                
-                <NavigationViewItemSeparator/>
-                
+
                 <NavigationViewItem 
+                    x:Name="ReportsNavItem"
                     Content="Reports" 
                     Tag="Reports">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE9F9;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+
+                <NavigationViewItem 
+                    x:Name="ConfigNavItem"
+                    Content="Configuration" 
+                    Tag="Config">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE713;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+              
             </NavigationView.MenuItems>
 
             <NavigationView.PaneFooter>
@@ -91,5 +107,9 @@
                 </Frame.ContentTransitions>
             </Frame>
         </NavigationView>
+
+        <!-- Spotlight Overlay (Hidden by default) -->
+        <local:SpotlightOverlay x:Name="SpotlightOverlay"
+                                     Visibility="Collapsed"/>
     </Grid>
 </Page>

@@ -74,7 +74,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Không thể tải dữ liệu: {ex.Message}";
+                ErrorMessage = $"Can not load data: {ex.Message}";
             }
             finally
             {
@@ -113,7 +113,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Không thể tìm kiếm: {ex.Message}";
+                ErrorMessage = $"Search failed: {ex.Message}";
             }
             finally
             {
@@ -170,7 +170,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Không thể tạo khách hàng: {ex.Message}";
+                ErrorMessage = $"Failed to create new customer: {ex.Message}";
                 throw;
             }
             finally
@@ -200,7 +200,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Không thể cập nhật khách hàng: {ex.Message}";
+                ErrorMessage = $"Failed to update customer: {ex.Message}";
                 throw;
             }
             finally
@@ -230,14 +230,14 @@ namespace my_shop.App.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Không thể xóa khách hàng";
+                    ErrorMessage = "Failed to delete customer!";
                     HasError = true;
                 }
             }
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Lỗi khi xóa khách hàng: {ex.Message}";
+                ErrorMessage = $"Error delete customer: {ex.Message}";
             }
             finally
             {

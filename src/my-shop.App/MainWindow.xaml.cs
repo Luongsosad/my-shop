@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using my_shop.App.Services.LoginService;
+using my_shop.App.Services.OnboardingService;
 using my_shop.App.Views;
 using System;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace my_shop.App
         private readonly ITokenExpirationMonitor _tokenMonitor;
         private readonly ICredentialsService _credentialsService;
         private readonly IAuthService _authService;
+        private readonly IOnboardingService _onboardingService;
 
         public static MainWindow Instance { get; private set; }
         
@@ -36,6 +38,8 @@ namespace my_shop.App
             _tokenMonitor = tokenMonitor;
             _credentialsService = credentialsService;
             _authService = authService;
+            _onboardingService = appHost.Services.GetRequiredService<IOnboardingService>(); 
+
 
             _tokenMonitor.TokenExpired += OnTokenExpired;
             _ = InitializeAsync();
@@ -77,21 +81,20 @@ namespace my_shop.App
 
                 Debug.WriteLine($"🔵 [InitializeAsync] Token valid: {isTokenValid}, Remember me: {hasRememberMe}");
 
-                // Case 1: Token valid + Remember Me = AUTO LOGIN
                 if (isTokenValid && hasRememberMe)
                 {
                     Debug.WriteLine("🔵 [InitializeAsync] Auto-login mode - initializing current admin...");
 
-                    // ==================== INITIALIZE CURRENT ADMIN ====================
                     var adminInitialized = await _authService.InitializeCurrentAdminFromTokenAsync();
 
                     if (adminInitialized)
                     {
                         Debug.WriteLine($"🔵 [InitializeAsync] Admin initialized successfully. IsLoggedIn: {_authService.IsLoggedIn}");
-                        await LoadUserThemeAsync();
                         _tokenMonitor.StartMonitoring();
                         var mainLayout = _appHost.Services.GetRequiredService<MainLayout>();
                         MainFrame.Content = mainLayout;
+
+                        await ShowOnboardingIfNeededAsync(mainLayout);
                     }
                     else
                     {
@@ -100,9 +103,7 @@ namespace my_shop.App
                         await _credentialsService.ClearCredentialsAsync();
                         ShowLoginScreen();
                     }
-                    // ==================================================================
                 }
-                // Case 2 & 3: Show Login Screen
                 else
                 {
                     Debug.WriteLine("🔵 [InitializeAsync] Showing login screen");
@@ -127,19 +128,40 @@ namespace my_shop.App
             }
         }
 
-        public void ShowLoginScreen()
+        // ✅ THÊM METHOD MỚI
+        private async System.Threading.Tasks.Task ShowOnboardingIfNeededAsync(MainLayout mainLayout)
         {
             try
             {
-                if (Content is FrameworkElement rootElement)
+                var shouldShow = await _onboardingService.ShouldShowOnboardingAsync();
+
+                if (shouldShow)
                 {
-                    rootElement.RequestedTheme = ElementTheme.Light;
+                    Debug.WriteLine("🔵 [Onboarding] First time user - showing interactive tour");
+
+                    // Wait for UI to be fully rendered
+                    await System.Threading.Tasks.Task.Delay(800);
+
+                    // Start the spotlight tour
+                    await mainLayout.StartOnboardingTourAsync();
+
+                    // Mark as completed
+                    await _onboardingService.MarkOnboardingCompleteAsync();
+                    Debug.WriteLine("✅ [Onboarding] Tour marked as completed");
+                }
+                else
+                {
+                    Debug.WriteLine("🔵 [Onboarding] Not first time - skipping tour");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine($"❌ [Onboarding] Error: {ex.Message}");
             }
+        }
 
+        public void ShowLoginScreen()
+        {
             var loginView = _appHost.Services.GetRequiredService<LoginScreenView>();
             loginView.SetNavigationFrame(MainFrame, _appHost);
             MainFrame.Content = loginView;

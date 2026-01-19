@@ -1,0 +1,166 @@
+﻿<UserControl
+    x:Class="my_shop.App.Views.SpotlightOverlay"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+	<Grid x:Name="RootGrid">
+		<!-- Dark Overlay with Hole (4 rectangles) -->
+		<Grid>
+			<!-- Top Rectangle -->
+			<Rectangle x:Name="TopRect"
+                       Fill="Black"
+                       Opacity="0.75"
+                       VerticalAlignment="Top"
+                       Height="0"/>
+
+			<!-- Middle Row with Left, Hole, Right -->
+			<Grid x:Name="MiddleGrid"
+                  VerticalAlignment="Top"
+                  Height="0"
+                  Margin="0,0,0,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0"/>
+					<ColumnDefinition Width="0"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<!-- Left Rectangle -->
+				<Rectangle x:Name="LeftRect"
+                           Grid.Column="0"
+                           Fill="Black"
+                           Opacity="0.75"/>
+
+				<!-- Hole (Empty space) -->
+				<!-- Column 1 is the spotlight hole -->
+
+				<!-- Right Rectangle -->
+				<Rectangle x:Name="RightRect"
+                           Grid.Column="2"
+                           Fill="Black"
+                           Opacity="0.75"/>
+			</Grid>
+
+			<!-- Bottom Rectangle -->
+			<Rectangle x:Name="BottomRect"
+                       Fill="Black"
+                       Opacity="0.75"
+                       VerticalAlignment="Bottom"
+                       Height="0"/>
+		</Grid>
+
+		<!-- Spotlight Highlight Border -->
+		<Canvas x:Name="SpotlightCanvas">
+			<Border x:Name="SpotlightBorder"
+                    BorderBrush="{ThemeResource SystemAccentColor}"
+                    BorderThickness="4"
+                    CornerRadius="8"
+                    Width="200"
+                    Height="100"
+                    Background="Transparent"/>
+		</Canvas>
+
+		<!-- Tooltip Content -->
+		<Border x:Name="TooltipBorder"
+                Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+                BorderBrush="{ThemeResource SystemAccentColor}"
+                BorderThickness="2"
+                CornerRadius="12"
+                Padding="24"
+                MaxWidth="450"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+
+			<StackPanel Spacing="16">
+				<!-- Icon -->
+				<Border Width="64" Height="64"
+                        CornerRadius="32"
+                        HorizontalAlignment="Center">
+					<Border.Background>
+						<SolidColorBrush Color="{ThemeResource SystemAccentColor}" Opacity="0.15"/>
+					</Border.Background>
+					<FontIcon x:Name="TooltipIcon"
+                              Glyph="&#xE80F;"
+                              FontSize="32"
+                              Foreground="{ThemeResource SystemAccentColor}"/>
+				</Border>
+
+				<!-- Title -->
+				<TextBlock x:Name="TooltipTitle"
+                           Text="Feature Title"
+                           FontSize="22"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center"
+                           TextWrapping="Wrap"/>
+
+				<!-- Description -->
+				<TextBlock x:Name="TooltipDescription"
+                           Text="Feature description goes here..."
+                           TextWrapping="Wrap"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           LineHeight="22"/>
+
+				<!-- Progress and Actions -->
+				<StackPanel Spacing="16" Margin="0,8,0,0">
+					<!-- Progress Indicator -->
+					<StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Spacing="8">
+						<Ellipse x:Name="Step1Dot" Width="10" Height="10" Fill="{ThemeResource SystemAccentColor}"/>
+						<Ellipse x:Name="Step2Dot" Width="10" Height="10" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+						<Ellipse x:Name="Step3Dot" Width="10" Height="10" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+						<Ellipse x:Name="Step4Dot" Width="10" Height="10" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+						<Ellipse x:Name="Step5Dot" Width="10" Height="10" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+						<Ellipse x:Name="Step6Dot" Width="10" Height="10" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+						<Ellipse x:Name="Step7Dot" Width="10" Height="10" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+					</StackPanel>
+
+					<!-- Step Counter -->
+					<TextBlock x:Name="StepCounter"
+                               Text="1 / 7"
+                               FontSize="13"
+                               HorizontalAlignment="Center"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               FontWeight="SemiBold"/>
+
+					<!-- Buttons -->
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<Button x:Name="SkipButton"
+                                Grid.Column="0"
+                                Content="Skip Tour"
+                                Click="OnSkipClick"
+                                HorizontalAlignment="Left"/>
+
+						<StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    HorizontalAlignment="Center">
+							<Button x:Name="PrevButton"
+                                    Content="Previous"
+                                    Click="OnPrevClick"
+                                    Visibility="Collapsed"
+                                    MinWidth="100"/>
+							<Button x:Name="NextButton"
+                                    Content="Next"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    Click="OnNextClick"
+                                    MinWidth="100"/>
+						</StackPanel>
+
+						<TextBlock Grid.Column="2"/>
+					</Grid>
+				</StackPanel>
+			</StackPanel>
+		</Border>
+	</Grid>
+</UserControl>

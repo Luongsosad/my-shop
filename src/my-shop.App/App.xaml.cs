@@ -8,6 +8,7 @@ using my_shop.App.Services;
 using my_shop.App.Services.EmailService;
 using my_shop.App.Services.LicenseService;
 using my_shop.App.Services.LoginService;
+using my_shop.App.Services.OnboardingService;
 using my_shop.App.ViewModels;
 using my_shop.App.Views;
 using my_shop.Application.Interfaces;
@@ -21,7 +22,7 @@ namespace my_shop.App
 {
     public partial class App : Microsoft.UI.Xaml.Application
     {
-        private Window? _window;
+        public static Window? MainWindowInstance { get; private set; }
         public IHost AppHost { get; private set; }
 
         public App()
@@ -126,6 +127,7 @@ namespace my_shop.App
                     // License System
                     services.AddSingleton<IAdminRepository, AdminRepository>();
                     services.AddSingleton<LicenseService>();
+                    services.AddSingleton<IOnboardingService, OnboardingService>();
                     // ========================================================
 
                     System.Diagnostics.Debug.WriteLine("🔵 App: Configuring Cloudinary service...");
@@ -176,10 +178,10 @@ namespace my_shop.App
             // Show error dialog
             var dialog = new ContentDialog
             {
-                Title = "Lỗi ứng dụng",
+                Title = "Application error",
                 Content = $"Đã xảy ra lỗi:\n\n{e.Exception.GetType().Name}\n{e.Exception.Message}",
                 CloseButtonText = "Đóng",
-                XamlRoot = _window?.Content?.XamlRoot
+                XamlRoot = MainWindowInstance?.Content?.XamlRoot
             };
 
             if (dialog.XamlRoot != null)
@@ -190,6 +192,7 @@ namespace my_shop.App
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
+            //Windows.Storage.ApplicationData.Current.LocalSettings.Values.Remove("auth_token");
             var tokenService = AppHost.Services.GetRequiredService<ITokenService>();
             var jwtHelper = AppHost.Services.GetRequiredService<IJwtHelper>();
             var credentialsService = AppHost.Services.GetRequiredService<ICredentialsService>();
@@ -198,8 +201,14 @@ namespace my_shop.App
 
             System.Diagnostics.Debug.WriteLine($"🔵 OnLaunched: AuthService instance: {authService.GetHashCode()}");
 
-            _window = new MainWindow(AppHost, tokenService, tokenMonitor, credentialsService, authService);
-            _window.Activate();
+            var mainWindow = new MainWindow(AppHost, tokenService, tokenMonitor, credentialsService, authService);
+            MainWindowInstance = mainWindow;
+            mainWindow.Activate();
+        }
+
+        public static MainWindow? GetMainWindow()
+        {
+            return MainWindowInstance as MainWindow;
         }
 
         public static T GetService<T>() where T : class

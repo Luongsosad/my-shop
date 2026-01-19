@@ -9,227 +9,392 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded">
 
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
+
+        <!-- Modern Card Style -->
+        <Style x:Key="ModernCard" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
     </Page.Resources>
 
-    <Grid>
+    <Grid Padding="12,12,12,0">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Grid Grid.Row="0" Padding="24,24,24,16">
+        <!-- ===== HEADER ===== -->
+        <Grid Grid.Row="0" Margin="0,0,0,24">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0">
-                <TextBlock Text="Quản lý khách hàng" FontSize="32" FontWeight="Bold"/>
-                <TextBlock Text="Danh sách khách hàng" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            <!-- Title Section -->
+            <StackPanel Grid.Column="0" Spacing="8">
+                <TextBlock Text="Customers" 
+                          FontSize="32" 
+                          FontWeight="SemiBold"/>
+                <TextBlock Text="Manage your customer database and relationships" 
+                          FontSize="14"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
 
+            <!-- Add Button -->
             <Button Grid.Column="1"
                    Click="AddNewButton_Click"
                    VerticalAlignment="Center"
-                   Style="{StaticResource AccentButtonStyle}">
-                <StackPanel Orientation="Horizontal" Spacing="8">
+                   Style="{StaticResource AccentButtonStyle}"
+                   Padding="16,12">
+                <StackPanel Orientation="Horizontal" Spacing="10">
                     <FontIcon Glyph="&#xE710;" FontSize="16"/>
-                    <TextBlock Text="Thêm khách hàng"/>
+                    <TextBlock Text="Add Customer" FontWeight="SemiBold"/>
                 </StackPanel>
             </Button>
         </Grid>
 
-        <!-- Main Content -->
-        <Grid Grid.Row="1" Padding="24,0,24,24">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <!-- Search Bar -->
-            <Grid Grid.Row="0" Margin="0,0,0,16">
+        <!-- ===== SEARCH & FILTER BAR ===== -->
+        <Border Grid.Row="1" 
+                Style="{StaticResource ModernCard}"
+                Margin="0,0,0,20">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
+                <!-- Search Box -->
                 <TextBox Grid.Column="0"
                         x:Name="SearchBox"
                         Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        PlaceholderText="Tìm kiếm khách hàng (tên, SĐT)..."
-                        Margin="0,0,8,0">
+                        PlaceholderText="Search by name, phone, or email..."
+                        FontSize="14"
+                        Padding="12"
+                        BorderThickness="0"
+                        CornerRadius="10"
+                        Background="Transparent"
+                        Margin="0,0,12,0">
                     <TextBox.KeyboardAccelerators>
                         <KeyboardAccelerator Key="Enter" Invoked="SearchBox_KeyboardAcceleratorInvoked"/>
                     </TextBox.KeyboardAccelerators>
                 </TextBox>
 
+                <!-- Search Button -->
                 <Button Grid.Column="1"
                        Click="SearchButton_Click"
-                       Style="{StaticResource AccentButtonStyle}">
+                       Style="{StaticResource AccentButtonStyle}"
+                       Padding="12,10"
+                        CornerRadius="6"
+                        Margin="0,0,10,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <FontIcon Glyph="&#xE721;" FontSize="16"/>
-                        <TextBlock Text="Tìm kiếm"/>
+                        <TextBlock Text="Search"/>
                     </StackPanel>
                 </Button>
             </Grid>
+        </Border>
 
-            <!-- Customers Table with Pagination -->
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                
-                <Border Grid.Row="0"
-                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                       BorderThickness="1"
-                       CornerRadius="8"
-                       Padding="0">
-                    
-                    <Grid>
-                        <!-- Data Grid -->
-                        <ListView x:Name="CustomersListView"
-                                 ItemsSource="{x:Bind ViewModel.Customers, Mode=OneWay}"
-                                 SelectionMode="None"
-                                 IsItemClickEnabled="False">
-                            <ListView.ItemTemplate>
-                                <DataTemplate x:DataType="models:CustomerModel">
-                                    <Grid Padding="16,12" 
-                                         BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
-                                         BorderThickness="0,0,0,1">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="60"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="200"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
+        <!-- ===== MAIN CONTENT AREA ===== -->
+        <!-- ===== MAIN CONTENT AREA ===== -->
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Column="0" 
-                                                  Text="{x:Bind Id}"
-                                                  VerticalAlignment="Center"
-                                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                        
-                                        <TextBlock Grid.Column="1" 
-                                                  Text="{x:Bind Name}"
-                                                  VerticalAlignment="Center"
-                                                  FontWeight="SemiBold"/>
-                                        
-                                        <TextBlock Grid.Column="2" 
-                                                  Text="{x:Bind Phone}"
-                                                  VerticalAlignment="Center"/>
+            <!-- Customer List Card -->
+            <!-- Customer List Card -->
+            <Border Grid.Row="0"
+       Style="{StaticResource ModernCard}"
+       Padding="0">
 
-                                        <StackPanel Grid.Column="3" 
-                                                   Orientation="Horizontal" 
-                                                   Spacing="8">
-                                            <Button Content="Sửa"
-                                                   Click="EditButton_Click"
-                                                   CommandParameter="{x:Bind}"
-                                                   Style="{StaticResource AccentButtonStyle}"/>
-                                            <Button Content="Xóa"
-                                                   Click="DeleteButton_Click"
-                                                   CommandParameter="{x:Bind}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Table Content -->
+                    <Grid Grid.Row="0">
+                        <!-- Table Header -->
+                        <Grid Background="{ThemeResource LayerFillColorDefaultBrush}"
+                 Padding="24,16"
+                 VerticalAlignment="Top"
+                 Height="56">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" 
+                          Text="ID" 
+                          FontSize="13"
+                          FontWeight="SemiBold"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                          VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="1" 
+                          Text="Customer Name" 
+                          FontSize="13"
+                          FontWeight="SemiBold"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                          VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="2" 
+                          Text="Phone Number" 
+                          FontSize="13"
+                          FontWeight="SemiBold"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                          VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="3" 
+                          Text="Actions" 
+                          FontSize="13"
+                          FontWeight="SemiBold"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Customer List -->
+                        <ScrollViewer Margin="0,56,0,0"
+                         VerticalScrollBarVisibility="Auto">
+                            <ListView x:Name="CustomersListView"
+                         ItemsSource="{x:Bind ViewModel.Customers, Mode=OneWay}"
+                         SelectionMode="None"
+                         IsItemClickEnabled="False">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Setter Property="Padding" Value="0"/>
+                                        <Setter Property="Margin" Value="0"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:CustomerModel">
+                                        <Grid Padding="24,16" 
+                                 BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                                 BorderThickness="0,0,0,1"
+                                 Background="Transparent">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="150"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- ID with Badge -->
+                                            <Border Grid.Column="0"
+                                       Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                       CornerRadius="6"
+                                       Padding="8,4"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center">
+                                                <TextBlock Text="{x:Bind Id}"
+                                              FontSize="12"
+                                              FontWeight="SemiBold"
+                                              Foreground="White"/>
+                                            </Border>
+
+                                            <!-- Customer Name with Icon -->
+                                            <StackPanel Grid.Column="1" 
+                                           Orientation="Horizontal" 
+                                           Spacing="12"
+                                           VerticalAlignment="Center">
+                                                <Border Width="40" 
+                                           Height="40" 
+                                           CornerRadius="20"
+                                           VerticalAlignment="Center">
+                                                    <Border.Background>
+                                                        <SolidColorBrush Color="{ThemeResource SystemAccentColor}" Opacity="0.1"/>
+                                                    </Border.Background>
+                                                    <FontIcon Glyph="&#xE77B;" 
+                                                 FontSize="20"
+                                                 Foreground="{ThemeResource SystemAccentColor}"/>
+                                                </Border>
+
+                                                <TextBlock Text="{x:Bind Name}"
+                                              FontSize="14"
+                                              FontWeight="SemiBold"
+                                              VerticalAlignment="Center"/>
+                                            </StackPanel>
+
+                                            <!-- Phone with Icon -->
+                                            <StackPanel Grid.Column="2" 
+                                           Orientation="Horizontal" 
+                                           Spacing="8"
+                                           VerticalAlignment="Center">
+                                                <FontIcon Glyph="&#xE717;" 
+                                             FontSize="14"
+                                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                <TextBlock Text="{x:Bind Phone}"
+                                              FontSize="14"
+                                              VerticalAlignment="Center"/>
+                                            </StackPanel>
+
+                                            <!-- Action Buttons -->
+                                            <StackPanel Grid.Column="3" 
+                                           Orientation="Horizontal" 
+                                           Spacing="8"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center">
+                                                <Button Click="EditButton_Click"
+                                           CommandParameter="{x:Bind}"
+                                           Background="Transparent"
+                                           BorderThickness="1"
+                                           ToolTipService.ToolTip="Edit Customer"
+                                           Padding="10,8">
+                                                    <FontIcon Glyph="&#xE70F;" FontSize="16"/>
+                                                </Button>
+
+                                                <Button Click="DeleteButton_Click"
+                                           CommandParameter="{x:Bind}"
+                                           ToolTipService.ToolTip="Delete Customer"
+                                           Padding="10,8">
+                                                    <FontIcon Glyph="&#xE74D;" FontSize="16"/>
+                                                    <Button.Resources>
+                                                        <SolidColorBrush x:Key="ButtonBackground" Color="Transparent"/>
+                                                        <SolidColorBrush x:Key="ButtonBorderBrush" Color="#DC2626"/>
+                                                        <SolidColorBrush x:Key="ButtonForeground" Color="#DC2626"/>
+                                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FEE2E2"/>
+                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#DC2626"/>
+                                                    </Button.Resources>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </ScrollViewer>
 
                         <!-- Empty State -->
                         <StackPanel VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Spacing="16"
-                                   x:Name="EmptyState"
-                                   Visibility="{x:Bind ViewModel.HasNoCustomers, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <FontIcon Glyph="&#xE716;" FontSize="48" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock Text="Chưa có khách hàng" 
-                                      FontSize="16" 
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <Button Content="Thêm khách hàng đầu tiên"
-                                   Click="AddNewButton_Click"
-                                   Style="{StaticResource AccentButtonStyle}"/>
+                       HorizontalAlignment="Center"
+                       Spacing="20"
+                       x:Name="EmptyState"
+                       Visibility="{x:Bind ViewModel.HasNoCustomers, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                            <!-- Empty Icon -->
+                            <Border Width="120" 
+                       Height="120" 
+                       CornerRadius="60"
+                       HorizontalAlignment="Center">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{ThemeResource SystemAccentColor}" Opacity="0.1"/>
+                                </Border.Background>
+                                <FontIcon Glyph="&#xE716;" 
+                             FontSize="60" 
+                             Foreground="{ThemeResource SystemAccentColor}"/>
+                            </Border>
+
+                            <StackPanel Spacing="8" HorizontalAlignment="Center">
+                                <TextBlock Text="No Customers Yet" 
+                              FontSize="24" 
+                              FontWeight="SemiBold"
+                              HorizontalAlignment="Center"/>
+                                <TextBlock Text="Start by adding your first customer to the system" 
+                              FontSize="14"
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                              HorizontalAlignment="Center"
+                              TextAlignment="Center"/>
+                            </StackPanel>
+
+                            <Button Click="AddNewButton_Click"
+                       Style="{StaticResource AccentButtonStyle}"
+                       Padding="20,12">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <FontIcon Glyph="&#xE710;" FontSize="16"/>
+                                    <TextBlock Text="Add Your First Customer" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
 
                         <!-- Loading Indicator -->
-                        <ProgressRing x:Name="LoadingRing"
-                                     IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                                     Width="50"
-                                     Height="50"
-                                     HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"/>
+                        <Grid Background="{ThemeResource LayerFillColorDefaultBrush}"
+                 Opacity="0.9"
+                 Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <StackPanel HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Spacing="16">
+                                <ProgressRing IsActive="True"
+                                 Width="50"
+                                 Height="50"/>
+                                <TextBlock Text="Loading customers..."
+                              FontSize="14"
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
-                </Border>
 
-                <!-- Pagination Controls -->
-                <Grid Grid.Row="1" 
-                      Margin="0,16,0,0"
-                      Padding="16"
-                      Background="{ThemeResource LayerFillColorDefaultBrush}"
-                      CornerRadius="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- ===== PAGINATION (INSIDE CARD) ===== -->
+                    <Border Grid.Row="1"
+               Background="{ThemeResource LayerFillColorDefaultBrush}"
+               BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+               Padding="20,16"
+                            Margin="0,20,0,5">
+                        <Grid ColumnSpacing="12"
+                 HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                    <!-- Previous Button -->
-                    <Button Grid.Column="0"
-                           Command="{x:Bind ViewModel.PreviousPageCommand}"
-                           Margin="0,0,16,0">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE76B;" FontSize="14"/>
-                            <TextBlock Text="Trang trước"/>
-                        </StackPanel>
-                    </Button>
+                            <!-- Previous -->
+                            <Button Grid.Column="0"
+                       Width="36"
+                       Height="36"
+                       CornerRadius="18"
+                       Command="{x:Bind ViewModel.PreviousPageCommand}"
+                       Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       Padding="0">
+                                <FontIcon Glyph="&#xE76B;"
+                             FontFamily="{StaticResource SymbolThemeFontFamily}"
+                             FontSize="14"/>
+                            </Button>
 
-                    <!-- Page Info -->
-                    <StackPanel Grid.Column="1" 
-                               Orientation="Horizontal" 
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Spacing="8">
-                        <TextBlock Text="Trang" 
-                                  VerticalAlignment="Center"
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        <TextBlock Text="{x:Bind ViewModel.CurrentPage, Mode=OneWay}" 
-                                  FontWeight="SemiBold"
-                                  VerticalAlignment="Center"/>
-                        <TextBlock Text="/" 
-                                  VerticalAlignment="Center"
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        <TextBlock Text="{x:Bind ViewModel.TotalPages, Mode=OneWay}" 
-                                  VerticalAlignment="Center"
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        <TextBlock Text="•" 
-                                  VerticalAlignment="Center"
-                                  Margin="8,0"
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        <TextBlock VerticalAlignment="Center"
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}">
-                            <Run Text="Tổng:"/>
-                            <Run Text="{x:Bind ViewModel.TotalCustomers, Mode=OneWay}" FontWeight="SemiBold"/>
-                            <Run Text="khách hàng"/>
-                        </TextBlock>
-                    </StackPanel>
+                            <!-- Page Indicator -->
+                            <TextBlock Grid.Column="1"
+                          VerticalAlignment="Center"
+                          Margin="8,0">
+                    <Run Text="Page "/>
+                    <Run Text="{x:Bind ViewModel.CurrentPage, Mode=OneWay}" FontWeight="SemiBold" FontSize="18"/>
+                    <Run Text=" / "/>
+                    <Run Text="{x:Bind ViewModel.TotalPages, Mode=OneWay}" FontWeight="SemiBold" FontSize="18"/>
+                            </TextBlock>
 
-                    <!-- Next Button -->
-                    <Button Grid.Column="2"
-                           Command="{x:Bind ViewModel.NextPageCommand}"
-                           Margin="16,0,0,0">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="Trang sau"/>
-                            <FontIcon Glyph="&#xE76C;" FontSize="14"/>
-                        </StackPanel>
-                    </Button>
+                            <!-- Next -->
+                            <Button Grid.Column="2"
+                       Width="36"
+                       Height="36"
+                       CornerRadius="18"
+                       Command="{x:Bind ViewModel.NextPageCommand}"
+                       Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                       BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                       BorderThickness="1"
+                       Padding="0">
+                                <FontIcon Glyph="&#xE76C;"
+                             FontFamily="{StaticResource SymbolThemeFontFamily}"
+                             FontSize="14"/>
+                            </Button>
+                        </Grid>
+                    </Border>
                 </Grid>
-            </Grid>
+            </Border>
         </Grid>
     </Grid>
 </Page>

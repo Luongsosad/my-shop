@@ -8,8 +8,7 @@ xmlns:converters="using:my_shop.App.Converters"
 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 xmlns:System="using:System"
-mc:Ignorable="d"
-Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+mc:Ignorable="d">
 
 <Page.Resources>
 <converters:CurrencyConverter x:Key="CurrencyConverter"/>
@@ -31,10 +30,10 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid>
         <!-- Main Content -->
         <ScrollViewer x:Name="MainContent" Opacity="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource InvertedBoolToOpacityConverter}}">
-        <StackPanel Spacing="24" Padding="24">
+        <StackPanel Spacing="24" Padding="12">
             <!-- Header -->
             <StackPanel>
-                <TextBlock Text="Dashboard" FontSize="32" FontWeight="Bold"/>
+                <TextBlock Text="Dashboard" FontSize="32" FontWeight="SemiBold"/>
                 <TextBlock Text="Welcome back! Here's what's happening today." 
                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                           Margin="0,4,0,0"/>
@@ -53,10 +52,10 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <Border Grid.Column="0" Style="{StaticResource StatCardStyle}">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE7B8;" FontSize="20" Foreground="{ThemeResource SystemAccentColor}"/>
-                            <TextBlock Text="Total Products" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <FontIcon Glyph="&#xE7B8;" FontSize="17" Foreground="{ThemeResource SystemAccentColor}"/>
+                            <TextBlock Text="Total Products" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                        <TextBlock FontSize="24" FontWeight="Bold" Margin="0,8,0,0">
                             <Run Text="{x:Bind ViewModel.Stats.TotalProducts, Mode=OneWay, FallbackValue=0, TargetNullValue=0}"/>
                         </TextBlock>
                     </StackPanel>
@@ -66,10 +65,10 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <Border Grid.Column="1" Style="{StaticResource StatCardStyle}">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE7BF;" FontSize="20" Foreground="#10B981"/>
-                            <TextBlock Text="Today's Orders" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <FontIcon Glyph="&#xE7BF;" FontSize="17" Foreground="#10B981"/>
+                                <TextBlock Text="Today's Orders" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                        <TextBlock FontSize="24" FontWeight="Bold" Margin="0,8,0,0">
                             <Run Text="{x:Bind ViewModel.Stats.TodayOrders, Mode=OneWay, FallbackValue=0, TargetNullValue=0}"/>
                         </TextBlock>
                     </StackPanel>
@@ -79,11 +78,11 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <Border Grid.Column="2" Style="{StaticResource StatCardStyle}">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE8A5;" FontSize="20" Foreground="#F59E0B"/>
-                            <TextBlock Text="Today's Revenue" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <FontIcon Glyph="&#xE8A5;" FontSize="17" Foreground="#F59E0B"/>
+                                <TextBlock Text="Today's Revenue" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
-                            <Run Text="{x:Bind ViewModel.Stats.TodayRevenue, Mode=OneWay, Converter={StaticResource CurrencyConverter}, FallbackValue='0 ₫', TargetNullValue='0 ₫'}"/>
+                        <TextBlock FontSize="24" FontWeight="Bold" Margin="0,8,0,0">
+                            <Run Text="{x:Bind ViewModel.Stats.TodayRevenue, Mode=OneWay, Converter={StaticResource CurrencyConverter}, FallbackValue='0 đ', TargetNullValue='0 đ'}"/>
                         </TextBlock>
                     </StackPanel>
                 </Border>
@@ -92,10 +91,10 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <Border Grid.Column="3" Style="{StaticResource StatCardStyle}">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE7BA;" FontSize="20" Foreground="#EF4444"/>
-                            <TextBlock Text="Low Stock Items" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <FontIcon Glyph="&#xE7BA;" FontSize="17" Foreground="#EF4444"/>
+                                <TextBlock Text="Low Stock Items" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                        <TextBlock FontSize="24" FontWeight="Bold" Margin="0,8,0,0">
                             <Run Text="{x:Bind ViewModel.Stats.LowStockCount, Mode=OneWay, FallbackValue=0, TargetNullValue=0}"/>
                         </TextBlock>
                     </StackPanel>
@@ -247,9 +246,9 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
                             <FontIcon Glyph="&#xE9D9;" FontSize="24" Foreground="{ThemeResource SystemAccentColor}"/>
                             <StackPanel>
-                                <TextBlock Text="Doanh thu theo ngày" FontSize="20" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Revenue by day" FontSize="20" FontWeight="SemiBold"/>
                                 <TextBlock FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
-                                    <Run Text="Tháng "/>
+                                    <Run Text="In "/>
                                     <Run Text="{x:Bind ViewModel.SelectedMonth, Mode=OneWay}"/>
                                     <Run Text="/"/>
                                     <Run Text="{x:Bind ViewModel.SelectedYear, Mode=OneWay}"/>
@@ -264,22 +263,22 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                      VerticalAlignment="Center"/>
                             
                             <ComboBox x:Name="MonthComboBox"
-                                     PlaceholderText="Tháng"
+                                     PlaceholderText="Month"
                                      SelectionChanged="MonthComboBox_SelectionChanged"
                                      Width="120"
                                      MinWidth="120">
-                                <ComboBoxItem Content="Tháng 1" Tag="1"/>
-                                <ComboBoxItem Content="Tháng 2" Tag="2"/>
-                                <ComboBoxItem Content="Tháng 3" Tag="3"/>
-                                <ComboBoxItem Content="Tháng 4" Tag="4"/>
-                                <ComboBoxItem Content="Tháng 5" Tag="5"/>
-                                <ComboBoxItem Content="Tháng 6" Tag="6"/>
-                                <ComboBoxItem Content="Tháng 7" Tag="7"/>
-                                <ComboBoxItem Content="Tháng 8" Tag="8"/>
-                                <ComboBoxItem Content="Tháng 9" Tag="9"/>
-                                <ComboBoxItem Content="Tháng 10" Tag="10"/>
-                                <ComboBoxItem Content="Tháng 11" Tag="11"/>
-                                <ComboBoxItem Content="Tháng 12" Tag="12"/>
+                                <ComboBoxItem Content="January" Tag="1"/>
+                                <ComboBoxItem Content="February" Tag="2"/>
+                                <ComboBoxItem Content="March" Tag="3"/>
+                                <ComboBoxItem Content="April" Tag="4"/>
+                                <ComboBoxItem Content="May" Tag="5"/>
+                                <ComboBoxItem Content="June" Tag="6"/>
+                                <ComboBoxItem Content="July" Tag="7"/>
+                                <ComboBoxItem Content="August" Tag="8"/>
+                                <ComboBoxItem Content="September" Tag="9"/>
+                                <ComboBoxItem Content="Octorber" Tag="10"/>
+                                <ComboBoxItem Content="November" Tag="11"/>
+                                <ComboBoxItem Content="December" Tag="12"/>
                             </ComboBox>
                             
                             <ComboBox x:Name="YearComboBox"
@@ -330,7 +329,7 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                             <StackPanel Spacing="4">
                                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                                     <Border Width="12" Height="12" Background="#3B82F6" CornerRadius="2"/>
-                                                    <TextBlock Text="Doanh thu:" FontSize="12" 
+                                                        <TextBlock Text="Revenue:" FontSize="12" 
                                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                                     <TextBlock x:Name="TooltipRevenue" 
                                                               FontSize="12" 
@@ -338,7 +337,7 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                                     <Border Width="12" Height="12" Background="#10B981" CornerRadius="2"/>
-                                                    <TextBlock Text="Đơn hàng:" FontSize="12" 
+                                                        <TextBlock Text="Order:" FontSize="12" 
                                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                                     <TextBlock x:Name="TooltipOrders" 
                                                               FontSize="12" 
@@ -356,11 +355,11 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                    Spacing="24" Margin="0,16,0,0">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <Border Width="16" Height="16" Background="#3B82F6" CornerRadius="4"/>
-                                <TextBlock Text="Doanh thu" FontSize="12" VerticalAlignment="Center"/>
+                                <TextBlock Text="Revenue" FontSize="12" VerticalAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <Border Width="16" Height="16" Background="#10B981" CornerRadius="4"/>
-                                <TextBlock Text="Đơn hàng" FontSize="12" VerticalAlignment="Center"/>
+                                <TextBlock Text="Order" FontSize="12" VerticalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
@@ -376,7 +375,7 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <Border Grid.Column="0" Background="{ThemeResource LayerFillColorDefaultBrush}" 
                                Padding="12" CornerRadius="8">
                             <StackPanel>
-                                <TextBlock Text="Tổng doanh thu" FontSize="11" 
+                                    <TextBlock Text="Total revenue" FontSize="11" 
                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                 <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,4,0,0">
                                     <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyTotalRevenueConverter}}"/>
@@ -387,7 +386,7 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <Border Grid.Column="1" Background="{ThemeResource LayerFillColorDefaultBrush}" 
                                Padding="12" CornerRadius="8">
                             <StackPanel>
-                                <TextBlock Text="Tổng đơn hàng" FontSize="11" 
+                                    <TextBlock Text="Total order" FontSize="11" 
                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                 <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,4,0,0">
                                     <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyTotalOrdersConverter}}"/>
@@ -398,7 +397,7 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <Border Grid.Column="2" Background="{ThemeResource LayerFillColorDefaultBrush}" 
                                Padding="12" CornerRadius="8">
                             <StackPanel>
-                                <TextBlock Text="TB doanh thu/ngày" FontSize="11" 
+                                    <TextBlock Text="Average daily revenue" FontSize="11" 
                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                 <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,4,0,0">
                                     <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyAvgRevenueConverter}}"/>

@@ -9,7 +9,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    >
 
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -21,7 +21,7 @@
     </Page.Resources>
 
     <ScrollViewer>
-        <Grid Padding="24">
+        <Grid Padding="12">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -35,7 +35,7 @@
             <StackPanel Grid.Row="0" Spacing="16" Margin="0,0,0,24">
                 <TextBlock Text="Reports &amp; Analytics" 
                           FontSize="32" 
-                          FontWeight="Bold"/>
+                          FontWeight="SemiBold"/>
                 
                 <TextBlock Text="View business insights and reports" 
                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -121,11 +121,19 @@
                                          Width="120"/>
                             </StackPanel>
 
-                            <Button Grid.Column="3" 
-                                   Content="Apply Filter"
-                                   Command="{x:Bind ViewModel.ApplyFilterCommand}"
-                                   VerticalAlignment="Bottom"
-                                   Style="{StaticResource AccentButtonStyle}"/>
+                            <Button Grid.Column="3"
+        Command="{x:Bind ViewModel.ApplyFilterCommand}"
+        VerticalAlignment="Bottom"
+        Style="{StaticResource AccentButtonStyle}">
+
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <!-- Filter icon -->
+                                    <FontIcon Glyph="&#xE71C;" FontSize="16"/>
+                                    <TextBlock Text="Apply Filter"/>
+                                </StackPanel>
+
+                            </Button>
+
                         </Grid>
                     </StackPanel>
                 </Border>
@@ -150,12 +158,19 @@
                        Padding="16"
                        Margin="0,0,8,0">
                     <ToolTipService.ToolTip>
-                        <ToolTip Content="Tổng doanh thu từ tất cả đơn hàng trong khoảng thời gian đã chọn"/>
+                        <ToolTip Content="Total revenue from all orders within the selected time period"/>
                     </ToolTipService.ToolTip>
                     <StackPanel Spacing="8">
-                        <TextBlock Text="💰 Total Revenue" 
-                                  FontSize="14" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <FontIcon Glyph="&#xE8C7;"
+              FontSize="14"
+              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+
+                            <TextBlock Text="Total Revenue"
+               FontSize="14"
+                                       FontWeight="SemiBold"
+               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        </StackPanel>
                         <TextBlock Text="{x:Bind ViewModel.TotalRevenueText, Mode=OneWay}" 
                                   FontSize="20" 
                                   FontWeight="Bold"/>
@@ -175,12 +190,12 @@
                                     <SolidColorBrush Color="{x:Bind ViewModel.RevenueStatusColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
                                 </TextBlock.Foreground>
                             </TextBlock>
-                            <TextBlock Text="so với kỳ trước" 
+                            <TextBlock Text="compared to the previous period" 
                                       FontSize="11" 
                                       Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                         </StackPanel>
                         
-                        <TextBlock Text="Tổng doanh thu" 
+                        <TextBlock Text="Total revenue" 
                                   FontSize="11" 
                                   Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                     </StackPanel>
@@ -195,12 +210,20 @@
                        Padding="16"
                        Margin="0,0,8,0">
                     <ToolTipService.ToolTip>
-                        <ToolTip Content="Tổng lợi nhuận = Doanh thu - Chi phí nhập hàng"/>
+                        <ToolTip Content="Total profit = Revenue - Cost of goods sold"/>
                     </ToolTipService.ToolTip>
                     <StackPanel Spacing="8">
-                        <TextBlock Text="📈 Total Profit" 
-                                  FontSize="14" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <FontIcon Glyph="&#xE9D2;"
+              FontSize="14"
+              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+
+                            <TextBlock Text="Total Profit"
+               FontSize="14"
+                                       FontWeight="SemiBold"
+               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        </StackPanel>
+
                         <TextBlock Text="{x:Bind ViewModel.TotalProfitText, Mode=OneWay}" 
                                   FontSize="20" 
                                   FontWeight="Bold"/>
@@ -220,12 +243,12 @@
                                     <SolidColorBrush Color="{x:Bind ViewModel.ProfitStatusColor, Mode=OneWay, Converter={StaticResource StringToColorConverter}}"/>
                                 </TextBlock.Foreground>
                             </TextBlock>
-                            <TextBlock Text="so với kỳ trước" 
+                            <TextBlock Text="compared to the previous period" 
                                       FontSize="11" 
                                       Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                         </StackPanel>
-                        
-                        <TextBlock Text="Tổng lợi nhuận" 
+
+                        <TextBlock Text="Total profit" 
                                   FontSize="11" 
                                   Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                     </StackPanel>
@@ -240,12 +263,18 @@
                        Padding="16"
                        Margin="0,0,8,0">
                     <ToolTipService.ToolTip>
-                        <ToolTip Content="Tổng số đơn hàng đã tạo trong khoảng thời gian"/>
+                        <ToolTip Content="Total number of orders created during the period"/>
                     </ToolTipService.ToolTip>
                     <StackPanel Spacing="8">
-                        <TextBlock Text="🛒 Total Orders" 
-                                  FontSize="14" 
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE8FD;"
+              FontSize="14"
                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <TextBlock Text="Total Orders"
+               FontSize="14"
+                                       FontWeight="SemiBold"
+               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        </StackPanel>
                         <TextBlock Text="{x:Bind ViewModel.TotalOrdersText, Mode=OneWay}" 
                                   FontSize="20" 
                                   FontWeight="Bold"/>
@@ -265,12 +294,12 @@
                                     <SolidColorBrush Color="{x:Bind ViewModel.OrdersIncreased, Mode=OneWay, Converter={StaticResource BoolToGreenRedConverter}}"/>
                                 </TextBlock.Foreground>
                             </TextBlock>
-                            <TextBlock Text="so với kỳ trước" 
+                            <TextBlock Text="compared to the previous period" 
                                       FontSize="11" 
                                       Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                         </StackPanel>
                         
-                        <TextBlock Text="Số đơn hàng" 
+                        <TextBlock Text="Total orders" 
                                   FontSize="11" 
                                   Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                     </StackPanel>
@@ -285,16 +314,24 @@
                        Padding="16"
                        Margin="0,0,8,0">
                     <ToolTipService.ToolTip>
-                        <ToolTip Content="Giá trị trung bình mỗi đơn hàng = Tổng doanh thu / Số đơn hàng"/>
+                        <ToolTip Content="Average order value = Total revenue / Number of orders"/>
                     </ToolTipService.ToolTip>
                     <StackPanel Spacing="8">
-                        <TextBlock Text="💵 Avg Order Value" 
-                                  FontSize="14" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE719;"
+              FontSize="14"
+              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+
+                            <TextBlock Text="Avg Order Value"
+               FontSize="14"
+                                       FontWeight="SemiBold"
+               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        </StackPanel>
+
                         <TextBlock Text="{x:Bind ViewModel.AverageOrderValueText, Mode=OneWay}" 
                                   FontSize="20" 
                                   FontWeight="Bold"/>
-                        <TextBlock Text="Giá trị TB/đơn" 
+                        <TextBlock Text="Average value per unit" 
                                   FontSize="11" 
                                   Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                     </StackPanel>
@@ -308,12 +345,20 @@
                        CornerRadius="8"
                        Padding="16">
                     <ToolTipService.ToolTip>
-                        <ToolTip Content="Tỷ suất lợi nhuận = (Lợi nhuận / Doanh thu) × 100%"/>
+                        <ToolTip Content="Profit margin = (Profit / Revenue) × 100%"/>
                     </ToolTipService.ToolTip>
                     <StackPanel Spacing="8">
-                        <TextBlock Text="📊 Profit Margin" 
-                                  FontSize="14" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE8EF;"
+              FontSize="14"
+              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+
+                            <TextBlock Text="Profit Margin"
+               FontSize="14"
+                                       FontWeight="SemiBold"
+               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        </StackPanel>
+
                         <TextBlock Text="{x:Bind ViewModel.ProfitMarginText, Mode=OneWay}" 
                                   FontSize="20" 
                                   FontWeight="Bold"/>
@@ -340,8 +385,8 @@
                                 <Run Text="{x:Bind ViewModel.ProfitMarginValue, Mode=OneWay, Converter={StaticResource DoubleToMarginStatusConverter}}"/>
                             </TextBlock>
                         </StackPanel>
-                        
-                        <TextBlock Text="Tỷ suất lợi nhuận" 
+
+                        <TextBlock Text="Profit rate" 
                                   FontSize="11" 
                                   Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                     </StackPanel>
@@ -364,10 +409,13 @@
                        Padding="24"
                        Margin="0,0,12,0">
                     <StackPanel Spacing="16">
-                        <TextBlock Text="📦 Product Sales Over Time" 
-                                  FontSize="20" 
-                                  FontWeight="SemiBold"/>
-                        
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE7B8;" FontSize="20" FontWeight="Bold"/>
+                            <TextBlock Text="Product Sales Over Time"
+               FontSize="17"
+               FontWeight="SemiBold"/>
+                        </StackPanel>
+
                         <lvc:CartesianChart Series="{x:Bind ViewModel.ProductSalesSeriesCollection, Mode=OneWay}"
                                            XAxes="{x:Bind ViewModel.ProductSalesXAxes, Mode=OneWay}"
                                            YAxes="{x:Bind ViewModel.ProductSalesYAxes, Mode=OneWay}"
@@ -384,10 +432,14 @@
                        CornerRadius="8"
                        Padding="24">
                     <StackPanel Spacing="16">
-                        <TextBlock Text="🥧 Revenue Distribution" 
-                                  FontSize="20" 
-                                  FontWeight="SemiBold"/>
-                        
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE9D2;" FontSize="20" FontWeight="Bold"/>
+                            <TextBlock Text="Revenue Distribution"
+               FontSize="20"
+               FontWeight="SemiBold"/>
+                        </StackPanel>
+
+
                         <lvc:PieChart Series="{x:Bind ViewModel.ProductRevenueDistributionSeries, Mode=OneWay}"
                                      Height="400"
                                      LegendPosition="Bottom"/>
@@ -406,10 +458,10 @@
                 <StackPanel Spacing="16">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <FontIcon Glyph="&#xE734;" 
-                                 FontSize="24"
-                                 Foreground="#FFD700"/>
-                        <TextBlock Text="🏆 Top 5 Products Leaderboard" 
-                                  FontSize="20" 
+                                 FontSize="20"
+                                  FontWeight="SemiBold"/>
+                        <TextBlock Text="Top 5 Products Leaderboard" 
+                                  FontSize="17" 
                                   FontWeight="SemiBold"
                                   VerticalAlignment="Center"/>
                     </StackPanel>
@@ -518,10 +570,13 @@
                    CornerRadius="8"
                    Padding="24">
                 <StackPanel Spacing="16">
-                    <TextBlock Text="💰 Revenue &amp; Profit Analysis" 
-                              FontSize="20" 
-                              FontWeight="SemiBold"/>
-                    
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE9F9;" FontSize="20" FontWeight="SemiBold"/>
+                        <TextBlock Text="Revenue &amp; Profit Analysis" 
+               FontSize="17"
+               FontWeight="SemiBold"/>
+                    </StackPanel>
+
                     <lvc:CartesianChart Series="{x:Bind ViewModel.RevenueProfitSeriesCollection, Mode=OneWay}"
                                        XAxes="{x:Bind ViewModel.RevenueProfitXAxes, Mode=OneWay}"
                                        YAxes="{x:Bind ViewModel.RevenueProfitYAxes, Mode=OneWay}"

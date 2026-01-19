@@ -64,10 +64,11 @@ namespace my_shop.App.Views
         {
             var dialog = new ContentDialog
             {
-                Title = customer == null ? "Thêm khách hàng mới" : $"Sửa khách hàng: {customer.Name}",
-                PrimaryButtonText = "Lưu",
-                CloseButtonText = "Hủy",
+                Title = customer == null ? "Add new customer" : $"Update customer: {customer.Name}",
+                PrimaryButtonText = "Save",
+                CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Primary,
+                RequestedTheme = ElementTheme.Light,
                 XamlRoot = this.XamlRoot
             };
 
@@ -76,22 +77,29 @@ namespace my_shop.App.Views
             
             var nameBox = new TextBox 
             { 
-                Header = "Tên khách hàng *",
-                PlaceholderText = "Nhập tên khách hàng",
+                Header = "Customer's name",
+                PlaceholderText = "Enter customer name",
                 Text = customer?.Name ?? ""
             };
             
             var phoneBox = new TextBox 
             { 
-                Header = "Số điện thoại *",
-                PlaceholderText = "Nhập số điện thoại",
+                Header = "Phone number",
+                PlaceholderText = "Enter phone number",
                 Text = customer?.Phone ?? ""
             };
 
             panel.Children.Add(nameBox);
             panel.Children.Add(phoneBox);
-            
-            dialog.Content = panel;
+
+            var contentRoot = new Border
+            {
+                Width = 420,              
+                CornerRadius = new CornerRadius(8),
+                Child = panel
+            };
+
+            dialog.Content = contentRoot;
 
             var result = await dialog.ShowAsync();
             
@@ -100,14 +108,14 @@ namespace my_shop.App.Views
                 // Validate
                 if (string.IsNullOrWhiteSpace(nameBox.Text))
                 {
-                    await ShowErrorDialog("Lỗi", "Tên khách hàng không được để trống");
+                    await ShowErrorDialog("Error", "Customer name cannot be left blank");
                     await ShowCustomerDialog(customer);
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(phoneBox.Text))
                 {
-                    await ShowErrorDialog("Lỗi", "Số điện thoại không được để trống");
+                    await ShowErrorDialog("Error", "The phone number must not be left blank");
                     await ShowCustomerDialog(customer);
                     return;
                 }
@@ -127,7 +135,7 @@ namespace my_shop.App.Views
                 }
                 catch (Exception ex)
                 {
-                    await ShowErrorDialog("Lỗi", $"Không thể lưu khách hàng:\n\n{ex.Message}");
+                    await ShowErrorDialog("Error", $"Failed to save customer:\n\n{ex.Message}");
                 }
             }
         }
@@ -136,11 +144,12 @@ namespace my_shop.App.Views
         {
             var dialog = new ContentDialog
             {
-                Title = "Xác nhận xóa",
-                Content = $"Bạn có chắc chắn muốn xóa khách hàng '{customer.Name}'?\n\nHành động này không thể hoàn tác.",
-                PrimaryButtonText = "Xóa",
-                CloseButtonText = "Hủy",
+                Title = "Confirm deletion",
+                Content = $"Are you sure you want to delete customer '{customer.Name}'? This action cannot be undone.",
+                PrimaryButtonText = "Delete",
+                CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Close,
+                RequestedTheme = ElementTheme.Light,
                 XamlRoot = this.XamlRoot
             };
 
@@ -158,7 +167,8 @@ namespace my_shop.App.Views
             {
                 Title = title,
                 Content = message,
-                CloseButtonText = "Đóng",
+                CloseButtonText = "Close",
+                RequestedTheme = ElementTheme.Light,
                 XamlRoot = this.XamlRoot
             };
             await dialog.ShowAsync();

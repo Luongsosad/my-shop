@@ -47,18 +47,18 @@ public partial class VoucherModel : ObservableObject
         {
             var now = DateTime.Now;
             if (now < StartDate)
-                return "Chưa bắt đầu";
+                return "Haven't started yet";
             if (now > EndDate)
-                return "Đã hết hạn";
+                return "Expired";
             if (RemainingQuantity <= 0)
-                return "Hết lượt";
-            return "Đang hoạt động";
+                return "Out of stock";
+            return "Active";
         }
     }
 
     public string DisplayUsage => $"{TotalQuantity - RemainingQuantity}/{TotalQuantity}";
 
-    public string DisplayDiscount => $"{DiscountPercent}% (tối đa {MaxDiscountAmount:N0}đ)";
+    public string DisplayDiscount => $"{DiscountPercent}% (max {MaxDiscountAmount:N0}đ)";
 
-    public string DisplayMinOrder => MinOrderAmount > 0 ? $"Đơn tối thiểu {MinOrderAmount:N0}đ" : "Không giới hạn";
+    public string DisplayMinOrder => MinOrderAmount > 0 ? $"Minimum order {MinOrderAmount:N0}đ" : "Unlimited";
 }

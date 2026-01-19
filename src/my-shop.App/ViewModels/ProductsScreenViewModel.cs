@@ -146,7 +146,7 @@ namespace my_shop.App.ViewModels
                 await Task.WhenAll(categoriesTask, customersTask);
 
                 Categories.Clear();
-                Categories.Add(new CategoryModel { Id = 0, Name = "Tất cả" });
+                Categories.Add(new CategoryModel { Id = 0, Name = "All" });
                 foreach (var category in await categoriesTask)
                 {
                     Categories.Add(category);
@@ -165,7 +165,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Không thể tải dữ liệu: {ex.Message}";
+                ErrorMessage = $"Unable to load data: {ex.Message}";
             }
             finally
             {
@@ -244,7 +244,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Không thể tìm kiếm: {ex.Message}";
+                ErrorMessage = $"Cannot search: {ex.Message}";
             }
             finally
             {
@@ -318,7 +318,7 @@ namespace my_shop.App.ViewModels
         {
             if (product.Count <= 0)
             {
-                ErrorMessage = "Sản phẩm đã hết hàng";
+                ErrorMessage = "The product is out of stock";
                 HasError = true;
                 return;
             }
@@ -333,7 +333,7 @@ namespace my_shop.App.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Không đủ hàng trong kho";
+                    ErrorMessage = "Insufficient stock";
                     HasError = true;
                 }
             }
@@ -375,7 +375,7 @@ namespace my_shop.App.ViewModels
             else
             {
                 System.Diagnostics.Debug.WriteLine($"❌ Cannot increase - max stock reached");
-                ErrorMessage = "Không đủ hàng trong kho";
+                ErrorMessage = "Insufficient stock";
                 HasError = true;
             }
         }
@@ -417,14 +417,14 @@ namespace my_shop.App.ViewModels
         {
             if (string.IsNullOrWhiteSpace(VoucherCode))
             {
-                VoucherMessage = "Vui lòng nhập mã voucher";
+                VoucherMessage = "Please enter the voucher code";
                 HasVoucherError = true;
                 return;
             }
 
             if (CartTotalQuantity == 0)
             {
-                VoucherMessage = "Giỏ hàng trống";
+                VoucherMessage = "Cart is empty";
                 HasVoucherError = true;
                 return;
             }
@@ -438,13 +438,13 @@ namespace my_shop.App.ViewModels
                 {
                     AppliedVoucherResult = result;
                     UpdateCartTotals();
-                    VoucherMessage = result.Message ?? "Đã áp dụng voucher";
+                    VoucherMessage = result.Message ?? "Voucher applied!";
                     HasVoucherError = false;
                 }
                 else
                 {
                     AppliedVoucherResult = null;
-                    VoucherMessage = result?.Message ?? "Voucher không hợp lệ hoặc đã hết hạn";
+                    VoucherMessage = result?.Message ?? "The voucher is invalid or has expired";
                     HasVoucherError = true;
                     UpdateCartTotals();
                 }
@@ -452,7 +452,7 @@ namespace my_shop.App.ViewModels
             catch (Exception ex)
             {
                 AppliedVoucherResult = null;
-                VoucherMessage = $"Lỗi: {ex.Message}";
+                VoucherMessage = $"Erorr: {ex.Message}";
                 HasVoucherError = true;
                 UpdateCartTotals();
             }
@@ -473,7 +473,7 @@ namespace my_shop.App.ViewModels
         {
             if (CartItems.Count == 0)
             {
-                ErrorMessage = "Giỏ hàng trống";
+                ErrorMessage = "Cart is empty";
                 HasError = true;
                 return;
             }
@@ -509,13 +509,13 @@ namespace my_shop.App.ViewModels
                 await LoadDataAsync();
 
                 var voucherInfo = AppliedVoucherResult != null && AppliedVoucherResult.Success ? $" (Giảm giá: {CartDiscountAmount:N0}đ)" : "";
-                ErrorMessage = $"Đơn hàng #{order.Id} đã được tạo thành công!{voucherInfo}";
+                ErrorMessage = $"Order #{order.Id} has been successfully created!{voucherInfo}";
                 HasError = false;
             }
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Không thể tạo đơn hàng: {ex.Message}";
+                ErrorMessage = $"Unable to create order: {ex.Message}";
                 throw; // Re-throw để code-behind có thể catch
             }
             finally
@@ -550,13 +550,13 @@ namespace my_shop.App.ViewModels
                 var newProduct = await _dataService.CreateProductAsync(model);
                 Products.Add(newProduct);
                 
-                ErrorMessage = $"Đã thêm sản phẩm '{newProduct.Name}' thành công!";
+                ErrorMessage = $"Added product '{newProduct.Name}' succesfully!";
                 HasError = false;
             }
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Không thể tạo sản phẩm: {ex.Message}";
+                ErrorMessage = $"Unable to create product: {ex.Message}";
             }
             finally
             {
@@ -583,13 +583,13 @@ namespace my_shop.App.ViewModels
                     Products[index] = updatedProduct;
                 }
                 
-                ErrorMessage = $"Đã cập nhật sản phẩm '{updatedProduct.Name}' thành công!";
+                ErrorMessage = $"Updated product '{updatedProduct.Name}' successfully!";
                 HasError = false;
             }
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Không thể cập nhật sản phẩm: {ex.Message}";
+                ErrorMessage = $"Unable to update products: {ex.Message}";
             }
             finally
             {
@@ -613,14 +613,14 @@ namespace my_shop.App.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Không thể xóa sản phẩm";
+                    ErrorMessage = "The product cannot be deleted";
                     HasError = true;
                 }
             }
             catch (Exception ex)
             {
                 HasError = true;
-                ErrorMessage = $"Lỗi khi xóa sản phẩm: {ex.Message}";
+                ErrorMessage = $"Error when deleting a product: {ex.Message}";
             }
             finally
             {
