@@ -313,5 +313,159 @@ namespace my_shop.App.Views
                 DrawRevenueChart();
             }
         }
+
+        #region Stat Card Hover Animations
+
+        private void StatCard_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            if (sender is Border border)
+            {
+                var scaleAnimation = new DoubleAnimation
+                {
+                    To = 1.05,
+                    Duration = TimeSpan.FromMilliseconds(200),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
+
+                var storyboard = new Storyboard();
+                
+                Storyboard.SetTarget(scaleAnimation, border);
+                Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(ScaleTransform.ScaleX)");
+                storyboard.Children.Add(scaleAnimation);
+
+                var scaleYAnimation = new DoubleAnimation
+                {
+                    To = 1.05,
+                    Duration = TimeSpan.FromMilliseconds(200),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
+                
+                Storyboard.SetTarget(scaleYAnimation, border);
+                Storyboard.SetTargetProperty(scaleYAnimation, "(UIElement.RenderTransform).(ScaleTransform.ScaleY)");
+                storyboard.Children.Add(scaleYAnimation);
+
+                storyboard.Begin();
+
+                border.Translation = new System.Numerics.Vector3(0, -4, 32);
+            }
+        }
+
+        private void StatCard_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            if (sender is Border border)
+            {
+                var scaleAnimation = new DoubleAnimation
+                {
+                    To = 1.0,
+                    Duration = TimeSpan.FromMilliseconds(200),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
+
+                var storyboard = new Storyboard();
+                
+                Storyboard.SetTarget(scaleAnimation, border);
+                Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(ScaleTransform.ScaleX)");
+                storyboard.Children.Add(scaleAnimation);
+
+                var scaleYAnimation = new DoubleAnimation
+                {
+                    To = 1.0,
+                    Duration = TimeSpan.FromMilliseconds(200),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
+                
+                Storyboard.SetTarget(scaleYAnimation, border);
+                Storyboard.SetTargetProperty(scaleYAnimation, "(UIElement.RenderTransform).(ScaleTransform.ScaleY)");
+                storyboard.Children.Add(scaleYAnimation);
+
+                storyboard.Begin();
+
+                border.Translation = new System.Numerics.Vector3(0, 0, 0);
+            }
+        }
+
+        #endregion
+
+        #region Stat Card Click Actions
+
+        private async void ProductCard_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Products Overview",
+                Content = $"Total Products: {ViewModel.Stats.TotalProducts}\n\nClick OK to navigate to Products page.",
+                PrimaryButtonText = "Go to Products",
+                CloseButtonText = "Cancel",
+                XamlRoot = this.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+            
+            if (result == ContentDialogResult.Primary)
+            {
+                System.Diagnostics.Debug.WriteLine("Navigate to Products page");
+            }
+        }
+
+        private async void OrderCard_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Today's Orders",
+                Content = $"Orders Today: {ViewModel.Stats.TodayOrders}\n\nClick OK to view all orders.",
+                PrimaryButtonText = "View Orders",
+                CloseButtonText = "Cancel",
+                XamlRoot = this.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+            
+            if (result == ContentDialogResult.Primary)
+            {
+                System.Diagnostics.Debug.WriteLine("Navigate to Orders page");
+            }
+        }
+
+        private async void RevenueCard_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Revenue Details",
+                Content = $"Today's Revenue: {ViewModel.Stats.TodayRevenue:N0} đ\n\nView detailed revenue analytics.",
+                PrimaryButtonText = "View Analytics",
+                CloseButtonText = "Cancel",
+                XamlRoot = this.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+            
+            if (result == ContentDialogResult.Primary)
+            {
+                System.Diagnostics.Debug.WriteLine("Navigate to Revenue Analytics");
+            }
+        }
+
+        private async void LowStockCard_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Low Stock Alert",
+                Content = $"Items Running Low: {ViewModel.Stats.LowStockCount}\n\nClick OK to view and manage low stock items.",
+                PrimaryButtonText = "Manage Inventory",
+                CloseButtonText = "Cancel",
+                XamlRoot = this.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+            
+            if (result == ContentDialogResult.Primary)
+            {
+                System.Diagnostics.Debug.WriteLine("Navigate to Low Stock Management");
+            }
+        }
+
+        #endregion
+
+        // ...existing chart methods...
     }
 }

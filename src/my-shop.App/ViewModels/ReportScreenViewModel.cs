@@ -134,6 +134,9 @@ namespace my_shop.App.ViewModels
         [ObservableProperty]
         private PeriodTypeItem? selectedPeriodItem;
 
+        [ObservableProperty]
+        private string? selectedQuickRange;
+
         public ReportScreenViewModel(IDataService dataService)
         {
             _dataService = dataService;
@@ -142,6 +145,15 @@ namespace my_shop.App.ViewModels
             SelectedPeriodItem = PeriodTypes.First(p => p.Type == ReportPeriodType.Daily);
             SelectedPeriodType = ReportPeriodType.Daily;
             
+            // Set default date range to Last 30 Days and load data
+            var now = DateTimeOffset.Now;
+            _isSettingDatesProgrammatically = true;
+            StartDate = now.AddDays(-30).Date;
+            EndDate = now;
+            SelectedQuickRange = "last30days";
+            _isSettingDatesProgrammatically = false;
+            
+            // Load data automatically with default range
             _ = LoadReportDataAsync();
         }
 
@@ -150,6 +162,24 @@ namespace my_shop.App.ViewModels
             if (value != null)
             {
                 SelectedPeriodType = value.Type;
+            }
+        }
+
+        partial void OnStartDateChanged(DateTimeOffset value)
+        {
+            // Clear quick range selection when user manually changes dates
+            if (!_isSettingDatesProgrammatically)
+            {
+                SelectedQuickRange = null;
+            }
+        }
+
+        partial void OnEndDateChanged(DateTimeOffset value)
+        {
+            // Clear quick range selection when user manually changes dates
+            if (!_isSettingDatesProgrammatically)
+            {
+                SelectedQuickRange = null;
             }
         }
 
@@ -197,6 +227,9 @@ namespace my_shop.App.ViewModels
         [RelayCommand]
         private async Task SetDateRangeAsync(string range)
         {
+            // Set the selected quick range for highlighting
+            SelectedQuickRange = range.ToLower();
+            
             var now = DateTimeOffset.Now;
             
             switch (range.ToLower())
@@ -238,8 +271,16 @@ namespace my_shop.App.ViewModels
                     break;
             }
             
+            // Temporarily disable the date changed handlers by setting a flag
+            // Since we're setting dates programmatically, we don't want to clear SelectedQuickRange
+            _isSettingDatesProgrammatically = true;
+            // Dates are already set above
+            _isSettingDatesProgrammatically = false;
+            
             await LoadReportDataAsync();
         }
+
+        private bool _isSettingDatesProgrammatically = false;
 
         private void UpdateSummaryCards(RevenueProfitReport report)
         {

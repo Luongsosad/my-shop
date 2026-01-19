@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace my_shop.App.Models
@@ -43,6 +44,15 @@ namespace my_shop.App.Models
         
         [JsonProperty("count")]
         public int Count { get; set; }
+        
+        [JsonProperty("images")]
+        public List<string>? Images { get; set; }
+        
+        // Property ?? l?y ?nh ??u tiên ho?c placeholder
+        public string FirstImageUrl => 
+            Images != null && Images.Count > 0 && !string.IsNullOrEmpty(Images[0]) 
+                ? Images[0] 
+                : "ms-appx:///Assets/placeholder-product.png";
     }
 
     public class BestSellingProductDto
@@ -58,6 +68,15 @@ namespace my_shop.App.Models
         
         [JsonProperty("soldPercentage")]
         public double SoldPercentage { get; set; }
+        
+        [JsonProperty("images")]
+        public List<string>? Images { get; set; }
+        
+        // Property ?? l?y ?nh ??u tiên ho?c placeholder
+        public string FirstImageUrl => 
+            Images != null && Images.Count > 0 && !string.IsNullOrEmpty(Images[0]) 
+                ? Images[0] 
+                : "ms-appx:///Assets/placeholder-product.png";
     }
 
     public class DailyRevenueDto

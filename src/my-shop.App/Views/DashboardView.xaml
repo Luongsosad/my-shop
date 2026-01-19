@@ -2,7 +2,7 @@
 x:Class="my_shop.App.Views.DashboardView"
 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-xmlns:local="using:my_shop.App.Views"
+xmlns:local="using:my_shop.App.Models"
 xmlns:vm="using:my_shop.App.ViewModels"
 xmlns:converters="using:my_shop.App.Converters"
 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -17,13 +17,67 @@ mc:Ignorable="d">
 <converters:MonthlyTotalRevenueConverter x:Key="MonthlyTotalRevenueConverter"/>
 <converters:MonthlyTotalOrdersConverter x:Key="MonthlyTotalOrdersConverter"/>
 <converters:MonthlyAvgRevenueConverter x:Key="MonthlyAvgRevenueConverter"/>
-    <Style x:Key="StatCardStyle" TargetType="Border">
+<converters:ImageListToFirstImageConverter x:Key="ImageListToFirstImageConverter"/>
+
+        <!-- Enhanced Stat Card Style with Gradient & Animation -->
+        <Style x:Key="StatCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
             <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Padding" Value="16"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
             <Setter Property="Margin" Value="0,0,12,12"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Gradient Stat Card Styles -->
+        <Style x:Key="ProductCardStyle" TargetType="Border" BasedOn="{StaticResource StatCardStyle}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#667eea" Offset="0"/>
+                        <GradientStop Color="#764ba2" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="OrderCardStyle" TargetType="Border" BasedOn="{StaticResource StatCardStyle}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#10B981" Offset="0"/>
+                        <GradientStop Color="#059669" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="RevenueCardStyle" TargetType="Border" BasedOn="{StaticResource StatCardStyle}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#F59E0B" Offset="0"/>
+                        <GradientStop Color="#D97706" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="AlertCardStyle" TargetType="Border" BasedOn="{StaticResource StatCardStyle}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#EF4444" Offset="0"/>
+                        <GradientStop Color="#DC2626" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Page.Resources>
 
@@ -39,8 +93,8 @@ mc:Ignorable="d">
                           Margin="0,4,0,0"/>
             </StackPanel>
 
-            <!-- Statistics Cards Row -->
-            <Grid>
+            <!-- Statistics Cards Row with Responsive Grid -->
+            <Grid x:Name="StatsGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -48,57 +102,127 @@ mc:Ignorable="d">
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Total Products -->
-                <Border Grid.Column="0" Style="{StaticResource StatCardStyle}">
+                <!-- Total Products Card with Gradient -->
+                <Border Grid.Column="0" Style="{StaticResource ProductCardStyle}"
+                        PointerEntered="StatCard_PointerEntered"
+                        PointerExited="StatCard_PointerExited"
+                        Tapped="ProductCard_Tapped">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE7B8;" FontSize="17" Foreground="{ThemeResource SystemAccentColor}"/>
-                            <TextBlock Text="Total Products" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontWeight="SemiBold"/>
+                            <FontIcon Glyph="&#xE7B8;" FontSize="20" Foreground="White"/>
+                            <TextBlock Text="Total Products" FontSize="14" Foreground="White" Opacity="0.9" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <TextBlock FontSize="24" FontWeight="Bold" Margin="0,8,0,0">
+                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,12,0,0" Foreground="White">
                             <Run Text="{x:Bind ViewModel.Stats.TotalProducts, Mode=OneWay, FallbackValue=0, TargetNullValue=0}"/>
                         </TextBlock>
+                        <!-- Trend Indicator Placeholder -->
+                        <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,8,0,0">
+                            <FontIcon Glyph="&#xE74A;" FontSize="12" Foreground="#D1FAE5"/>
+                            <TextBlock Text="+12.5%" FontSize="12" Foreground="#D1FAE5" FontWeight="SemiBold"/>
+                            <TextBlock Text="vs last month" FontSize="11" Foreground="White" Opacity="0.7"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
 
-                <!-- Today Orders -->
-                <Border Grid.Column="1" Style="{StaticResource StatCardStyle}">
+                <!-- Today Orders Card with Gradient -->
+                <Border Grid.Column="1" Style="{StaticResource OrderCardStyle}"
+                        PointerEntered="StatCard_PointerEntered"
+                        PointerExited="StatCard_PointerExited"
+                        Tapped="OrderCard_Tapped">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE7BF;" FontSize="17" Foreground="#10B981"/>
-                                <TextBlock Text="Today's Orders" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontWeight="SemiBold"/>
+                            <FontIcon Glyph="&#xE7BF;" FontSize="20" Foreground="White"/>
+                            <TextBlock Text="Today's Orders" FontSize="14" Foreground="White" Opacity="0.9" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <TextBlock FontSize="24" FontWeight="Bold" Margin="0,8,0,0">
+                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,12,0,0" Foreground="White">
                             <Run Text="{x:Bind ViewModel.Stats.TodayOrders, Mode=OneWay, FallbackValue=0, TargetNullValue=0}"/>
                         </TextBlock>
+                        <!-- Trend Indicator Placeholder -->
+                        <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,8,0,0">
+                            <FontIcon Glyph="&#xE74A;" FontSize="12" Foreground="#D1FAE5"/>
+                            <TextBlock Text="+8.2%" FontSize="12" Foreground="#D1FAE5" FontWeight="SemiBold"/>
+                            <TextBlock Text="vs yesterday" FontSize="11" Foreground="White" Opacity="0.7"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
 
-                <!-- Today Revenue -->
-                <Border Grid.Column="2" Style="{StaticResource StatCardStyle}">
+                <!-- Today Revenue Card with Gradient -->
+                <Border Grid.Column="2" Style="{StaticResource RevenueCardStyle}"
+                        PointerEntered="StatCard_PointerEntered"
+                        PointerExited="StatCard_PointerExited"
+                        Tapped="RevenueCard_Tapped">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE8A5;" FontSize="17" Foreground="#F59E0B"/>
-                                <TextBlock Text="Today's Revenue" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontWeight="SemiBold"/>
+                            <FontIcon Glyph="&#xE8A5;" FontSize="20" Foreground="White"/>
+                            <TextBlock Text="Today's Revenue" FontSize="14" Foreground="White" Opacity="0.9" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <TextBlock FontSize="24" FontWeight="Bold" Margin="0,8,0,0">
+                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,12,0,0" Foreground="White" TextWrapping="Wrap">
                             <Run Text="{x:Bind ViewModel.Stats.TodayRevenue, Mode=OneWay, Converter={StaticResource CurrencyConverter}, FallbackValue='0 đ', TargetNullValue='0 đ'}"/>
                         </TextBlock>
+                        <!-- Trend Indicator Placeholder -->
+                        <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,8,0,0">
+                            <FontIcon Glyph="&#xE74A;" FontSize="12" Foreground="#FEF3C7"/>
+                            <TextBlock Text="+15.3%" FontSize="12" Foreground="#FEF3C7" FontWeight="SemiBold"/>
+                            <TextBlock Text="vs yesterday" FontSize="11" Foreground="White" Opacity="0.7"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
 
-                <!-- Low Stock Alert -->
-                <Border Grid.Column="3" Style="{StaticResource StatCardStyle}">
+                <!-- Low Stock Alert Card with Gradient -->
+                <Border Grid.Column="3" Style="{StaticResource AlertCardStyle}"
+                        PointerEntered="StatCard_PointerEntered"
+                        PointerExited="StatCard_PointerExited"
+                        Tapped="LowStockCard_Tapped">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE7BA;" FontSize="17" Foreground="#EF4444"/>
-                                <TextBlock Text="Low Stock Items" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontWeight="SemiBold"/>
+                            <FontIcon Glyph="&#xE7BA;" FontSize="20" Foreground="White"/>
+                            <TextBlock Text="Low Stock Items" FontSize="14" Foreground="White" Opacity="0.9" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <TextBlock FontSize="24" FontWeight="Bold" Margin="0,8,0,0">
+                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,12,0,0" Foreground="White">
                             <Run Text="{x:Bind ViewModel.Stats.LowStockCount, Mode=OneWay, FallbackValue=0, TargetNullValue=0}"/>
                         </TextBlock>
+                        <!-- Warning Indicator -->
+                        <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,8,0,0">
+                            <FontIcon Glyph="&#xE7BA;" FontSize="12" Foreground="#FEE2E2"/>
+                            <TextBlock Text="Needs attention" FontSize="12" Foreground="#FEE2E2" FontWeight="SemiBold"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
+
+                <!-- Responsive Design States -->
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup>
+                        <!-- Large screens (4 columns) -->
+                        <VisualState x:Name="WideLayout">
+                            <VisualState.StateTriggers>
+                                <AdaptiveTrigger MinWindowWidth="1200"/>
+                            </VisualState.StateTriggers>
+                        </VisualState>
+
+                        <!-- Medium screens (2 columns) -->
+                        <VisualState x:Name="MediumLayout">
+                            <VisualState.StateTriggers>
+                                <AdaptiveTrigger MinWindowWidth="800"/>
+                            </VisualState.StateTriggers>
+                            <VisualState.Setters>
+                                <Setter Target="StatsGrid.ColumnDefinitions[2].Width" Value="0"/>
+                                <Setter Target="StatsGrid.ColumnDefinitions[3].Width" Value="0"/>
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <!-- Small screens (1 column) -->
+                        <VisualState x:Name="NarrowLayout">
+                            <VisualState.StateTriggers>
+                                <AdaptiveTrigger MinWindowWidth="0"/>
+                            </VisualState.StateTriggers>
+                            <VisualState.Setters>
+                                <Setter Target="StatsGrid.ColumnDefinitions[1].Width" Value="0"/>
+                                <Setter Target="StatsGrid.ColumnDefinitions[2].Width" Value="0"/>
+                                <Setter Target="StatsGrid.ColumnDefinitions[3].Width" Value="0"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
             </Grid>
 
             <!-- Two Columns Layout -->
@@ -116,42 +240,43 @@ mc:Ignorable="d">
                 <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource StatCardStyle}">
                     <StackPanel>
                         <TextBlock Text="Recent Orders" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                        <ListView ItemsSource="{x:Bind ViewModel.RecentOrders, Mode=OneWay}" 
-                                 SelectionMode="None" MaxHeight="300">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Padding="0,8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        
-                                        <Border Grid.Column="0" Background="{ThemeResource AccentFillColorDefaultBrush}" 
-                                               Width="40" Height="40" CornerRadius="20" Margin="0,0,12,0">
-                                            <FontIcon Glyph="&#xE8B7;" FontSize="16" Foreground="White"/>
-                                        </Border>
-                                        
-                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding OrderId}" FontWeight="SemiBold"/>
-                                            <TextBlock Text="{Binding CreatedTime}" FontSize="12" 
-                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                        </StackPanel>
-                                        
-                                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,0,16,0">
-                                            <TextBlock Text="{Binding ItemCount}" FontSize="12" 
-                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                            <TextBlock Text="items" FontSize="11" 
-                                                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
-                                        </StackPanel>
-                                        
-                                        <TextBlock Grid.Column="3" Text="{Binding TotalPrice, Converter={StaticResource CurrencyConverter}}" 
-                                                  FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                        <ScrollViewer MaxHeight="400" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{x:Bind ViewModel.RecentOrders, Mode=OneWay}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Padding="0,8">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <Border Grid.Column="0" Background="{ThemeResource AccentFillColorDefaultBrush}" 
+                                                   Width="40" Height="40" CornerRadius="20" Margin="0,0,12,0">
+                                                <FontIcon Glyph="&#xE8B7;" FontSize="16" Foreground="White"/>
+                                            </Border>
+                                            
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding OrderId}" FontWeight="SemiBold"/>
+                                                <TextBlock Text="{Binding CreatedTime}" FontSize="12" 
+                                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                            </StackPanel>
+                                            
+                                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                                                <TextBlock Text="{Binding ItemCount}" FontSize="12" 
+                                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                <TextBlock Text="items" FontSize="11" 
+                                                          Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                            </StackPanel>
+                                            
+                                            <TextBlock Grid.Column="3" Text="{Binding TotalPrice, Converter={StaticResource CurrencyConverter}}" 
+                                                      FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                     </StackPanel>
                 </Border>
 
@@ -161,31 +286,51 @@ mc:Ignorable="d">
                         <TextBlock Text="Low Stock Alert" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
                         <TextBlock Text="Products running low (qty &lt; 5)" FontSize="12" 
                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" Margin="0,0,0,12"/>
-                        <ListView ItemsSource="{x:Bind ViewModel.LowStockProducts, Mode=OneWay}" 
-                                 SelectionMode="None" MaxHeight="300">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
+                        <ItemsControl ItemsSource="{x:Bind ViewModel.LowStockProducts, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="local:LowStockProductDto">
                                     <Grid Padding="0,8">
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
                                         
-                                        <StackPanel Grid.Column="0">
-                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextWrapping="Wrap"/>
-                                            <TextBlock Text="{Binding Sku}" FontSize="11" 
+                                        <!-- Product Image -->
+                                        <Border Grid.Column="0" Width="48" Height="48" Margin="0,0,12,0"
+                                               CornerRadius="8" 
+                                               Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                                            <Grid>
+                                                <!-- Default placeholder -->
+                                                <FontIcon Glyph="&#xE91B;" 
+                                                         FontSize="24" 
+                                                         Foreground="#999999"
+                                                         HorizontalAlignment="Center"
+                                                         VerticalAlignment="Center"/>
+                                                <!-- Actual image -->
+                                                <Image Stretch="UniformToFill">
+                                                    <Image.Source>
+                                                        <BitmapImage UriSource="{x:Bind Images, Converter={StaticResource ImageListToFirstImageConverter}, Mode=OneWay}"/>
+                                                    </Image.Source>
+                                                </Image>
+                                            </Grid>
+                                        </Border>
+                                        
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{x:Bind Name, Mode=OneWay}" FontWeight="SemiBold" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{x:Bind Sku, Mode=OneWay}" FontSize="11" 
                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                         </StackPanel>
                                         
-                                        <Border Grid.Column="1" Background="#FEE2E2" CornerRadius="12" 
+                                        <Border Grid.Column="2" Background="#FEE2E2" CornerRadius="12" 
                                                Padding="8,4" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Count}" FontSize="12" 
+                                            <TextBlock Text="{x:Bind Count, Mode=OneWay}" FontSize="12" 
                                                       Foreground="#DC2626" FontWeight="SemiBold"/>
                                         </Border>
                                     </Grid>
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </Border>
 
@@ -193,10 +338,9 @@ mc:Ignorable="d">
                 <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource StatCardStyle}">
                     <StackPanel>
                         <TextBlock Text="Top Selling Products" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                        <ListView ItemsSource="{x:Bind ViewModel.BestSellingProducts, Mode=OneWay}" 
-                                 SelectionMode="None" MaxHeight="300">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
+                        <ItemsControl ItemsSource="{x:Bind ViewModel.BestSellingProducts, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="local:BestSellingProductDto">
                                     <Grid Padding="0,8">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -205,29 +349,44 @@ mc:Ignorable="d">
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
                                         
-                                        <Border Grid.Column="0" Background="{ThemeResource AccentFillColorDefaultBrush}" 
-                                               Width="40" Height="40" CornerRadius="8" Margin="0,0,12,0">
-                                            <FontIcon Glyph="&#xE7B8;" FontSize="16" Foreground="White"/>
+                                        <!-- Product Image -->
+                                        <Border Grid.Column="0" Width="56" Height="56" Margin="0,0,12,0"
+                                               CornerRadius="8" 
+                                               Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                                            <Grid>
+                                                <!-- Default placeholder -->
+                                                <FontIcon Glyph="&#xE91B;" 
+                                                         FontSize="28" 
+                                                         Foreground="#999999"
+                                                         HorizontalAlignment="Center"
+                                                         VerticalAlignment="Center"/>
+                                                <!-- Actual image -->
+                                                <Image Stretch="UniformToFill">
+                                                    <Image.Source>
+                                                        <BitmapImage UriSource="{x:Bind Images, Converter={StaticResource ImageListToFirstImageConverter}, Mode=OneWay}"/>
+                                                    </Image.Source>
+                                                </Image>
+                                            </Grid>
                                         </Border>
                                         
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
-                                            <TextBlock Text="{Binding Category}" FontSize="12" 
+                                            <TextBlock Text="{x:Bind Name, Mode=OneWay}" FontWeight="SemiBold" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{x:Bind Category, Mode=OneWay}" FontSize="12" 
                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                         </StackPanel>
                                         
                                         <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,0,24,0">
-                                            <TextBlock Text="{Binding SoldCount}" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{x:Bind SoldCount, Mode=OneWay}" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                                             <TextBlock Text="sold" FontSize="11" 
                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center"/>
                                         </StackPanel>
                                         
-                                        <ProgressBar Grid.Column="3" Width="100" Value="{Binding SoldPercentage}" 
+                                        <ProgressBar Grid.Column="3" Width="100" Value="{x:Bind SoldPercentage, Mode=OneWay}" 
                                                     Maximum="100" VerticalAlignment="Center"/>
                                     </Grid>
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -410,19 +569,18 @@ mc:Ignorable="d">
         </StackPanel>
         </ScrollViewer>
 
-        <!-- Loading Overlay -->
+        <!-- Enhanced Loading Overlay with ProgressRing -->
         <Grid x:Name="LoadingOverlay" 
               Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-              Background="{ThemeResource LayerFillColorDefaultBrush}"
-              Opacity="0.8">
+              Background="{ThemeResource LayerFillColorDefaultBrush}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16">
                 <ProgressRing IsActive="True" Width="60" Height="60"/>
-                <TextBlock Text="Đang tải dữ liệu..." 
+                <TextBlock Text="Loading Dashboard..." 
                           FontSize="16" 
                           FontWeight="SemiBold"
                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                           HorizontalAlignment="Center"/>
-                <TextBlock Text="Vui lòng đợi..." 
+                <TextBlock Text="Please wait..." 
                           FontSize="14"
                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                           HorizontalAlignment="Center"/>
