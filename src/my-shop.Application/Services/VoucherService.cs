@@ -132,7 +132,7 @@ public class VoucherService : IVoucherService
     {
         var voucher = await _voucherRepository.GetByIdAsync(id);
         if (voucher == null)
-            throw new NotFoundException("Không tìm thấy voucher");
+            throw new NotFoundException("Can not find voucher");
 
         await _voucherRepository.DeleteAsync(id);
     }
@@ -143,7 +143,7 @@ public class VoucherService : IVoucherService
         {
             return new VoucherDiscountResult(
                 Success: false,
-                Message: "Vui lòng nhập mã voucher",
+                Message: "Please enter voucher!",
                 VoucherId: null,
                 DiscountAmount: 0,
                 FinalAmount: dto.OrderAmount
@@ -156,7 +156,7 @@ public class VoucherService : IVoucherService
         {
             return new VoucherDiscountResult(
                 Success: false,
-                Message: "Mã voucher không tồn tại",
+                Message: "Voucher is null!",
                 VoucherId: null,
                 DiscountAmount: 0,
                 FinalAmount: dto.OrderAmount
@@ -181,7 +181,7 @@ public class VoucherService : IVoucherService
         {
             return new VoucherDiscountResult(
                 Success: false,
-                Message: "Voucher đã hết hạn",
+                Message: "Voucher is expried",
                 VoucherId: null,
                 DiscountAmount: 0,
                 FinalAmount: dto.OrderAmount
@@ -192,7 +192,7 @@ public class VoucherService : IVoucherService
         {
             return new VoucherDiscountResult(
                 Success: false,
-                Message: "Voucher đã hết lượt sử dụng",
+                Message: "Voucher is out of stock",
                 VoucherId: null,
                 DiscountAmount: 0,
                 FinalAmount: dto.OrderAmount
@@ -203,7 +203,7 @@ public class VoucherService : IVoucherService
         {
             return new VoucherDiscountResult(
                 Success: false,
-                Message: $"Đơn hàng tối thiểu {voucher.MinOrderAmount:N0}đ để sử dụng voucher này",
+                Message: $"Min order value has to be greater than {voucher.MinOrderAmount:N0}đ to use this voucher",
                 VoucherId: null,
                 DiscountAmount: 0,
                 FinalAmount: dto.OrderAmount
@@ -221,7 +221,7 @@ public class VoucherService : IVoucherService
 
         return new VoucherDiscountResult(
             Success: true,
-            Message: $"Giảm {voucher.DiscountPercent}% (tối đa {voucher.MaxDiscountAmount:N0}đ)",
+            Message: $"Reduce {voucher.DiscountPercent}% (max {voucher.MaxDiscountAmount:N0}đ)",
             VoucherId: voucher.Id,
             DiscountAmount: discountAmount,
             FinalAmount: finalAmount

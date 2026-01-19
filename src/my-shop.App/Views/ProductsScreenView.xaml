@@ -78,7 +78,7 @@ Loaded="Page_Loaded">
                             <!-- Customer Selection -->
                             <StackPanel Grid.Row="1" Spacing="12" Margin="0,0,0,16">
                                 <TextBlock Text="Customer information" FontWeight="SemiBold" FontSize="16"/>
-                                
+
                                 <!-- Toggle: Existing vs New Customer -->
                                 <RadioButtons x:Name="CustomerTypeRadio" SelectedIndex="0" SelectionChanged="CustomerTypeRadio_SelectionChanged">
                                     <RadioButton Content="Old customers" Tag="existing"/>
@@ -270,7 +270,7 @@ Loaded="Page_Loaded">
                         </Grid>
                     </Flyout>
                 </Button.Flyout>
-                
+
                 <Grid>
                     <FontIcon Glyph="&#xE7BF;" FontSize="24"/>
                     <!-- Badge -->
@@ -302,7 +302,7 @@ Loaded="Page_Loaded">
         </Grid>
 
         <!-- Main Content -->
-        <Grid Grid.Row="1" Padding="12,0,12,12">
+        <Grid Grid.Row="1" Padding="12,0,12,0">
 
             <!-- Products Area -->
             <Grid Grid.Row="0">
@@ -497,12 +497,17 @@ Loaded="Page_Loaded">
                 </Grid>
 
                 <!-- Products Grid with Pagination -->
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1"
+                      Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8"
+            Padding="0,10,0,20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
+
                     <ScrollViewer Grid.Row="0">
                         <GridView ItemsSource="{x:Bind ViewModel.Products, Mode=OneWay}"
                                  SelectionMode="None"
@@ -630,7 +635,7 @@ Loaded="Page_Loaded">
                                                         <TextBlock Text="Delete"/>
                                                     </StackPanel>
                                                 </Button>
-                                                
+
                                                 <!-- Sales Mode: Add to Cart Button -->
                                                 <Button Width="270"
                                                        Command="{Binding DataContext.AddToCartCommand, ElementName=ProductsPage}"
@@ -650,83 +655,87 @@ Loaded="Page_Loaded">
                         </GridView>
                     </ScrollViewer>
 
-                    <!-- Pagination Controls -->
-                    <Grid Grid.Row="1" 
-                          Margin="0,16,0,0"
-                          Padding="16"
-                          Background="{ThemeResource LayerFillColorDefaultBrush}"
-                          CornerRadius="8"
-                          Visibility="{x:Bind ViewModel.TotalPages, Mode=OneWay, Converter={StaticResource IntToVisibilityConverter}}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <!-- Pagination - Replace existing pagination section in ProductsScreenView.xaml -->
+                    <Grid Grid.Row="1"
+      Margin="0,16,0,0"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                        <!-- Previous Button -->
-                        <Button Grid.Column="0"
-                               Command="{x:Bind ViewModel.PreviousPageCommand}"
-                               IsEnabled="{x:Bind ViewModel.CurrentPage, Mode=OneWay, Converter={StaticResource IntToBoolConverter}}"
-                               Margin="0,0,16,0">
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <FontIcon Glyph="&#xE76B;" FontSize="14"/>
-                                <TextBlock Text="Trang trước"/>
-                            </StackPanel>
-                        </Button>
+                        <!-- Pagination Controls -->
+                        <Grid Grid.Row="0"
+          ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- Page Info -->
-                        <StackPanel Grid.Column="1" 
-                                   Orientation="Horizontal" 
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Spacing="8">
-                            <TextBlock Text="Trang" 
-                                      VerticalAlignment="Center"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock Text="{x:Bind ViewModel.CurrentPage, Mode=OneWay}" 
-                                      FontWeight="SemiBold"
-                                      VerticalAlignment="Center"/>
-                            <TextBlock Text="/" 
-                                      VerticalAlignment="Center"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock Text="{x:Bind ViewModel.TotalPages, Mode=OneWay}" 
-                                      VerticalAlignment="Center"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock Text="•" 
-                                      VerticalAlignment="Center"
-                                      Margin="8,0"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock VerticalAlignment="Center"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}">
-                                <Run Text="Tổng:"/>
-                                <Run Text="{x:Bind ViewModel.TotalProducts, Mode=OneWay}" FontWeight="SemiBold"/>
-                                <Run Text="sản phẩm"/>
+                            <!-- Previous -->
+                            <Button Grid.Column="0"
+                Width="36"
+                Height="36"
+                CornerRadius="18"
+                Command="{x:Bind ViewModel.PreviousPageCommand}"
+                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                                <FontIcon Glyph="&#xE76B;"
+                      FontFamily="{StaticResource SymbolThemeFontFamily}"
+                      FontSize="14"/>
+                            </Button>
+
+                            <!-- Page Indicator -->
+                            <TextBlock Grid.Column="1"
+                   VerticalAlignment="Center"
+                   Margin="8,0">
+            <Run Text="Page "/>
+            <Run Text="{x:Bind ViewModel.CurrentPage, Mode=OneWay}" FontWeight="SemiBold" FontSize="18"/>
+            <Run Text=" / "/>
+            <Run Text="{x:Bind ViewModel.TotalPages, Mode=OneWay}" FontWeight="SemiBold" FontSize="18"/>
                             </TextBlock>
-                        </StackPanel>
 
-                        <!-- Next Button -->
-                        <Button Grid.Column="2"
-                               Command="{x:Bind ViewModel.NextPageCommand}"
-                               Margin="16,0,0,0">
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <TextBlock Text="Trang sau"/>
-                                <FontIcon Glyph="&#xE76C;" FontSize="14"/>
-                            </StackPanel>
-                        </Button>
+                            <!-- Next -->
+                            <Button Grid.Column="2"
+                Width="36"
+                Height="36"
+                CornerRadius="18"
+                Command="{x:Bind ViewModel.NextPageCommand}"
+                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                                <FontIcon Glyph="&#xE76C;"
+                      FontFamily="{StaticResource SymbolThemeFontFamily}"
+                      FontSize="14"/>
+                            </Button>
+                        </Grid>
+
+                        <!-- Total Products Count -->
+                        <TextBlock Grid.Row="1"
+               HorizontalAlignment="Center"
+               Margin="0,8,0,0"
+               FontSize="12"
+               >
+        <Run Text="Total:"/>
+        <Run Text="{x:Bind ViewModel.TotalProducts, Mode=OneWay}" FontWeight="SemiBold" FontSize="17"/>
+        <Run Text="products"/>
+                        </TextBlock>
                     </Grid>
-                </Grid>
 
-                <!-- Loading Indicator -->
-                <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                    <!-- Loading Indicator -->
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
                              Width="50"
                              Height="50"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Center"/>
+                </Grid>
             </Grid>
-        </Grid>
 
-        <!-- Error Message - TEMPORARILY DISABLED FOR DEBUGGING -->
-        <!--
+            <!-- Error Message - TEMPORARILY DISABLED FOR DEBUGGING -->
+            <!--
         <InfoBar Grid.Row="1"
                 IsOpen="{x:Bind ViewModel.HasError, Mode=OneWay}"
                 Severity="{x:Bind ViewModel.ErrorMessage, Mode=OneWay, Converter={StaticResource StringToInfoBarSeverityConverter}}"
@@ -734,5 +743,6 @@ Loaded="Page_Loaded">
                 VerticalAlignment="Bottom"
                 Margin="24"/>
         -->
+        </Grid>
     </Grid>
 </Page>

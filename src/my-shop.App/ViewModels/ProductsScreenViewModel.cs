@@ -508,7 +508,7 @@ namespace my_shop.App.ViewModels
                 // Reload products to update stock
                 await LoadDataAsync();
 
-                var voucherInfo = AppliedVoucherResult != null && AppliedVoucherResult.Success ? $" (Giảm giá: {CartDiscountAmount:N0}đ)" : "";
+                var voucherInfo = AppliedVoucherResult != null && AppliedVoucherResult.Success ? $" (Discount: {CartDiscountAmount:N0}đ)" : "";
                 ErrorMessage = $"Order #{order.Id} has been successfully created!{voucherInfo}";
                 HasError = false;
             }

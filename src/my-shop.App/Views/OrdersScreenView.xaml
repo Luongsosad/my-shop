@@ -590,55 +590,71 @@
 
                 <!-- Pagination -->
                 <Grid Grid.Row="1"
-      Margin="0,16,0,0"
-      ColumnSpacing="12"
+      Margin="0,5,0,0"
       HorizontalAlignment="Center"
       VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- Pagination Controls -->
+                    <Grid Grid.Row="0"
+          ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <!-- Previous -->
-                    <Button Grid.Column="0"
-            Width="36"
-            Height="36"
-            CornerRadius="18"
-            Command="{x:Bind ViewModel.PreviousPageCommand}"
-            Background="{ThemeResource SubtleFillColorSecondaryBrush}"
-            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-            BorderThickness="1">
-                        <FontIcon Glyph="&#xE76B;"
-                  FontFamily="{StaticResource SymbolThemeFontFamily}"
-                  FontSize="14"/>
-                    </Button>
+                        <!-- Previous -->
+                        <Button Grid.Column="0"
+                Width="36"
+                Height="36"
+                CornerRadius="18"
+                Command="{x:Bind ViewModel.PreviousPageCommand}"
+                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                            <FontIcon Glyph="&#xE76B;"
+                      FontFamily="{StaticResource SymbolThemeFontFamily}"
+                      FontSize="14"/>
+                        </Button>
 
-                    <!-- Page Indicator -->
-                    <TextBlock Grid.Column="1"
-               VerticalAlignment="Center"
-               Margin="8,0">
-        <Run Text="Page "/>
-        <Run Text="{x:Bind ViewModel.CurrentPage, Mode=OneWay}" FontWeight="SemiBold" FontSize="18"/>
-        <Run Text=" / "/>
-        <Run Text="{x:Bind ViewModel.TotalPages, Mode=OneWay}" FontWeight="SemiBold" FontSize="18"/>
+                        <!-- Page Indicator -->
+                        <TextBlock Grid.Column="1"
+                   VerticalAlignment="Center"
+                   Margin="8,0">
+            <Run Text="Page "/>
+            <Run Text="{x:Bind ViewModel.CurrentPage, Mode=OneWay}" FontWeight="SemiBold" FontSize="18"/>
+            <Run Text=" / "/>
+            <Run Text="{x:Bind ViewModel.TotalPages, Mode=OneWay}" FontWeight="SemiBold" FontSize="18"/>
+                        </TextBlock>
+
+                        <!-- Next -->
+                        <Button Grid.Column="2"
+                Width="36"
+                Height="36"
+                CornerRadius="18"
+                Command="{x:Bind ViewModel.NextPageCommand}"
+                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                            <FontIcon Glyph="&#xE76C;"
+                      FontFamily="{StaticResource SymbolThemeFontFamily}"
+                      FontSize="14"/>
+                        </Button>
+                    </Grid>
+
+                    <!-- Total Orders Count -->
+                    <TextBlock Grid.Row="1"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               >
+        <Run Text="Total:"/>
+        <Run Text="{x:Bind ViewModel.TotalOrders, Mode=OneWay}" FontWeight="SemiBold" FontSize="17"/>
+        <Run Text="orders"/>
                     </TextBlock>
-
-                    <!-- Next -->
-                    <Button Grid.Column="2"
-            Width="36"
-            Height="36"
-            CornerRadius="18"
-            Command="{x:Bind ViewModel.NextPageCommand}"
-            Background="{ThemeResource SubtleFillColorSecondaryBrush}"
-            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-            BorderThickness="1">
-                        <FontIcon Glyph="&#xE76C;"
-                  FontFamily="{StaticResource SymbolThemeFontFamily}"
-                  FontSize="14"/>
-                    </Button>
-
                 </Grid>
 
             </Grid>
