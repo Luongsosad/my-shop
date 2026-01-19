@@ -155,6 +155,7 @@ namespace my_shop.App.Models
         public string? CustomerPhone { get; set; }
         public List<OrderItemModel> Items { get; set; } = new();
         public int FinalPrice { get; set; }
+        public string? VoucherCode { get; set; }
     }
 
     public class OrderModel

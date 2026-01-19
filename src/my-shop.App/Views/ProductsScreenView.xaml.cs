@@ -17,11 +17,12 @@ namespace my_shop.App.Views
             {
                 System.Diagnostics.Debug.WriteLine("🔵 ProductsScreenView: Constructor START");
                 
-                this.InitializeComponent();
-                System.Diagnostics.Debug.WriteLine("🔵 ProductsScreenView: InitializeComponent DONE");
-                
+                // CRITICAL: Get ViewModel BEFORE InitializeComponent
                 ViewModel = App.GetService<ProductsScreenViewModel>();
                 System.Diagnostics.Debug.WriteLine("🔵 ProductsScreenView: ViewModel created");
+                
+                this.InitializeComponent();
+                System.Diagnostics.Debug.WriteLine("🔵 ProductsScreenView: InitializeComponent DONE");
                 
                 this.DataContext = ViewModel;
                 System.Diagnostics.Debug.WriteLine("🔵 ProductsScreenView: DataContext set");
@@ -65,8 +66,24 @@ namespace my_shop.App.Views
                 }
             }
             
-            // Force bindings to update
-            Bindings.Update();
+            // TEMPORARILY DISABLED - causes WinRT exception
+            // Bindings.Update();
+        }
+
+        private void SortByComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox comboBox && comboBox.SelectedItem is ComboBoxItem item && item.Tag is string tag)
+            {
+                ViewModel.SearchSortBy = tag;
+            }
+        }
+
+        private void SortOrderComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox comboBox && comboBox.SelectedItem is ComboBoxItem item && item.Tag is string tag)
+            {
+                ViewModel.SearchSortOrder = tag;
+            }
         }
 
         private async void Page_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -89,7 +106,8 @@ namespace my_shop.App.Views
         {
             try
             {
-                ViewModel.SearchProductsCommand.Execute(null);
+                // Use InitiateSearch which resets to page 1
+                ViewModel.InitiateSearchCommand.Execute(null);
                 args.Handled = true;
             }
             catch (Exception ex)
@@ -103,14 +121,35 @@ namespace my_shop.App.Views
             try
             {
                 System.Diagnostics.Debug.WriteLine($"🔵 Toggle Mode: {ViewModel.IsManagementMode} -> {!ViewModel.IsManagementMode}");
+                System.Diagnostics.Debug.WriteLine($"🔵 Cart items count: {ViewModel.CartItems.Count}");
+                
                 ViewModel.ToggleModeCommand.Execute(null);
                 
-                // Force UI update
-                Bindings.Update();
+                System.Diagnostics.Debug.WriteLine($"✅ Toggle mode command executed");
+                
+                // Defer binding update to avoid WinRT exception
+                _ = this.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () =>
+                {
+                    try
+                    {
+                        Bindings.Update();
+                        System.Diagnostics.Debug.WriteLine($"✅ Bindings updated");
+                    }
+                    catch (Exception ex2)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"❌ Bindings.Update Error: {ex2.Message}");
+                    }
+                });
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ ToggleModeButton_Click Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"❌ ToggleModeButton_Click Error: {ex.GetType().Name}");
+                System.Diagnostics.Debug.WriteLine($"❌ Message: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"❌ Stack Trace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ Inner Exception: {ex.InnerException.Message}");
+                }
             }
         }
 
@@ -333,6 +372,75 @@ namespace my_shop.App.Views
                 XamlRoot = this.XamlRoot
             };
             await dialog.ShowAsync();
+        }
+
+        // Cart Item Button Handlers
+        private void IncreaseQuantityButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        {
+            try
+            {
+                var button = sender as Microsoft.UI.Xaml.Controls.Button;
+                // Get item from DataContext (set automatically by DataTemplate)
+                var item = button?.DataContext as my_shop.App.Models.CartItemModel;
+                if (item != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"🔵 IncreaseQuantityButton_Click for {item.ProductName}");
+                    ViewModel.IncreaseQuantityCommand.Execute(item);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ IncreaseQuantityButton_Click: item is null");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ IncreaseQuantityButton_Click Error: {ex.Message}");
+            }
+        }
+
+        private void DecreaseQuantityButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        {
+            try
+            {
+                var button = sender as Microsoft.UI.Xaml.Controls.Button;
+                // Get item from DataContext (set automatically by DataTemplate)
+                var item = button?.DataContext as my_shop.App.Models.CartItemModel;
+                if (item != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"🔵 DecreaseQuantityButton_Click for {item.ProductName}");
+                    ViewModel.DecreaseQuantityCommand.Execute(item);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ DecreaseQuantityButton_Click: item is null");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ DecreaseQuantityButton_Click Error: {ex.Message}");
+            }
+        }
+
+        private void RemoveFromCartButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        {
+            try
+            {
+                var button = sender as Microsoft.UI.Xaml.Controls.Button;
+                // Get item from DataContext (set automatically by DataTemplate)
+                var item = button?.DataContext as my_shop.App.Models.CartItemModel;
+                if (item != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"🔵 RemoveFromCartButton_Click for {item.ProductName}");
+                    ViewModel.RemoveFromCartCommand.Execute(item);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ RemoveFromCartButton_Click: item is null");
+                }            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ RemoveFromCartButton_Click Error: {ex.Message}");
+            }
         }
     }
 }

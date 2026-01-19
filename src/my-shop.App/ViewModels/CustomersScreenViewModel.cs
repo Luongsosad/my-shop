@@ -28,6 +28,18 @@ namespace my_shop.App.ViewModels
         [ObservableProperty]
         private bool hasError;
 
+        [ObservableProperty]
+        private int currentPage = 1;
+
+        [ObservableProperty]
+        private int pageSize = 10;
+
+        [ObservableProperty]
+        private int totalPages;
+
+        [ObservableProperty]
+        private int totalCustomers;
+
         public bool HasNoCustomers => !IsLoading && Customers.Count == 0;
 
         public CustomersScreenViewModel(IDataService dataService)
@@ -44,7 +56,10 @@ namespace my_shop.App.ViewModels
 
             try
             {
-                var customers = await _dataService.GetCustomersAsync();
+                var (customers, totalCount) = await _dataService.GetCustomersWithPagingAsync(
+                    page: CurrentPage,
+                    pageSize: PageSize
+                );
 
                 Customers.Clear();
                 foreach (var customer in customers)
@@ -52,6 +67,8 @@ namespace my_shop.App.ViewModels
                     Customers.Add(customer);
                 }
 
+                TotalCustomers = totalCount;
+                TotalPages = (int)Math.Ceiling((double)totalCount / PageSize);
                 OnPropertyChanged(nameof(HasNoCustomers));
             }
             catch (Exception ex)
@@ -74,20 +91,23 @@ namespace my_shop.App.ViewModels
 
             try
             {
-                var allCustomers = await _dataService.GetCustomersAsync();
-
-                var filtered = string.IsNullOrWhiteSpace(SearchText)
-                    ? allCustomers
-                    : allCustomers.Where(c =>
-                        c.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                        c.Phone.Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+                CurrentPage = 1; // Reset to first page on new search
+                
+                var searchTerm = string.IsNullOrWhiteSpace(SearchText) ? null : SearchText;
+                var (customers, totalCount) = await _dataService.GetCustomersWithPagingAsync(
+                    page: CurrentPage,
+                    pageSize: PageSize,
+                    searchTerm: searchTerm
+                );
 
                 Customers.Clear();
-                foreach (var customer in filtered)
+                foreach (var customer in customers)
                 {
                     Customers.Add(customer);
                 }
 
+                TotalCustomers = totalCount;
+                TotalPages = (int)Math.Ceiling((double)totalCount / PageSize);
                 OnPropertyChanged(nameof(HasNoCustomers));
             }
             catch (Exception ex)
@@ -98,6 +118,39 @@ namespace my_shop.App.ViewModels
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        public async Task ClearSearchAsync()
+        {
+            SearchText = string.Empty;
+            await LoadDataAsync();
+        }
+
+        [RelayCommand]
+        public async Task NextPageAsync()
+        {
+            if (CurrentPage < TotalPages)
+            {
+                CurrentPage++;
+                if (string.IsNullOrWhiteSpace(SearchText))
+                    await LoadDataAsync();
+                else
+                    await SearchCustomersAsync();
+            }
+        }
+
+        [RelayCommand]
+        public async Task PreviousPageAsync()
+        {
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+                if (string.IsNullOrWhiteSpace(SearchText))
+                    await LoadDataAsync();
+                else
+                    await SearchCustomersAsync();
             }
         }
 

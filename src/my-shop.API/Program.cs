@@ -11,6 +11,7 @@ using Npgsql;
 using my_shop.Infrastructure.Services;
 using System.IO;
 using System.Text;
+using HotChocolate.Types;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,10 +71,15 @@ builder.Services.AddDbContext<MyShopDbContext>(options =>
 builder.Services.AddScoped<IApplicationDbContext>(provider => 
     provider.GetRequiredService<MyShopDbContext>());
 
+// Register repositories
+builder.Services.AddScoped<my_shop.Domain.Interfaces.IVoucherRepository, my_shop.Infrastructure.Repositories.VoucherRepository>();
+
+// Register services
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IVoucherService, VoucherService>();
 
 builder.Services
     .AddGraphQLServer()

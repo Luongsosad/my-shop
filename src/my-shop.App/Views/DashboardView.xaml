@@ -52,8 +52,9 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                             <FontIcon Glyph="&#xE7B8;" FontSize="20" Foreground="{ThemeResource SystemAccentColor}"/>
                             <TextBlock Text="Total Products" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                         </StackPanel>
-                        <TextBlock Text="{x:Bind ViewModel.Stats.TotalProducts, Mode=OneWay, FallbackValue=0}" 
-                                  FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                            <Run Text="{x:Bind ViewModel.Stats.TotalProducts, Mode=OneWay, FallbackValue=0, TargetNullValue=0}"/>
+                        </TextBlock>
                     </StackPanel>
                 </Border>
 
@@ -64,8 +65,9 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                             <FontIcon Glyph="&#xE7BF;" FontSize="20" Foreground="#10B981"/>
                             <TextBlock Text="Today's Orders" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                         </StackPanel>
-                        <TextBlock Text="{x:Bind ViewModel.Stats.TodayOrders, Mode=OneWay, FallbackValue=0}" 
-                                  FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                            <Run Text="{x:Bind ViewModel.Stats.TodayOrders, Mode=OneWay, FallbackValue=0, TargetNullValue=0}"/>
+                        </TextBlock>
                     </StackPanel>
                 </Border>
 
@@ -76,8 +78,9 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                             <FontIcon Glyph="&#xE8A5;" FontSize="20" Foreground="#F59E0B"/>
                             <TextBlock Text="Today's Revenue" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                         </StackPanel>
-                        <TextBlock Text="{x:Bind ViewModel.Stats.TodayRevenue, Mode=OneWay, Converter={StaticResource CurrencyConverter}, FallbackValue='0 ₫'}" 
-                                  FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                            <Run Text="{x:Bind ViewModel.Stats.TodayRevenue, Mode=OneWay, Converter={StaticResource CurrencyConverter}, FallbackValue='0 ₫', TargetNullValue='0 ₫'}"/>
+                        </TextBlock>
                     </StackPanel>
                 </Border>
 
@@ -88,8 +91,9 @@ Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                             <FontIcon Glyph="&#xE7BA;" FontSize="20" Foreground="#EF4444"/>
                             <TextBlock Text="Low Stock Items" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                         </StackPanel>
-                        <TextBlock Text="{x:Bind ViewModel.Stats.LowStockCount, Mode=OneWay, FallbackValue=0}" 
-                                  FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                        <TextBlock FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                            <Run Text="{x:Bind ViewModel.Stats.LowStockCount, Mode=OneWay, FallbackValue=0, TargetNullValue=0}"/>
+                        </TextBlock>
                     </StackPanel>
                 </Border>
             </Grid>

@@ -111,7 +111,9 @@ public class Mutation
         string? customerPhone,
         List<OrderItemInput> items,
         int finalPrice,
-        [Service] IApplicationDbContext context)
+        string? voucherCode,
+        [Service] IApplicationDbContext context,
+        [Service] IVoucherService voucherService)
     {
         // If customer details provided but no customerId, create new customer
         int? finalCustomerId = customerId;
@@ -131,11 +133,37 @@ public class Mutation
             
             finalCustomerId = newCustomer.Id;
         }
+
+        // Calculate original price from items
+        int oldPrice = items.Sum(item => item.Price * item.Quantity);
+        int? voucherId = null;
+
+        // Apply voucher if provided
+        if (!string.IsNullOrWhiteSpace(voucherCode))
+        {
+            var voucherResult = await voucherService.ApplyVoucherAsync(
+                new ApplyVoucherDto(voucherCode, oldPrice));
+
+            if (voucherResult.Success && voucherResult.VoucherId.HasValue)
+            {
+                voucherId = voucherResult.VoucherId.Value;
+                finalPrice = voucherResult.FinalAmount;
+                
+                // Decrease voucher quantity
+                await voucherService.UseVoucherAsync(voucherId.Value);
+            }
+            else
+            {
+                throw new GraphQLException($"Lỗi áp dụng voucher: {voucherResult.Message}");
+            }
+        }
         
         var order = new Order
         {
             CustomerId = finalCustomerId,
+            VoucherId = voucherId,
             CreatedTime = DateTime.UtcNow,
+            OldPrice = oldPrice,
             FinalPrice = finalPrice,
             OrderItems = items.Select(item => new OrderItem
             {
@@ -316,6 +344,29 @@ public class Mutation
                     .ThenInclude(p => p.Category)
             .Include(o => o.Customer)
             .FirstOrDefaultAsync(o => o.Id == id) ?? order;
+    }
+
+    // Voucher Mutations
+    public async Task<VoucherDto> CreateVoucher(
+        CreateVoucherDto input,
+        [Service] IVoucherService voucherService)
+    {
+        return await voucherService.CreateVoucherAsync(input);
+    }
+
+    public async Task<VoucherDto> UpdateVoucher(
+        UpdateVoucherDto input,
+        [Service] IVoucherService voucherService)
+    {
+        return await voucherService.UpdateVoucherAsync(input);
+    }
+
+    public async Task<bool> DeleteVoucher(
+        int id,
+        [Service] IVoucherService voucherService)
+    {
+        await voucherService.DeleteVoucherAsync(id);
+        return true;
     }
 }
 

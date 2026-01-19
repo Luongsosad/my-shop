@@ -18,6 +18,7 @@ public class MyShopDbContext : DbContext, IApplicationDbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<Voucher> Vouchers { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -86,6 +87,10 @@ public class MyShopDbContext : DbContext, IApplicationDbContext
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         modelBuilder.Entity<Order>()
+            .Property(o => o.OldPrice)
+            .HasDefaultValue(0);
+
+        modelBuilder.Entity<Order>()
             .Property(o => o.FinalPrice)
             .HasDefaultValue(0);
 
@@ -94,6 +99,25 @@ public class MyShopDbContext : DbContext, IApplicationDbContext
             .WithMany(c => c.Orders)
             .HasForeignKey(o => o.CustomerId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Order>()
+            .HasOne(o => o.Voucher)
+            .WithMany(v => v.Orders)
+            .HasForeignKey(o => o.VoucherId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // Voucher configurations
+        modelBuilder.Entity<Voucher>()
+            .HasIndex(v => v.Code)
+            .IsUnique();
+
+        modelBuilder.Entity<Voucher>()
+            .Property(v => v.IsDeleted)
+            .HasDefaultValue(false);
+
+        modelBuilder.Entity<Voucher>()
+            .Property(v => v.CreatedAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         // OrderItem configurations
         modelBuilder.Entity<OrderItem>()
