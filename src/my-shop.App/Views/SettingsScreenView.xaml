@@ -264,47 +264,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Store Information -->
-                <Border Style="{StaticResource SettingsSectionStyle}">
-                    <StackPanel Spacing="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE8D4;" FontSize="24" Foreground="#10B981"/>
-                            <TextBlock Text="Thông tin cửa hàng" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <TextBlock Text="Thông tin hiển thị trên hóa đơn và báo cáo" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                  FontSize="13"/>
-
-                        <StackPanel Spacing="12">
-                            <TextBox Header="Tên cửa hàng"
-                                    Text="{x:Bind ViewModel.StoreInfo.StoreName, Mode=TwoWay}"
-                                    PlaceholderText="Nhập tên cửa hàng"/>
-                            
-                            <TextBox Header="Địa chỉ"
-                                    Text="{x:Bind ViewModel.StoreInfo.Address, Mode=TwoWay}"
-                                    PlaceholderText="Nhập địa chỉ"/>
-                            
-                            <TextBox Header="Số điện thoại"
-                                    Text="{x:Bind ViewModel.StoreInfo.Phone, Mode=TwoWay}"
-                                    PlaceholderText="Nhập số điện thoại"/>
-                            
-                            <TextBox Header="Email"
-                                    Text="{x:Bind ViewModel.StoreInfo.Email, Mode=TwoWay}"
-                                    PlaceholderText="Nhập email"/>
-                            
-                            <TextBox Header="Mã số thuế"
-                                    Text="{x:Bind ViewModel.StoreInfo.TaxCode, Mode=TwoWay}"
-                                    PlaceholderText="Nhập mã số thuế"/>
-
-                            <Button Content="Lưu thông tin"
-                                   Command="{x:Bind ViewModel.SaveStoreInfoCommand}"
-                                   Style="{StaticResource AccentButtonStyle}"
-                                   HorizontalAlignment="Right"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
                 <!-- User Profile -->
                 <Border Style="{StaticResource SettingsSectionStyle}">
                     <StackPanel Spacing="16">
