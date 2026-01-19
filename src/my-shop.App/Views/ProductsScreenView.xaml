@@ -127,7 +127,10 @@ Loaded="Page_Loaded">
 
                                                         <!-- Thumbnail -->
                                                         <Border Grid.Column="0" Width="40" Height="40" CornerRadius="4" Background="Gray">
-                                                            <Image Source="{x:Bind ImageUrl}" Stretch="UniformToFill"/>
+                                                            <Image Source="{x:Bind ImageUrl}"
+                                                                   Stretch="Uniform"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"/>
                                                         </Border>
 
                                                         <!-- Name & Price -->
@@ -533,7 +536,7 @@ Loaded="Page_Loaded">
                                                              HorizontalAlignment="Center"
                                                              VerticalAlignment="Center"/>
                                                     <!-- Actual image if available -->
-                                                    <Image Stretch="UniformToFill">
+                                                    <Image Stretch="Uniform">
                                                         <Image.Source>
                                                             <BitmapImage UriSource="{x:Bind Images, Converter={StaticResource ImageListToFirstImageConverter}, Mode=OneWay}" />
                                                         </Image.Source>
