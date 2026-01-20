@@ -1,0 +1,13 @@
+# Obfuscation Files
+
+# Tools directory (download separately)
+tools/
+
+# Obfuscated output
+../../Obfuscated/
+
+# Backup files
+../../Backup/
+
+# Logs
+*.log

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project baseDir="..\..\Release\Layers-Original" outputDir="..\..\Release\Layers-Obfuscated" xmlns="http://confuser.codeplex.com">
+  <rule pattern="true" inherit="false">
+    <protection id="constants" />
+    <protection id="ctrl flow" />
+    <protection id="ref proxy" />
+    <protection id="rename">
+      <argument name="mode" value="decodable" />
+      <argument name="renPublic" value="false" />
+    </protection>
+  </rule>
+  
+  <module path="my-shop.Application.dll" />
+  <module path="my-shop.Domain.dll" />
+  <module path="my-shop.Infrastructure.dll" />
+  <module path="my-shop.API.dll" />
+</project>
