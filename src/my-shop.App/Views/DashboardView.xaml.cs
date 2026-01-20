@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Foundation;
+using Windows.UI;
 
 namespace my_shop.App.Views
 {
@@ -20,6 +21,7 @@ namespace my_shop.App.Views
         private List<DailyRevenueDto> _chartData = new();
         private double _chartWidth;
         private double _chartHeight;
+        private int _currentRank = 0;
 
         public DashboardView()
         {
@@ -167,9 +169,9 @@ namespace my_shop.App.Views
         private void ShowTooltip(DailyRevenueDto dataPoint, Point position)
         {
             // Update tooltip content
-            TooltipDate.Text = $"Ngày {dataPoint.Day}";
-            TooltipRevenue.Text = $"{dataPoint.Revenue:N0} ₫";
-            TooltipOrders.Text = $"{dataPoint.OrderCount} đơn";
+            TooltipDate.Text = $"Day {dataPoint.Day}";
+            TooltipRevenue.Text = $"{dataPoint.Revenue:N0}₫";
+            TooltipOrders.Text = $"{dataPoint.OrderCount} orders";
 
             // Position tooltip
             ChartTooltipPopup.HorizontalOffset = position.X + 10;
@@ -312,6 +314,96 @@ namespace my_shop.App.Views
             {
                 DrawRevenueChart();
             }
+        }
+
+        private void ProductCard_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is Border border)
+            {
+                _currentRank++;
+
+                // Find the RankText TextBlock
+                var rankText = FindChildByName(border, "RankText") as TextBlock;
+                if (rankText != null)
+                {
+                    rankText.Text = _currentRank.ToString();
+                }
+
+                // Find the RankBadge Border and update gradient based on rank
+                var rankBadge = FindChildByName(border, "RankBadge") as Border;
+                if (rankBadge != null)
+                {
+                    rankBadge.Background = GetRankGradient(_currentRank);
+                }
+            }
+        }
+
+        private Brush GetRankGradient(int rank)
+        {
+            return rank switch
+            {
+                1 => new LinearGradientBrush
+                {
+                    StartPoint = new Point(0, 0),
+                    EndPoint = new Point(1, 1),
+                    GradientStops = new GradientStopCollection
+            {
+                new GradientStop { Color = Color.FromArgb(255, 251, 191, 36), Offset = 0 },  // Gold
+                new GradientStop { Color = Color.FromArgb(255, 217, 119, 6), Offset = 1 }
+            }
+                },
+                2 => new LinearGradientBrush
+                {
+                    StartPoint = new Point(0, 0),
+                    EndPoint = new Point(1, 1),
+                    GradientStops = new GradientStopCollection
+            {
+                new GradientStop { Color = Color.FromArgb(255, 203, 213, 225), Offset = 0 },  // Silver
+                new GradientStop { Color = Color.FromArgb(255, 148, 163, 184), Offset = 1 }
+            }
+                },
+                3 => new LinearGradientBrush
+                {
+                    StartPoint = new Point(0, 0),
+                    EndPoint = new Point(1, 1),
+                    GradientStops = new GradientStopCollection
+            {
+                new GradientStop { Color = Color.FromArgb(255, 217, 119, 6), Offset = 0 },   // Bronze
+                new GradientStop { Color = Color.FromArgb(255, 146, 64, 14), Offset = 1 }
+            }
+                },
+                _ => new LinearGradientBrush
+                {
+                    StartPoint = new Point(0, 0),
+                    EndPoint = new Point(1, 1),
+                    GradientStops = new GradientStopCollection
+            {
+                new GradientStop { Color = Color.FromArgb(255, 99, 102, 241), Offset = 0 },   // Purple
+                new GradientStop { Color = Color.FromArgb(255, 79, 70, 229), Offset = 1 }
+            }
+                }
+            };
+        }
+
+        private FrameworkElement? FindChildByName(DependencyObject parent, string name)
+        {
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is FrameworkElement element && element.Name == name)
+                {
+                    return element;
+                }
+
+                var result = FindChildByName(child, name);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return null;
         }
 
         #region Stat Card Hover Animations

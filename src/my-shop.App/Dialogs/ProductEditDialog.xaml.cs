@@ -55,7 +55,7 @@ namespace my_shop.App.Dialogs
             if (product != null)
             {
                 // Edit mode
-                this.Title = $"Sửa sản phẩm: {product.Name}";
+                this.Title = $"Update product: {product.Name}";
                 NameTextBox.Text = product.Name;
                 SkuTextBox.Text = product.Sku;
                 PriceNumberBox.Value = product.ImportPrice;

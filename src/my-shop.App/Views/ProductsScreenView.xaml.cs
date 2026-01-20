@@ -256,6 +256,7 @@ namespace my_shop.App.Views
                 PrimaryButtonText = "Delete",
                 CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Close,
+                RequestedTheme = Microsoft.UI.Xaml.ElementTheme.Light,
                 XamlRoot = this.XamlRoot
             };
 
@@ -357,6 +358,7 @@ namespace my_shop.App.Views
                 Title = title,
                 Content = message,
                 CloseButtonText = "Close",
+                RequestedTheme = Microsoft.UI.Xaml.ElementTheme.Light,
                 XamlRoot = this.XamlRoot
             };
             await dialog.ShowAsync();

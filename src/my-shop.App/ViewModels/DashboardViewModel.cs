@@ -79,7 +79,7 @@ namespace my_shop.App.ViewModels
             try
             {
                 var statsTask = _dataService.GetDashboardStatsAsync();
-                var ordersTask = _dataService.GetRecentOrdersAsync(3);
+                var ordersTask = _dataService.GetRecentOrdersAsync(6);
                 var lowStockTask = _dataService.GetLowStockProductsAsync(5, 5);
                 var bestSellingTask = _dataService.GetBestSellingProductsAsync(5);
                 var revenueChartTask = _dataService.GetMonthlyRevenueChartAsync(SelectedYear, SelectedMonth);
@@ -87,7 +87,13 @@ namespace my_shop.App.ViewModels
                 await Task.WhenAll(statsTask, ordersTask, lowStockTask, bestSellingTask, revenueChartTask);
 
                 Stats = await statsTask;
-                
+
+                BestSellingProducts.Clear();
+                foreach (var product in await bestSellingTask)
+                {
+                    BestSellingProducts.Add(product);
+                }
+
                 RecentOrders.Clear();
                 foreach (var order in await ordersTask)
                 {

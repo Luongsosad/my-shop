@@ -6,8 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    PrimaryButtonText="Lưu"
-    CloseButtonText="Hủy"
+    RequestedTheme="Light"
+    PrimaryButtonText="Save"
+    CloseButtonText="Cancel"
     DefaultButton="Primary">
 
     <ContentDialog.Resources>
@@ -20,14 +21,16 @@
             <!-- Product Name -->
             <TextBox 
                 x:Name="NameTextBox"
-                Header="Tên sản phẩm *"
-                PlaceholderText="Nhập tên sản phẩm"/>
+                Header="
+Product name *"
+                PlaceholderText="
+Enter the product name"/>
 
             <!-- SKU -->
             <TextBox 
                 x:Name="SkuTextBox"
                 Header="SKU *"
-                PlaceholderText="Nhập mã SKU"/>
+                PlaceholderText="Enter SKU"/>
 
             <!-- Price and Stock -->
             <Grid ColumnSpacing="16">
@@ -39,7 +42,7 @@
                 <NumberBox 
                     x:Name="PriceNumberBox"
                     Grid.Column="0"
-                    Header="Giá nhập (₫) *"
+                    Header="Import price (₫) *"
                     PlaceholderText="0"
                     Minimum="0"
                     SpinButtonPlacementMode="Inline"/>
@@ -47,7 +50,8 @@
                 <NumberBox 
                     x:Name="StockNumberBox"
                     Grid.Column="1"
-                    Header="Tồn kho *"
+                    Header="
+Inventory *"
                     PlaceholderText="0"
                     Minimum="0"
                     SpinButtonPlacementMode="Inline"/>
@@ -56,23 +60,24 @@
             <!-- Category -->
             <ComboBox 
                 x:Name="CategoryComboBox"
-                Header="Danh mục *"
-                PlaceholderText="Chọn danh mục"
+                Header="Category *"
+                PlaceholderText="Select category"
                 DisplayMemberPath="Name"
                 HorizontalAlignment="Stretch"/>
 
             <!-- Description -->
             <TextBox 
                 x:Name="DescriptionTextBox"
-                Header="Mô tả"
-                PlaceholderText="Nhập mô tả sản phẩm (tùy chọn)"
+                Header="Desciption"
+                PlaceholderText="
+Enter a product description (optional)"
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
                 Height="100"/>
 
             <!-- Images Section -->
             <StackPanel Spacing="12">
-                <TextBlock Text="Hình ảnh" FontWeight="SemiBold" FontSize="16"/>
+                <TextBlock Text="Image" FontWeight="SemiBold" FontSize="16"/>
                 
                 <!-- Upload from Computer -->
                 <Button 
@@ -81,7 +86,8 @@
                     HorizontalAlignment="Stretch">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <FontIcon Glyph="&#xE8B7;" FontSize="16"/>
-                        <TextBlock Text="Chọn ảnh từ máy tính"/>
+                        <TextBlock Text="
+Select an image from your computer"/>
                     </StackPanel>
                 </Button>
                 
@@ -94,7 +100,8 @@
                     TextWrapping="Wrap"/>
                 
                 <!-- Or add URL -->
-                <TextBlock Text="Hoặc nhập URL:" FontSize="12" Foreground="Gray"/>
+                <TextBlock Text="
+Or enter the URL:" FontSize="12" Foreground="Gray"/>
                 <Grid ColumnSpacing="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -109,7 +116,7 @@
                     <Button 
                         x:Name="AddImageButton"
                         Grid.Column="1"
-                        Content="Thêm URL"
+                        Content="Add URL"
                         Click="AddImageButton_Click"/>
                 </Grid>
 
@@ -156,7 +163,7 @@
                                     Background="Transparent">
                                     <StackPanel Orientation="Horizontal" Spacing="4">
                                         <FontIcon Glyph="&#xE74D;" FontSize="14"/>
-                                        <TextBlock Text="Xóa"/>
+                                        <TextBlock Text="Delete"/>
                                     </StackPanel>
                                 </Button>
                             </Grid>
@@ -166,7 +173,8 @@
                 
                 <TextBlock 
                     x:Name="NoImagesText"
-                    Text="Chưa có hình ảnh. Chọn file hoặc nhập URL."
+                    Text="
+No images available. Choose a file or enter a URL"
                     FontSize="12"
                     Foreground="Gray"
                     FontStyle="Italic"
@@ -176,7 +184,8 @@
 
             <!-- Required Note -->
             <TextBlock 
-                Text="* Trường bắt buộc"
+                Text="* 
+Required field"
                 FontSize="12"
                 Foreground="Gray"
                 FontStyle="Italic"/>

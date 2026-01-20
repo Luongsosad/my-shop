@@ -3,6 +3,7 @@ x:Class="my_shop.App.Views.DashboardView"
 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 xmlns:local="using:my_shop.App.Models"
+xmlns:dto="using:my_shop.Application.DTOs"
 xmlns:vm="using:my_shop.App.ViewModels"
 xmlns:converters="using:my_shop.App.Converters"
 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -18,6 +19,7 @@ mc:Ignorable="d">
 <converters:MonthlyTotalOrdersConverter x:Key="MonthlyTotalOrdersConverter"/>
 <converters:MonthlyAvgRevenueConverter x:Key="MonthlyAvgRevenueConverter"/>
 <converters:ImageListToFirstImageConverter x:Key="ImageListToFirstImageConverter"/>
+        <converters:DoubleToPercentageConverter x:Key="DoubleToPercentageConverter"/>
 
         <!-- Enhanced Stat Card Style with Gradient & Animation -->
         <Style x:Key="StatCardStyle" TargetType="Border">
@@ -119,7 +121,7 @@ mc:Ignorable="d">
                         <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,8,0,0">
                             <FontIcon Glyph="&#xE74A;" FontSize="12" Foreground="#D1FAE5"/>
                             <TextBlock Text="+12.5%" FontSize="12" Foreground="#D1FAE5" FontWeight="SemiBold"/>
-                            <TextBlock Text="vs last month" FontSize="11" Foreground="White" Opacity="0.7"/>
+                            <TextBlock Text="compare to last month" FontSize="11" Foreground="White" Opacity="0.7"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -141,7 +143,7 @@ mc:Ignorable="d">
                         <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,8,0,0">
                             <FontIcon Glyph="&#xE74A;" FontSize="12" Foreground="#D1FAE5"/>
                             <TextBlock Text="+8.2%" FontSize="12" Foreground="#D1FAE5" FontWeight="SemiBold"/>
-                            <TextBlock Text="vs yesterday" FontSize="11" Foreground="White" Opacity="0.7"/>
+                            <TextBlock Text="compare to yesterday" FontSize="11" Foreground="White" Opacity="0.7"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -163,7 +165,7 @@ mc:Ignorable="d">
                         <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,8,0,0">
                             <FontIcon Glyph="&#xE74A;" FontSize="12" Foreground="#FEF3C7"/>
                             <TextBlock Text="+15.3%" FontSize="12" Foreground="#FEF3C7" FontWeight="SemiBold"/>
-                            <TextBlock Text="vs yesterday" FontSize="11" Foreground="White" Opacity="0.7"/>
+                            <TextBlock Text="compare to yesterday" FontSize="11" Foreground="White" Opacity="0.7"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -237,336 +239,952 @@ mc:Ignorable="d">
                 </Grid.RowDefinitions>
 
                 <!-- Recent Orders -->
-                <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource StatCardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Recent Orders" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                        <ScrollViewer MaxHeight="400" VerticalScrollBarVisibility="Auto">
-                            <ItemsControl ItemsSource="{x:Bind ViewModel.RecentOrders, Mode=OneWay}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Padding="0,8">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            
-                                            <Border Grid.Column="0" Background="{ThemeResource AccentFillColorDefaultBrush}" 
-                                                   Width="40" Height="40" CornerRadius="20" Margin="0,0,12,0">
-                                                <FontIcon Glyph="&#xE8B7;" FontSize="16" Foreground="White"/>
+                    <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource StatCardStyle}">
+                        <StackPanel>
+                            <!-- Header Section -->
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                                    <Border Background="{ThemeResource AccentFillColorDefaultBrush}" 
+                       Width="36" Height="36" CornerRadius="8">
+                                        <FontIcon Glyph="&#xE8A1;" FontSize="18" Foreground="White"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Recent Orders" FontSize="20" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Latest customer transactions" 
+                              FontSize="12" 
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Orders List -->
+                            <ScrollViewer MaxHeight="450" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{x:Bind ViewModel.RecentOrders, Mode=OneWay}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="local:RecentOrderDto">
+                                            <Border Background="{ThemeResource LayerFillColorDefaultBrush}"
+                               CornerRadius="8"
+                               Padding="16"
+                               Margin="0,0,0,12"
+                               BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                               BorderThickness="1">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- Order Icon & ID -->
+                                                    <Border Grid.Column="0" 
+                                       Background="{ThemeResource AccentFillColorSecondaryBrush}" 
+                                       Width="48" 
+                                       Height="48" 
+                                       CornerRadius="24" 
+                                       Margin="0,0,16,0"
+                                       VerticalAlignment="Center">
+                                                        <FontIcon Glyph="&#xE7BF;" 
+                                             FontSize="20" 
+                                             Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                                                    </Border>
+
+                                                    <!-- Order Details -->
+                                                    <StackPanel Grid.Column="1" 
+                                           VerticalAlignment="Center" 
+                                           Spacing="4">
+                                                        <!-- Order ID & Status -->
+                                                        <StackPanel Orientation="Horizontal" Spacing="12">
+                                                            <TextBlock Text="{x:Bind OrderId, Mode=OneWay}" 
+                                                  FontWeight="SemiBold"
+                                                  FontSize="15"/>
+                                                            <!-- Status Badge with dynamic color -->
+                                                            <Border CornerRadius="4"
+                                               Padding="8,3"
+                                               VerticalAlignment="Center"
+                                               Background="{x:Bind StatusBackgroundBrush, Mode=OneWay}">
+                                                                <TextBlock Text="{x:Bind StatusDisplayText, Mode=OneWay}"
+                                                      FontSize="11"
+                                                      FontWeight="SemiBold"
+                                                      Foreground="{x:Bind StatusForegroundBrush, Mode=OneWay}"/>
+                                                            </Border>
+                                                        </StackPanel>
+
+                                                        <!-- Customer Info -->
+                                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                                            <FontIcon Glyph="&#xE77B;" 
+                                                 FontSize="12" 
+                                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                            <TextBlock FontSize="13">
+                                            <Run Text="{x:Bind Customer.Name, Mode=OneWay}" 
+                                                 FontWeight="Medium"
+                                                 Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                                            <Run Text="•" 
+                                                 Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                            <Run Text="{x:Bind Customer.Phone, Mode=OneWay}" 
+                                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                            </TextBlock>
+                                                        </StackPanel>
+
+                                                        <!-- Time & Items -->
+                                                        <StackPanel Orientation="Horizontal" Spacing="16">
+                                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                                <FontIcon Glyph="&#xE787;" 
+                                                     FontSize="11" 
+                                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                                                <TextBlock Text="{x:Bind CreatedTime, Mode=OneWay}" 
+                                                      FontSize="12"
+                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                            </StackPanel>
+
+                                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                                <FontIcon Glyph="&#xE7B8;" 
+                                                     FontSize="11" 
+                                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                                                <TextBlock FontSize="12"
+                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                                                <Run Text="{x:Bind ItemCount, Mode=OneWay}"/>
+                                                <Run Text="items"/>
+                                                                </TextBlock>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </StackPanel>
+
+                                                    <!-- Price & Action -->
+                                                    <StackPanel Grid.Column="2" 
+                                           VerticalAlignment="Center" 
+                                           Spacing="8"
+                                           HorizontalAlignment="Right">
+                                                        <TextBlock Text="{x:Bind TotalPrice, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" 
+                                              FontWeight="Bold"
+                                              FontSize="16"
+                                              Foreground="{ThemeResource SystemAccentColor}"
+                                              HorizontalAlignment="Right"/>
+
+                                                    </StackPanel>
+                                                </Grid>
                                             </Border>
-                                            
-                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding OrderId}" FontWeight="SemiBold"/>
-                                                <TextBlock Text="{Binding CreatedTime}" FontSize="12" 
-                                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                            </StackPanel>
-                                            
-                                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,0,16,0">
-                                                <TextBlock Text="{Binding ItemCount}" FontSize="12" 
-                                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                                <TextBlock Text="items" FontSize="11" 
-                                                          Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
-                                            </StackPanel>
-                                            
-                                            <TextBlock Grid.Column="3" Text="{Binding TotalPrice, Converter={StaticResource CurrencyConverter}}" 
-                                                      FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                        </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+
+                            <!-- Empty State -->
+                            <StackPanel x:Name="EmptyState" 
+                   Visibility="Collapsed"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"
+                   Spacing="12"
+                   Padding="32">
+                                <FontIcon Glyph="&#xE7C1;" 
+                     FontSize="48" 
+                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                <TextBlock Text="No recent orders" 
+                      FontSize="16" 
+                      FontWeight="SemiBold"
+                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                      HorizontalAlignment="Center"/>
+                                <TextBlock Text="Orders will appear here once customers start purchasing" 
+                      FontSize="13"
+                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                      HorizontalAlignment="Center"
+                      TextWrapping="Wrap"
+                      MaxWidth="300"
+                      TextAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Low Stock Products -->
+                    <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource StatCardStyle}">
+                        <StackPanel>
+                            <!-- Header Section -->
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Spacing="4">
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <Border Background="#FEE2E2" 
+                           Width="32" Height="32" 
+                           CornerRadius="8"
+                           VerticalAlignment="Center">
+                                            <FontIcon Glyph="&#xE7BA;" 
+                                 FontSize="16" 
+                                 Foreground="#DC2626"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="Low Stock Alert" 
+                                  FontSize="20" 
+                                  FontWeight="SemiBold"/>
+                                            <TextBlock Text="Needs immediate attention" 
+                                  FontSize="11" 
+                                  Foreground="#DC2626"
+                                  FontWeight="Medium"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <Border Grid.Column="1" 
+                   Background="#FEF2F2"
+                   CornerRadius="8"
+                   Padding="10,6"
+                   VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <TextBlock Text="&lt; 5" 
+                              FontSize="13"
+                              FontWeight="Bold"
+                              Foreground="#DC2626"/>
+                                        <TextBlock Text="in stock" 
+                              FontSize="10"
+                              Foreground="#991B1B"
+                              VerticalAlignment="Bottom"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <!-- Products List -->
+                            <ScrollViewer MaxHeight="400" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{x:Bind ViewModel.LowStockProducts, Mode=OneWay}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="local:LowStockProductDto">
+                                            <Border Background="{ThemeResource LayerFillColorDefaultBrush}"
+                               CornerRadius="8"
+                               Padding="12"
+                               Margin="0,0,0,10"
+                               BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                               BorderThickness="1">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- Product Image with Warning Indicator -->
+                                                    <Grid Grid.Column="0" Margin="0,0,12,0">
+                                                        <Border Width="52" 
+                                           Height="52" 
+                                           CornerRadius="10" 
+                                           Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                                                            <Grid>
+                                                                <!-- Default placeholder -->
+                                                                <FontIcon Glyph="&#xE91B;" 
+                                                     FontSize="26" 
+                                                     Foreground="#CCCCCC"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Center"/>
+                                                                <!-- Actual image -->
+                                                                <Image Stretch="UniformToFill">
+                                                                    <Image.Source>
+                                                                        <BitmapImage UriSource="{x:Bind Images, Converter={StaticResource ImageListToFirstImageConverter}, Mode=OneWay}"/>
+                                                                    </Image.Source>
+                                                                </Image>
+                                                            </Grid>
+                                                        </Border>
+
+                                                        <!-- Warning Badge -->
+                                                        <Border Width="20" 
+                                           Height="20" 
+                                           Background="#DC2626"
+                                           CornerRadius="10"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Top"
+                                           Margin="0,-4,-4,0"
+                                           BorderBrush="White"
+                                           BorderThickness="2">
+                                                            <FontIcon Glyph="&#xE7BA;" 
+                                                 FontSize="10" 
+                                                 Foreground="White"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </Grid>
+
+                                                    <!-- Product Info -->
+                                                    <StackPanel Grid.Column="1" 
+                                           VerticalAlignment="Center" 
+                                           Spacing="4">
+                                                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" 
+                                              FontWeight="SemiBold" 
+                                              FontSize="14"
+                                              TextWrapping="Wrap" 
+                                              MaxLines="2" 
+                                              TextTrimming="CharacterEllipsis"/>
+
+                                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                                            <Border Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                                               CornerRadius="4"
+                                               Padding="6,2">
+                                                                <TextBlock Text="{x:Bind Sku, Mode=OneWay}" 
+                                                      FontSize="10"
+                                                      FontFamily="Consolas"
+                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                            </Border>
+                                                        </StackPanel>
+                                                    </StackPanel>
+
+                                                    <!-- Stock Count -->
+                                                    <StackPanel Grid.Column="2" 
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Right"
+                                           Spacing="4">
+                                                        <Border Background="#FEE2E2" 
+                                           CornerRadius="8" 
+                                           Padding="10,6"
+                                           MinWidth="50">
+                                                            <StackPanel HorizontalAlignment="Center" Spacing="2">
+                                                                <TextBlock Text="{x:Bind Count, Mode=OneWay}" 
+                                                      FontSize="18" 
+                                                      FontWeight="Bold"
+                                                      Foreground="#DC2626"
+                                                      HorizontalAlignment="Center"/>
+                                                                <TextBlock Text="left" 
+                                                      FontSize="9"
+                                                      Foreground="#991B1B"
+                                                      HorizontalAlignment="Center"
+                                                      FontWeight="Medium"/>
+                                                            </StackPanel>
+                                                        </Border>
+
+                                                        <!-- Quick Action Button -->
+                                                       
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+
+                            <!-- Empty State -->
+                            <StackPanel x:Name="EmptyState1" 
+                   Visibility="Collapsed"
+                   HorizontalAlignment="Center" 
+                   Spacing="12"
+                   Padding="24"
+                   Margin="0,20,0,0">
+                                <Border Background="#D1FAE5" 
+                   Width="56" Height="56" 
+                   CornerRadius="28"
+                   HorizontalAlignment="Center">
+                                    <FontIcon Glyph="&#xE73E;" 
+                         FontSize="28" 
+                         Foreground="#059669"/>
+                                </Border>
+                                <TextBlock Text="All Good!" 
+                      FontSize="16" 
+                      FontWeight="SemiBold"
+                      HorizontalAlignment="Center"/>
+                                <TextBlock Text="No products running low on stock" 
+                      FontSize="12"
+                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                      HorizontalAlignment="Center"
+                      TextWrapping="Wrap"
+                      MaxWidth="200"
+                      TextAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Footer Action -->
+                            <Border Background="{ThemeResource LayerFillColorDefaultBrush}"
+               CornerRadius="8"
+               Padding="12"
+               Margin="0,12,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <FontIcon Grid.Column="0" 
+                         Glyph="&#xE946;" 
+                         FontSize="16"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                         VerticalAlignment="Center"
+                         Margin="0,0,10,0"/>
+
+                                    <TextBlock Grid.Column="1" 
+                          Text="Set up automatic restock alerts"
+                          FontSize="12"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                          VerticalAlignment="Center"/>
+
+                                    <HyperlinkButton Grid.Column="2" 
+                                Content="Configure"
+                                FontSize="12"
+                                Padding="0"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Best Selling Products -->
+                    <!-- Best Selling Products -->
+                    <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource StatCardStyle}">
+                        <StackPanel>
+                            <!-- Header Section -->
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                                    <Border Background="#DBEAFE" 
+                       Width="36" Height="36" 
+                       CornerRadius="8">
+                                        <FontIcon Glyph="&#xE734;" 
+                             FontSize="18" 
+                             Foreground="#1D4ED8"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Top Selling Products" 
+                              FontSize="20" 
+                              FontWeight="SemiBold"/>
+                                        <TextBlock Text="Your best performers this month" 
+                              FontSize="12" 
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                    <ComboBox PlaceholderText="This Month" 
+                         MinWidth="130"
+                         FontSize="13"
+                         SelectedIndex="0">
+                                        <ComboBoxItem Content="This Month"/>
+                                        <ComboBoxItem Content="Last Month"/>
+                                        <ComboBoxItem Content="This Quarter"/>
+                                        <ComboBoxItem Content="This Year"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Products List with Ranking -->
+                            <ItemsControl ItemsSource="{x:Bind ViewModel.BestSellingProducts, Mode=OneWay}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="local:BestSellingProductDto">
+                                        <Border Background="{ThemeResource LayerFillColorDefaultBrush}"
+                           CornerRadius="10"
+                           Padding="16"
+                           Margin="0,0,0,12"
+                           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                           BorderThickness="1"
+                           x:Name="ProductCard"
+                           Loaded="ProductCard_Loaded">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="140"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Ranking Badge -->
+                                                <Border Grid.Column="0" 
+                                   x:Name="RankBadge"
+                                   Width="32" 
+                                   Height="32" 
+                                   CornerRadius="16"
+                                   Margin="0,0,16,0"
+                                   VerticalAlignment="Center">
+                                                    <Border.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                            <GradientStop Color="#F59E0B" Offset="0"/>
+                                                            <GradientStop Color="#D97706" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <TextBlock x:Name="RankText"
+                                          FontSize="14" 
+                                          FontWeight="Bold"
+                                          Foreground="White"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                                                </Border>
+
+                                                <!-- Product Image -->
+                                                <Border Grid.Column="1" 
+                                   Width="64" 
+                                   Height="64" 
+                                   Margin="0,0,16,0"
+                                   CornerRadius="10" 
+                                   VerticalAlignment="Center"
+                                   Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                                                    <Grid>
+                                                        <!-- Default placeholder -->
+                                                        <FontIcon Glyph="&#xE91B;" 
+                                             FontSize="32" 
+                                             Foreground="#CCCCCC"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"/>
+                                                        <!-- Actual image -->
+                                                        <Image Stretch="UniformToFill">
+                                                            <Image.Source>
+                                                                <BitmapImage UriSource="{x:Bind Images, Converter={StaticResource ImageListToFirstImageConverter}, Mode=OneWay}"/>
+                                                            </Image.Source>
+                                                        </Image>
+                                                    </Grid>
+                                                </Border>
+
+                                                <!-- Product Info -->
+                                                <StackPanel Grid.Column="2" 
+                                       VerticalAlignment="Center" 
+                                       Spacing="6">
+                                                    <TextBlock Text="{x:Bind Name, Mode=OneWay}" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15"
+                                          MaxLines="2" 
+                                          TextWrapping="Wrap" 
+                                          TextTrimming="CharacterEllipsis"/>
+
+                                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                                        <Border Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                                           CornerRadius="4"
+                                           Padding="8,3">
+                                                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                                                <FontIcon Glyph="&#xE8D6;" 
+                                                     FontSize="11" 
+                                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                                <TextBlock Text="{x:Bind Category, Mode=OneWay}" 
+                                                      FontSize="11"
+                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                            </StackPanel>
+                                                        </Border>
+
+                                                        <!-- Trending Indicator -->
+                                                        <Border Background="#DCFCE7"
+                                           CornerRadius="4"
+                                           Padding="6,3">
+                                                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                                                <FontIcon Glyph="&#xE74A;" 
+                                                     FontSize="10" 
+                                                     Foreground="#16A34A"/>
+                                                                <TextBlock Text="Trending" 
+                                                      FontSize="10"
+                                                      FontWeight="SemiBold"
+                                                      Foreground="#16A34A"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <!-- Sales Count -->
+                                                <StackPanel Grid.Column="3" 
+                                       VerticalAlignment="Center" 
+                                       Margin="0,0,20,0"
+                                       Spacing="4">
+                                                    <TextBlock Text="{x:Bind SoldCount, Mode=OneWay}" 
+                                          FontSize="24" 
+                                          FontWeight="Bold" 
+                                          Foreground="{ThemeResource SystemAccentColor}"
+                                          HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="units sold" 
+                                          FontSize="11" 
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}" 
+                                          HorizontalAlignment="Center"/>
+                                                </StackPanel>
+
+                                                <!-- Performance Bar -->
+                                                <StackPanel Grid.Column="4" 
+                                       VerticalAlignment="Center"
+                                       Spacing="6">
+                                                    <Grid>
+                                                        <ProgressBar Value="{x:Bind SoldPercentage, Mode=OneWay}" 
+                                                Maximum="100" 
+                                                Height="8"
+                                                CornerRadius="4">
+                                                            <ProgressBar.Foreground>
+                                                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                                    <GradientStop Color="#10B981" Offset="0"/>
+                                                                    <GradientStop Color="#059669" Offset="1"/>
+                                                                </LinearGradientBrush>
+                                                            </ProgressBar.Foreground>
+                                                        </ProgressBar>
+                                                    </Grid>
+
+                                                    <Grid>
+                                                        <TextBlock Text="Performance" 
+                                              FontSize="10"
+                                              Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                              HorizontalAlignment="Left"/>
+                                                        <TextBlock HorizontalAlignment="Right"
+                                              FontSize="11"
+                                              FontWeight="SemiBold"
+                                              Foreground="#059669">
+                                        <Run Text="{x:Bind SoldPercentage, Mode=OneWay, Converter={StaticResource DoubleToPercentageConverter}}"/>
+                                        <Run Text="%"/>
+                                                        </TextBlock>
+                                                    </Grid>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </ScrollViewer>
-                    </StackPanel>
-                </Border>
+                        </StackPanel>
+                    </Border>
+                </Grid>
 
-                <!-- Low Stock Products -->
-                <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource StatCardStyle}">
+                <!-- Revenue Chart -->
+                <Border Style="{StaticResource StatCardStyle}">
                     <StackPanel>
-                        <TextBlock Text="Low Stock Alert" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                        <TextBlock Text="Products running low (qty &lt; 5)" FontSize="12" 
-                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}" Margin="0,0,0,12"/>
-                        <ItemsControl ItemsSource="{x:Bind ViewModel.LowStockProducts, Mode=OneWay}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="local:LowStockProductDto">
-                                    <Grid Padding="0,8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        
-                                        <!-- Product Image -->
-                                        <Border Grid.Column="0" Width="48" Height="48" Margin="0,0,12,0"
-                                               CornerRadius="8" 
-                                               Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
-                                            <Grid>
-                                                <!-- Default placeholder -->
-                                                <FontIcon Glyph="&#xE91B;" 
-                                                         FontSize="24" 
-                                                         Foreground="#999999"
-                                                         HorizontalAlignment="Center"
-                                                         VerticalAlignment="Center"/>
-                                                <!-- Actual image -->
-                                                <Image Stretch="UniformToFill">
-                                                    <Image.Source>
-                                                        <BitmapImage UriSource="{x:Bind Images, Converter={StaticResource ImageListToFirstImageConverter}, Mode=OneWay}"/>
-                                                    </Image.Source>
-                                                </Image>
-                                            </Grid>
-                                        </Border>
-                                        
-                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{x:Bind Name, Mode=OneWay}" FontWeight="SemiBold" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis"/>
-                                            <TextBlock Text="{x:Bind Sku, Mode=OneWay}" FontSize="11" 
-                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                        </StackPanel>
-                                        
-                                        <Border Grid.Column="2" Background="#FEE2E2" CornerRadius="12" 
-                                               Padding="8,4" VerticalAlignment="Center">
-                                            <TextBlock Text="{x:Bind Count, Mode=OneWay}" FontSize="12" 
-                                                      Foreground="#DC2626" FontWeight="SemiBold"/>
-                                        </Border>
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Border>
+                        <!-- Header with Month/Year Picker -->
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                <!-- Best Selling Products -->
-                <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource StatCardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Top Selling Products" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                        <ItemsControl ItemsSource="{x:Bind ViewModel.BestSellingProducts, Mode=OneWay}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="local:BestSellingProductDto">
-                                    <Grid Padding="0,8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        
-                                        <!-- Product Image -->
-                                        <Border Grid.Column="0" Width="56" Height="56" Margin="0,0,12,0"
-                                               CornerRadius="8" 
-                                               Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
-                                            <Grid>
-                                                <!-- Default placeholder -->
-                                                <FontIcon Glyph="&#xE91B;" 
-                                                         FontSize="28" 
-                                                         Foreground="#999999"
-                                                         HorizontalAlignment="Center"
-                                                         VerticalAlignment="Center"/>
-                                                <!-- Actual image -->
-                                                <Image Stretch="UniformToFill">
-                                                    <Image.Source>
-                                                        <BitmapImage UriSource="{x:Bind Images, Converter={StaticResource ImageListToFirstImageConverter}, Mode=OneWay}"/>
-                                                    </Image.Source>
-                                                </Image>
-                                            </Grid>
-                                        </Border>
-                                        
-                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{x:Bind Name, Mode=OneWay}" FontWeight="SemiBold" MaxLines="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
-                                            <TextBlock Text="{x:Bind Category, Mode=OneWay}" FontSize="12" 
-                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                        </StackPanel>
-                                        
-                                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,0,24,0">
-                                            <TextBlock Text="{x:Bind SoldCount, Mode=OneWay}" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                                            <TextBlock Text="sold" FontSize="11" 
-                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center"/>
-                                        </StackPanel>
-                                        
-                                        <ProgressBar Grid.Column="3" Width="100" Value="{x:Bind SoldPercentage, Mode=OneWay}" 
-                                                    Maximum="100" VerticalAlignment="Center"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Border>
-            </Grid>
-
-            <!-- Revenue Chart Placeholder -->
-            <Border Style="{StaticResource StatCardStyle}">
-                <StackPanel>
-                    <!-- Header with Month/Year Picker -->
-                    <Grid Margin="0,0,0,16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE9D9;" FontSize="24" Foreground="{ThemeResource SystemAccentColor}"/>
-                            <StackPanel>
-                                    <TextBlock Text="Revenue by day" FontSize="20" FontWeight="SemiBold"/>
-                                <TextBlock FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
-                                    <Run Text="In "/>
-                                    <Run Text="{x:Bind ViewModel.SelectedMonth, Mode=OneWay}"/>
-                                    <Run Text="/"/>
-                                    <Run Text="{x:Bind ViewModel.SelectedYear, Mode=OneWay}"/>
-                                </TextBlock>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                                <Border Background="#DBEAFE" 
+                       Width="40" Height="40" 
+                       CornerRadius="10">
+                                    <FontIcon Glyph="&#xE9D9;" 
+                             FontSize="20" 
+                             Foreground="#1D4ED8"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Revenue Analytics" 
+                              FontSize="20" 
+                              FontWeight="SemiBold"/>
+                                    <TextBlock FontSize="12" 
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                        <Run Text="Daily performance for"/>
+                        <Run Text="{x:Bind ViewModel.SelectedMonth, Mode=OneWay}"/>
+                        <Run Text="/"/>
+                        <Run Text="{x:Bind ViewModel.SelectedYear, Mode=OneWay}"/>
+                                    </TextBlock>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                        
-                        <!-- Month/Year Picker -->
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE787;" FontSize="16" 
-                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                     VerticalAlignment="Center"/>
-                            
-                            <ComboBox x:Name="MonthComboBox"
-                                     PlaceholderText="Month"
-                                     SelectionChanged="MonthComboBox_SelectionChanged"
-                                     Width="120"
-                                     MinWidth="120">
-                                <ComboBoxItem Content="January" Tag="1"/>
-                                <ComboBoxItem Content="February" Tag="2"/>
-                                <ComboBoxItem Content="March" Tag="3"/>
-                                <ComboBoxItem Content="April" Tag="4"/>
-                                <ComboBoxItem Content="May" Tag="5"/>
-                                <ComboBoxItem Content="June" Tag="6"/>
-                                <ComboBoxItem Content="July" Tag="7"/>
-                                <ComboBoxItem Content="August" Tag="8"/>
-                                <ComboBoxItem Content="September" Tag="9"/>
-                                <ComboBoxItem Content="Octorber" Tag="10"/>
-                                <ComboBoxItem Content="November" Tag="11"/>
-                                <ComboBoxItem Content="December" Tag="12"/>
-                            </ComboBox>
-                            
-                            <ComboBox x:Name="YearComboBox"
-                                     PlaceholderText="Năm"
-                                     SelectionChanged="YearComboBox_SelectionChanged"
-                                     Width="100"
-                                     MinWidth="100">
-                                <!-- Years will be populated in code-behind -->
-                            </ComboBox>
-                        </StackPanel>
-                    </Grid>
-                    
-                    <!-- Chart Container -->
-                    <Grid Height="320" Margin="0,8,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        
-                        <!-- Chart Canvas -->
-                        <Border Grid.Row="0" Background="{ThemeResource LayerFillColorDefaultBrush}" 
-                               CornerRadius="8" Padding="16">
+
+                            <!-- Month/Year Picker -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                                <Border Background="{ThemeResource LayerFillColorDefaultBrush}"
+                       CornerRadius="8"
+                       Padding="12,8">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE787;" 
+                                 FontSize="14" 
+                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                 VerticalAlignment="Center"/>
+                                        <TextBlock Text="Period:" 
+                                  FontSize="12"
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                  VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <ComboBox x:Name="MonthComboBox"
+                         PlaceholderText="Month"
+                         SelectionChanged="MonthComboBox_SelectionChanged"
+                         MinWidth="140"
+                         VerticalAlignment="Center">
+                                    <ComboBoxItem Content="January" Tag="1"/>
+                                    <ComboBoxItem Content="February" Tag="2"/>
+                                    <ComboBoxItem Content="March" Tag="3"/>
+                                    <ComboBoxItem Content="April" Tag="4"/>
+                                    <ComboBoxItem Content="May" Tag="5"/>
+                                    <ComboBoxItem Content="June" Tag="6"/>
+                                    <ComboBoxItem Content="July" Tag="7"/>
+                                    <ComboBoxItem Content="August" Tag="8"/>
+                                    <ComboBoxItem Content="September" Tag="9"/>
+                                    <ComboBoxItem Content="October" Tag="10"/>
+                                    <ComboBoxItem Content="November" Tag="11"/>
+                                    <ComboBoxItem Content="December" Tag="12"/>
+                                </ComboBox>
+
+                                <ComboBox x:Name="YearComboBox"
+                         PlaceholderText="Year"
+                         SelectionChanged="YearComboBox_SelectionChanged"
+                         MinWidth="100"
+                         VerticalAlignment="Center">
+                                    <!-- Years will be populated in code-behind -->
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Stats Summary Cards - Moved to Top -->
+                        <Grid Margin="0,0,0,20" ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" 
+                   CornerRadius="10"
+                   Padding="16">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#3B82F6" Offset="0"/>
+                                        <GradientStop Color="#2563EB" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <StackPanel Spacing="8">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE8A5;" FontSize="16" Foreground="White" Opacity="0.9"/>
+                                        <TextBlock Text="Total Revenue" 
+                                  FontSize="12" 
+                                  Foreground="White"
+                                  Opacity="0.9"
+                                  FontWeight="Medium"/>
+                                    </StackPanel>
+                                    <TextBlock FontSize="24" 
+                              FontWeight="Bold" 
+                              Foreground="White">
+                        <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyTotalRevenueConverter}}"/>
+                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                        <FontIcon Glyph="&#xE74A;" FontSize="11" Foreground="#BFDBFE"/>
+                                        <TextBlock Text="+12.5% from last month" 
+                                  FontSize="11"
+                                  Foreground="#BFDBFE"
+                                  FontWeight="Medium"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" 
+                   CornerRadius="10"
+                   Padding="16">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#10B981" Offset="0"/>
+                                        <GradientStop Color="#059669" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <StackPanel Spacing="8">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE7BF;" FontSize="16" Foreground="White" Opacity="0.9"/>
+                                        <TextBlock Text="Total Orders" 
+                                  FontSize="12" 
+                                  Foreground="White"
+                                  Opacity="0.9"
+                                  FontWeight="Medium"/>
+                                    </StackPanel>
+                                    <TextBlock FontSize="24" 
+                              FontWeight="Bold" 
+                              Foreground="White">
+                        <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyTotalOrdersConverter}}"/>
+                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                        <FontIcon Glyph="&#xE74A;" FontSize="11" Foreground="#D1FAE5"/>
+                                        <TextBlock Text="+8.3% from last month" 
+                                  FontSize="11"
+                                  Foreground="#D1FAE5"
+                                  FontWeight="Medium"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="2" 
+                   CornerRadius="10"
+                   Padding="16">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#8B5CF6" Offset="0"/>
+                                        <GradientStop Color="#7C3AED" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <StackPanel Spacing="8">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE9D9;" FontSize="16" Foreground="White" Opacity="0.9"/>
+                                        <TextBlock Text="Daily Average" 
+                                  FontSize="12" 
+                                  Foreground="White"
+                                  Opacity="0.9"
+                                  FontWeight="Medium"/>
+                                    </StackPanel>
+                                    <TextBlock FontSize="24" 
+                              FontWeight="Bold" 
+                              Foreground="White"
+                              TextWrapping="Wrap">
+                        <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyAvgRevenueConverter}}"/>
+                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                        <FontIcon Glyph="&#xE74A;" FontSize="11" Foreground="#DDD6FE"/>
+                                        <TextBlock Text="+5.2% from last month" 
+                                  FontSize="11"
+                                  Foreground="#DDD6FE"
+                                  FontWeight="Medium"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- Chart Container -->
+                        <Border Background="{ThemeResource LayerFillColorDefaultBrush}" 
+               CornerRadius="12" 
+               Padding="20"
+               BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+               BorderThickness="1">
                             <Grid>
-                                <Canvas x:Name="RevenueChartCanvas"
-                                       PointerMoved="RevenueChartCanvas_PointerMoved"
-                                       PointerExited="RevenueChartCanvas_PointerExited">
-                                    <Canvas.Resources>
-                                        <Storyboard x:Name="ChartAnimationStoryboard"/>
-                                    </Canvas.Resources>
-                                </Canvas>
-                                
-                                <!-- Tooltip Popup -->
-                                <Popup x:Name="ChartTooltipPopup"
-                                      IsLightDismissEnabled="False">
-                                    <Border Background="{ThemeResource LayerFillColorDefaultBrush}"
-                                           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                           BorderThickness="1"
-                                           CornerRadius="8"
-                                           Padding="12"
-                                           MaxWidth="250">
-                                        <Border.Shadow>
-                                            <ThemeShadow/>
-                                        </Border.Shadow>
-                                        <StackPanel Spacing="8">
-                                            <TextBlock x:Name="TooltipDate" 
-                                                      FontWeight="SemiBold" 
-                                                      FontSize="14"/>
-                                            <StackPanel Spacing="4">
-                                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                                    <Border Width="12" Height="12" Background="#3B82F6" CornerRadius="2"/>
-                                                        <TextBlock Text="Revenue:" FontSize="12" 
-                                                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                                    <TextBlock x:Name="TooltipRevenue" 
-                                                              FontSize="12" 
-                                                              FontWeight="SemiBold"/>
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                                    <Border Width="12" Height="12" Background="#10B981" CornerRadius="2"/>
-                                                        <TextBlock Text="Order:" FontSize="12" 
-                                                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                                    <TextBlock x:Name="TooltipOrders" 
-                                                              FontSize="12" 
-                                                              FontWeight="SemiBold"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="360"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Chart Canvas -->
+                                <Grid Grid.Row="0">
+                                    <Canvas x:Name="RevenueChartCanvas"
+                           PointerMoved="RevenueChartCanvas_PointerMoved"
+                           PointerExited="RevenueChartCanvas_PointerExited">
+                                        <Canvas.Resources>
+                                            <Storyboard x:Name="ChartAnimationStoryboard"/>
+                                        </Canvas.Resources>
+                                    </Canvas>
+
+                                    <!-- Tooltip Popup -->
+                                    <Popup x:Name="ChartTooltipPopup"
+                          IsLightDismissEnabled="False">
+                                        <Border Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+                               BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                               BorderThickness="1"
+                               CornerRadius="8"
+                               Padding="16"
+                               MaxWidth="280">
+                                            <Border.Shadow>
+                                                <ThemeShadow/>
+                                            </Border.Shadow>
+                                            <StackPanel Spacing="12">
+                                                <TextBlock x:Name="TooltipDate" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15"/>
+                                                <StackPanel Spacing="8">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                                                            <Border Width="14" Height="14" Background="#3B82F6" CornerRadius="3"/>
+                                                            <TextBlock Text="Revenue" 
+                                                      FontSize="13" 
+                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                        </StackPanel>
+                                                        <TextBlock Grid.Column="1"
+                                                  x:Name="TooltipRevenue" 
+                                                  FontSize="14" 
+                                                  FontWeight="Bold"
+                                                  HorizontalAlignment="Right"/>
+                                                    </Grid>
+
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                                                            <Border Width="14" Height="14" Background="#10B981" CornerRadius="3"/>
+                                                            <TextBlock Text="Orders" 
+                                                      FontSize="13" 
+                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                        </StackPanel>
+                                                        <TextBlock Grid.Column="1"
+                                                  x:Name="TooltipOrders" 
+                                                  FontSize="14" 
+                                                  FontWeight="Bold"
+                                                  HorizontalAlignment="Right"/>
+                                                    </Grid>
                                                 </StackPanel>
                                             </StackPanel>
-                                        </StackPanel>
-                                    </Border>
-                                </Popup>
+                                        </Border>
+                                    </Popup>
+                                </Grid>
+
+                                <!-- Legend -->
+                                <StackPanel Grid.Row="1" 
+                           Orientation="Horizontal" 
+                           HorizontalAlignment="Center" 
+                           Spacing="32" 
+                           Margin="0,20,0,0">
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <Border Width="20" Height="20" CornerRadius="4">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#3B82F6" Offset="0"/>
+                                                    <GradientStop Color="#2563EB" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                        </Border>
+                                        <TextBlock Text="Revenue" 
+                                  FontSize="13" 
+                                  FontWeight="Medium"
+                                  VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <Border Width="20" Height="20" CornerRadius="4">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#10B981" Offset="0"/>
+                                                    <GradientStop Color="#059669" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                        </Border>
+                                        <TextBlock Text="Orders" 
+                                  FontSize="13" 
+                                  FontWeight="Medium"
+                                  VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </StackPanel>
                             </Grid>
                         </Border>
-                        
-                        <!-- Legend -->
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
-                                   Spacing="24" Margin="0,16,0,0">
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <Border Width="16" Height="16" Background="#3B82F6" CornerRadius="4"/>
-                                <TextBlock Text="Revenue" FontSize="12" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <Border Width="16" Height="16" Background="#10B981" CornerRadius="4"/>
-                                <TextBlock Text="Order" FontSize="12" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-                    
-                    <!-- Stats Summary -->
-                    <Grid Margin="0,16,0,0" ColumnSpacing="16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <Border Grid.Column="0" Background="{ThemeResource LayerFillColorDefaultBrush}" 
-                               Padding="12" CornerRadius="8">
-                            <StackPanel>
-                                    <TextBlock Text="Total revenue" FontSize="11" 
-                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,4,0,0">
-                                    <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyTotalRevenueConverter}}"/>
-                                </TextBlock>
-                            </StackPanel>
+
+                        <!-- Insights Section -->
+                        <Border Background="{ThemeResource LayerFillColorDefaultBrush}"
+               CornerRadius="10"
+               Padding="16"
+               Margin="0,16,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                       Background="#DBEAFE"
+                       Width="40"
+                       Height="40"
+                       CornerRadius="20"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center">
+                                    <FontIcon Glyph="&#xE946;" 
+                             FontSize="18" 
+                             Foreground="#1D4ED8"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Business Insight" 
+                              FontSize="14"
+                              FontWeight="SemiBold"
+                              Margin="0,0,0,4"/>
+                                    <TextBlock FontSize="12"
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                              TextWrapping="Wrap">
+                        <Run Text="Your revenue is trending"/>
+                        <Run Text="upward" Foreground="#10B981" FontWeight="SemiBold"/>
+                        <Run Text="this month. Peak sales occur on weekends. Consider running promotions mid-week to boost performance."/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
                         </Border>
-                        
-                        <Border Grid.Column="1" Background="{ThemeResource LayerFillColorDefaultBrush}" 
-                               Padding="12" CornerRadius="8">
-                            <StackPanel>
-                                    <TextBlock Text="Total order" FontSize="11" 
-                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,4,0,0">
-                                    <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyTotalOrdersConverter}}"/>
-                                </TextBlock>
-                            </StackPanel>
-                        </Border>
-                        
-                        <Border Grid.Column="2" Background="{ThemeResource LayerFillColorDefaultBrush}" 
-                               Padding="12" CornerRadius="8">
-                            <StackPanel>
-                                    <TextBlock Text="Average daily revenue" FontSize="11" 
-                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                                <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,4,0,0">
-                                    <Run Text="{x:Bind ViewModel.MonthlyRevenueData, Mode=OneWay, Converter={StaticResource MonthlyAvgRevenueConverter}}"/>
-                                </TextBlock>
-                            </StackPanel>
-                        </Border>
-                    </Grid>
-                </StackPanel>
-            </Border>
-        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
         </ScrollViewer>
 
         <!-- Enhanced Loading Overlay with ProgressRing -->

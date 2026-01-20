@@ -1,4 +1,5 @@
 using my_shop.Application.DTOs;
+using my_shop.Domain.Entities;
 
 namespace my_shop.Application.Interfaces;
 

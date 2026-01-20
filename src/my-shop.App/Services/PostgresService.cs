@@ -79,6 +79,12 @@ namespace my_shop.App.Services
                                 createdTime
                                 itemCount
                                 totalPrice
+                                status
+                                customer {
+                                    id
+                                    name
+                                    phone
+                                }
                             }
                         }",
                     Variables = new { count }

@@ -41,7 +41,7 @@
 
             <!-- Title Section -->
             <StackPanel Grid.Column="0" Spacing="8">
-                <TextBlock Text="Customers" 
+                <TextBlock Text="Customers Management" 
                           FontSize="32" 
                           FontWeight="SemiBold"/>
                 <TextBlock Text="Manage your customer database and relationships" 

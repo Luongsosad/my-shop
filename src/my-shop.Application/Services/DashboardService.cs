@@ -33,9 +33,10 @@ public class DashboardService : IDashboardService
         };
     }
 
-    public async Task<List<RecentOrderDto>> GetRecentOrdersAsync(int count = 3)
+    public async Task<List<RecentOrderDto>> GetRecentOrdersAsync(int count = 6)
     {
         return await _context.Orders
+            .Include(o => o.Customer)
             .OrderByDescending(o => o.CreatedTime)
             .Take(count)
             .Select(o => new RecentOrderDto
@@ -43,7 +44,9 @@ public class DashboardService : IDashboardService
                 OrderId = $"Order #{o.Id}",
                 CreatedTime = o.CreatedTime.ToString("dd/MM/yyyy HH:mm"),
                 ItemCount = o.OrderItems.Count,
-                TotalPrice = o.FinalPrice
+                TotalPrice = o.FinalPrice,
+                Status = o.Status,
+                Customer = o.Customer
             })
             .ToListAsync();
     }
