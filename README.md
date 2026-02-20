@@ -25,27 +25,27 @@ D? án ???c xây d?ng theo **Clean Architecture** v?i các layer:
 
 ```
 ???????????????????????????????????????????
-?         https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip (WinUI 3)          ?  ? Presentation Layer
+?         https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip (WinUI 3)          ?  ? Presentation Layer
 ?  Views + ViewModels + DI Container     ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?       https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip              ?  ? Application Layer
+?       https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip              ?  ? Application Layer
 ?     Business Logic / Use Cases         ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?         https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                 ?  ? Domain Layer
+?         https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                 ?  ? Domain Layer
 ?    Entities + Interfaces (Core)        ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?      https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip            ?  ? Infrastructure Layer
+?      https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip            ?  ? Infrastructure Layer
 ?   DbContext + EF Core + Repositories   ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?          https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                   ?  ? API Layer
+?          https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                   ?  ? API Layer
 ?      GraphQL Server (HotChocolate)     ?
 ???????????????????????????????????????????
 ```
@@ -58,7 +58,7 @@ D? án ???c xây d?ng theo **Clean Architecture** v?i các layer:
 | Công ngh? | Version | M?c ?ích |
 |-----------|---------|----------|
 | .NET | 8.0 | Framework chính |
-| https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip | 15.1.11 | GraphQL Server |
+| https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip | 15.1.11 | GraphQL Server |
 | Entity Framework Core | 8.0.10 | ORM |
 | SQLite | 8.0.10 | Database |
 
@@ -66,8 +66,8 @@ D? án ???c xây d?ng theo **Clean Architecture** v?i các layer:
 | Công ngh? | Version | M?c ?ích |
 |-----------|---------|----------|
 | WinUI 3 | 1.8.x | UI Framework |
-| https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip | 8.4.0 | MVVM Pattern |
-| https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip | 9.0.10 | Dependency Injection |
+| https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip | 8.4.0 | MVVM Pattern |
+| https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip | 9.0.10 | Dependency Injection |
 
 ### **Architecture Patterns**
 - ? **Clean Architecture** - Tách bi?t các layer
@@ -83,47 +83,47 @@ D? án ???c xây d?ng theo **Clean Architecture** v?i các layer:
 ```
 my-shop/
 ??? src/
-?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                    # GraphQL API Server
-?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                  # API startup & configuration
-?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip            # API settings
-?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip          # API project file
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                    # GraphQL API Server
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                  # API startup & configuration
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip            # API settings
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip          # API project file
 ?   ?
-?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                    # WinUI 3 Application
-?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                 # DI Container setup
-?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip             # Main window
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                    # WinUI 3 Application
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                 # DI Container setup
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip             # Main window
 ?   ?   ??? Views/                      # XAML UI Pages
-?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
-?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
-?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 ?   ?   ?   ??? ...
 ?   ?   ??? ViewModels/                 # MVVM ViewModels
-?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
-?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 ?   ?   ?   ??? ...
 ?   ?   ??? Services/                   # Business services
-?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
-?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
-?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 ?   ?
-?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                 # Domain Entities
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                 # Domain Entities
 ?   ?   ??? Entities/
-?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip              # Product entity
-?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip             # Category entity
-?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                # Order entity
-?   ?       ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip            # Order item entity
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip              # Product entity
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip             # Category entity
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                # Order entity
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip            # Order item entity
 ?   ?
-?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip         # Data Access Layer
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip         # Data Access Layer
 ?   ?   ??? Db/
-?   ?   ?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip      # EF Core DbContext
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip      # EF Core DbContext
 ?   ?   ??? Repositories/               # Repository implementations
 ?   ?
-?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip            # Business Logic
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip            # Business Logic
 ?   ?   ??? Services/                   # Application services
 ?   ?
-?   ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip                 # Shared code
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                 # Shared code
 ?
 ??? tests/
-    ??? https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip              # Unit tests
+    ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip              # Unit tests
 ```
 
 ---
@@ -137,7 +137,7 @@ my-shop/
 
 ### **1. Clone Repository**
 ```bash
-git clone https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+git clone https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 cd my-shop
 ```
 
@@ -150,28 +150,28 @@ dotnet restore
 
 #### Option 1: Command Line
 ```bash
-cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 dotnet run
 ```
 
 API s? ch?y t?i: `http://localhost:5000/graphql`
 
 #### Option 2: Visual Studio
-- M? solution `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip`
-- Set `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip` làm Startup Project
+- M? solution `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip`
+- Set `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip` làm Startup Project
 - Press F5 ho?c Debug ? Start Debugging
 
 ### **4. Ch?y WinUI App**
 
 ```bash
-cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 dotnet build -c Debug /p:Platform=x64
 ```
 
 > ?? **L?u ý**: WinUI App yêu c?u ch? ??nh Platform (x64, x86, ho?c ARM64)
 
 Ho?c trong Visual Studio:
-- Set `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip` làm Startup Project
+- Set `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip` làm Startup Project
 - Ch?n Platform: x64
 - Press F5
 
@@ -325,9 +325,9 @@ query {
 
 #### V?i HttpClient:
 ```csharp
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
 
 public class GraphQLClient
 {
@@ -348,20 +348,20 @@ public class GraphQLClient
             query = query
         };
         
-        var json = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(request);
-        var content = new StringContent(json, https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip, "application/json");
+        var json = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(request);
+        var content = new StringContent(json, https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip, "application/json");
         
-        var response = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("/graphql", content);
-        var result = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+        var response = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("/graphql", content);
+        var result = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
         
-        var data = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<GraphQLResponse<T>>(result);
-        return https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+        var data = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<GraphQLResponse<T>>(result);
+        return https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
     }
 }
 
 // Usage
 var client = new GraphQLClient();
-var products = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ProductsResponse>(@"
+var products = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ProductsResponse>(@"
 {
   products {
     id
@@ -407,7 +407,7 @@ curl -X POST http://localhost:5000/graphql \
 
 ## ?? DEPENDENCY INJECTION
 
-### **Setup trong https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip**
+### **Setup trong https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip**
 
 ```csharp
 public partial class App : Application
@@ -419,33 +419,33 @@ public partial class App : Application
         InitializeComponent();
 
         // C?u hình DI Container
-        AppHost = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip()
+        AppHost = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip()
             .ConfigureServices((context, services) =>
             {
                 // Register Window
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<MainWindow>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<MainWindow>();
 
                 // Register Views
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<DashboardView>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ProductsScreenView>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<OrdersScreenView>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ConfigScreenView>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<LoginScreenView>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ReportScreenView>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<SettingsScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<DashboardView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ProductsScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<OrdersScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ConfigScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<LoginScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ReportScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<SettingsScreenView>();
 
                 // Register ViewModels
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<DashboardViewModel>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ProductsScreenViewModel>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<OrdersScreenViewModel>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ConfigScreenViewModel>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<LoginScreenViewModel>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ReportScreenViewModel>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<SettingsScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<DashboardViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ProductsScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<OrdersScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ConfigScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<LoginScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ReportScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<SettingsScreenViewModel>();
 
                 // Register Services
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<IDataService, SQLiteService>();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<IDataService, PostgresService>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<IDataService, SQLiteService>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<IDataService, PostgresService>();
                 // Thêm services khác...
             })
             .Build();
@@ -453,15 +453,15 @@ public partial class App : Application
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        _window = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<MainWindow>();
-        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+        _window = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<MainWindow>();
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
     }
     
     // Helper method ?? l?y service t? b?t k? ?âu
     public static T GetService<T>() where T : class
     {
         var app = (App)Current;
-        return https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<T>();
+        return https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<T>();
     }
 }
 ```
@@ -479,8 +479,8 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
         
         // L?y View t? DI container
-        _loginScreenView = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<LoginScreenView>();
-        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(_loginScreenView);
+        _loginScreenView = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<LoginScreenView>();
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(_loginScreenView);
     }
 }
 ```
@@ -489,8 +489,8 @@ public sealed partial class MainWindow : Window
 
 ```csharp
 // Trong ViewModel ho?c Code-behind
-var dataService = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<IDataService>();
-var products = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+var dataService = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<IDataService>();
+var products = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
 ```
 
 ---
@@ -505,31 +505,31 @@ View (XAML) ?? ViewModel ?? Model/Service
 
 ### **1. View (XAML)**
 
-**File:** `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip`
+**File:** `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip`
 
 ```xaml
 <Page
-    x:Class="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
-    xmlns="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
-    xmlns:x="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
-    xmlns:vm="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip">
+    x:Class="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
+    xmlns="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
+    xmlns:x="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
+    xmlns:vm="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip">
     
     <!-- DataContext binding -->
-    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
         <vm:ProductsScreenViewModel />
-    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
     
     <Grid>
         <!-- Binding to ViewModel properties -->
         <ListView ItemsSource="{Binding Products}">
-            <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock Text="{Binding Name}" />
                         <TextBlock Text="{Binding Sku}" />
                     </StackPanel>
                 </DataTemplate>
-            <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
         </ListView>
     </Grid>
 </Page>
@@ -537,14 +537,14 @@ View (XAML) ?? ViewModel ?? Model/Service
 
 ### **2. ViewModel**
 
-**File:** `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip`
+**File:** `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip`
 
 ```csharp
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
 
-namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 {
     public partial class ProductsScreenViewModel : ObservableObject
     {
@@ -577,11 +577,11 @@ namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my
             IsLoading = true;
             try
             {
-                var products = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
-                https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+                var products = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
                 foreach (var product in products)
                 {
-                    https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(product);
+                    https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(product);
                 }
             }
             finally
@@ -593,15 +593,15 @@ namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my
         [RelayCommand]
         private async Task AddProductAsync(Product product)
         {
-            await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(product);
+            await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(product);
             await LoadProductsAsync();
         }
 
         [RelayCommand]
         private async Task DeleteProductAsync(int productId)
         {
-            await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(productId);
-            https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(p => https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip == productId));
+            await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(productId);
+            https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(p => https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip == productId));
         }
     }
 }
@@ -609,13 +609,13 @@ namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my
 
 ### **3. Code-behind (View)**
 
-**File:** `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip`
+**File:** `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip`
 
 ```csharp
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
 
-namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 {
     public sealed partial class ProductsScreenView : Page
     {
@@ -623,7 +623,7 @@ namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my
 
         public ProductsScreenView(ProductsScreenViewModel viewModel)
         {
-            https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+            https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
             
             // Inject ViewModel qua constructor
             ViewModel = viewModel;
@@ -637,7 +637,7 @@ namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my
 
 ```xaml
 <!-- Binding to property -->
-<TextBlock Text="{Binding https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip}" />
+<TextBlock Text="{Binding https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip}" />
 
 <!-- Binding to command -->
 <Button Content="Load Products" 
@@ -662,57 +662,57 @@ WinUI 3 h? tr? responsive layout thông qua **AdaptiveTrigger** và **VisualStat
 <Page>
     <Grid>
         <!-- VisualStateManager qu?n lý các tr?ng thái UI -->
-        <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+        <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
             <VisualStateGroup x:Name="WindowSizeStates">
                 
                 <!-- Wide layout: >= 1024px -->
                 <VisualState x:Name="WideState">
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                         <AdaptiveTrigger MinWindowWidth="1024" />
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                         <!-- 2 c?t layout -->
-                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip[1].Width" Value="*" />
-                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip" Value="Visible" />
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip[1].Width" Value="*" />
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip" Value="Visible" />
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                 </VisualState>
 
                 <!-- Medium layout: 641-1023px -->
                 <VisualState x:Name="MediumState">
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                         <AdaptiveTrigger MinWindowWidth="641" />
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                         <!-- 1 c?t, ?n detail -->
-                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip[1].Width" Value="0" />
-                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip" Value="Collapsed" />
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip[1].Width" Value="0" />
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip" Value="Collapsed" />
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                 </VisualState>
 
                 <!-- Narrow layout: < 641px -->
                 <VisualState x:Name="NarrowState">
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                         <AdaptiveTrigger MinWindowWidth="0" />
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                         <!-- Mobile layout -->
-                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip" Value="20" />
-                        <Setter Target="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip" Value="10" />
-                    <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip" Value="20" />
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip" Value="10" />
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                 </VisualState>
                 
             </VisualStateGroup>
-        <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+        <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
 
         <Grid x:Name="MainGrid">
-            <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-            <https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip>
+            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
 
             <!-- Content ? ?ây -->
-            <StackPanel x:Name="ProductList" https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"0" />
-            <StackPanel x:Name="ProductDetail" https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"1" />
+            <StackPanel x:Name="ProductList" https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"0" />
+            <StackPanel x:Name="ProductDetail" https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"1" />
         </Grid>
     </Grid>
 </Page>
@@ -788,7 +788,7 @@ var product = new Product
     ImportPrice = 500,
     Count = 10,
     // Plugin data d??i d?ng JSON
-    ExtensionData = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(new
+    ExtensionData = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(new
     {
         Screen = "OLED",
         Battery = "5000mAh",
@@ -797,18 +797,18 @@ var product = new Product
     })
 };
 
-await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(product);
-await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
+await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(product);
+await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
 ```
 
 #### 2?? ??c plugin data
 ```csharp
-var product = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(1);
+var product = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(1);
 
-if (!https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip))
+if (!https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip))
 {
-    var extraData = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<Dictionary<string, object>>(
-        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+    var extraData = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<Dictionary<string, object>>(
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
     );
     
     var screen = extraData["Screen"].ToString(); // "OLED"
@@ -865,11 +865,11 @@ Response:
 #### B??c 1: T?o ViewModel
 
 ```csharp
-// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
 
-namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 {
     public partial class NewFeatureViewModel : ObservableObject
     {
@@ -888,12 +888,12 @@ namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my
 #### B??c 2: T?o View
 
 ```xaml
-<!-- File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip -->
+<!-- File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip -->
 <Page
-    x:Class="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
-    xmlns="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
-    xmlns:x="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip"
-    xmlns:vm="https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip">
+    x:Class="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
+    xmlns="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
+    xmlns:x="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
+    xmlns:vm="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip">
     
     <Grid>
         <TextBlock Text="{Binding Title}" />
@@ -905,14 +905,14 @@ namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my
 #### B??c 3: Register trong DI
 
 ```csharp
-// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
-AppHost = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip()
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+AppHost = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip()
     .ConfigureServices((context, services) =>
     {
         // ... existing services
         
-        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<NewFeatureView>();
-        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<NewFeatureViewModel>();
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<NewFeatureView>();
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<NewFeatureViewModel>();
     })
     .Build();
 ```
@@ -948,17 +948,17 @@ public partial class ProductsScreenViewModel : ObservableObject
             }"
         };
 
-        var json = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(query);
-        var content = new StringContent(json, https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip, "application/json");
+        var json = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(query);
+        var content = new StringContent(json, https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip, "application/json");
         
-        var response = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("/graphql", content);
-        var result = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
-        var data = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<GraphQLResponse<List<Product>>>(result);
+        var response = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("/graphql", content);
+        var result = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+        var data = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<GraphQLResponse<List<Product>>>(result);
         
-        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
-        foreach (var product in https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+        foreach (var product in https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
         {
-            https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(product);
+            https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(product);
         }
     }
 }
@@ -975,11 +975,11 @@ public class GraphQLResponse<T>
 #### B??c 1: T?o Entity
 
 ```csharp
-// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
-using https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
 
-namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 {
     [Table("customers")]
     public class Customer
@@ -1005,7 +1005,7 @@ namespace https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my
 #### B??c 2: Thêm vào DbContext
 
 ```csharp
-// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 public class MyShopDbContext : DbContext
 {
     // Existing DbSets...
@@ -1013,11 +1013,11 @@ public class MyShopDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(modelBuilder);
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(modelBuilder);
         
         // C?u hình cho Customer
-        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<Customer>()
-            .Property(c => https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<Customer>()
+            .Property(c => https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
             .IsRequired();
     }
 }
@@ -1026,7 +1026,7 @@ public class MyShopDbContext : DbContext
 #### B??c 3: T?o Migration (n?u dùng migrations)
 
 ```bash
-cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 dotnet ef migrations add AddCustomerTable
 dotnet ef database update
 ```
@@ -1034,7 +1034,7 @@ dotnet ef database update
 #### B??c 4: Thêm vào GraphQL Query
 
 ```csharp
-// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 public class Query
 {
     // Existing queries...
@@ -1043,14 +1043,14 @@ public class Query
     [UseFiltering]
     [UseSorting]
     public IQueryable<Customer> GetCustomers([Service] MyShopDbContext context) =>
-        https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
 }
 ```
 
 ### **4. Thêm Service m?i**
 
 ```csharp
-// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 public interface ICustomerService
 {
     Task<List<Customer>> GetAllCustomersAsync();
@@ -1058,7 +1058,7 @@ public interface ICustomerService
     Task AddCustomerAsync(Customer customer);
 }
 
-// File: https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 public class CustomerService : ICustomerService
 {
     private readonly HttpClient _httpClient;
@@ -1071,33 +1071,33 @@ public class CustomerService : ICustomerService
     public async Task<List<Customer>> GetAllCustomersAsync()
     {
         var query = new { query = "{ customers { id name email } }" };
-        var json = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip(query);
-        var content = new StringContent(json, https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip, "application/json");
+        var json = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(query);
+        var content = new StringContent(json, https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip, "application/json");
         
-        var response = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("/graphql", content);
-        var result = await https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip();
-        var data = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<GraphQLResponse<List<Customer>>>(result);
+        var response = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("/graphql", content);
+        var result = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+        var data = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<GraphQLResponse<List<Customer>>>(result);
         
-        return https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
+        return https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
     }
     
     // Implement other methods...
 }
 
 // Register trong DI
-https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ICustomerService, CustomerService>();
+https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ICustomerService, CustomerService>();
 ```
 
 ### **5. Debug và Troubleshooting**
 
 #### Ki?m tra DI registration
 ```csharp
-// Trong https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
-var services = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip;
-var viewModel = https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<ProductsScreenViewModel>();
+// Trong https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+var services = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+var viewModel = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ProductsScreenViewModel>();
 if (viewModel == null)
 {
-    https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("ViewModel not registered!");
+    https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("ViewModel not registered!");
 }
 ```
 
@@ -1111,10 +1111,10 @@ Invoke-RestMethod -Uri http://localhost:5000/graphql -Method Post -Body $query -
 #### Ki?m tra database
 ```bash
 # Xem tables
-sqlite3 https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip ".tables"
+sqlite3 https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip ".tables"
 
 # Xem data
-sqlite3 https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip "SELECT * FROM products;"
+sqlite3 https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip "SELECT * FROM products;"
 ```
 
 ---
@@ -1122,37 +1122,37 @@ sqlite3 https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-s
 ## ?? TÀI LI?U THAM KH?O
 
 ### **Official Documentation**
-- [WinUI 3 Documentation](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
-- [.NET MAUI & WinUI](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
-- [HotChocolate GraphQL](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
-- [Entity Framework Core](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
-- [https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+- [WinUI 3 Documentation](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+- [.NET MAUI & WinUI](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+- [HotChocolate GraphQL](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+- [Entity Framework Core](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+- [https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
 
 ### **Tutorials**
-- [Building WinUI 3 Apps](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
-- [GraphQL Best Practices](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
-- [Clean Architecture in .NET](https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip)
+- [Building WinUI 3 Apps](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+- [GraphQL Best Practices](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+- [Clean Architecture in .NET](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
 
 ---
 
 ## ? FAQ
 
 ### **Q: Làm sao ?? thay ??i database t? SQLite sang PostgreSQL?**
-A: Thay ??i trong `https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip` c?a API:
+A: Thay ??i trong `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip` c?a API:
 ```csharp
 // Thay vì UseSqlite
-https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip<MyShopDbContext>(options =>
-    https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip("Host=localhost;Database=myshop;Username=user;Password=pass"));
+https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<MyShopDbContext>(options =>
+    https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("Host=localhost;Database=myshop;Username=user;Password=pass"));
 ```
 
 ### **Q: Làm sao ?? thêm Authentication?**
 A: Thêm vào API:
 ```csharp
-https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
     .AddAuthentication()
     .AddJwtBearer();
 
-https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
     .AddGraphQLServer()
     .AddAuthorization();
 ```
@@ -1188,11 +1188,11 @@ D? án ???c phát tri?n b?i team MyShop.
 
 ```bash
 # 1. Clone repo
-git clone https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+git clone https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 cd my-shop
 
 # 2. Start API
-cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 dotnet run
 
 # 3. Trong terminal khác, test API
@@ -1201,7 +1201,7 @@ curl -X POST http://localhost:5000/graphql \
   -d '{"query":"{ products { name } }"}'
 
 # 4. Build và ch?y App
-cd https://raw.githubusercontent.com/VHoangNguyen0102/my-shop/demo/src/my-shop.App/Assets/shop-my-v2.1.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
 dotnet build /p:Platform=x64
 ```
 
