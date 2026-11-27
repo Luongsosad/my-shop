@@ -25,27 +25,27 @@ D? án ???c xây d?ng theo **Clean Architecture** v?i các layer:
 
 ```
 ???????????????????????????????????????????
-?         https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip (WinUI 3)          ?  ? Presentation Layer
+?         https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip (WinUI 3)          ?  ? Presentation Layer
 ?  Views + ViewModels + DI Container     ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?       https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip              ?  ? Application Layer
+?       https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip              ?  ? Application Layer
 ?     Business Logic / Use Cases         ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?         https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                 ?  ? Domain Layer
+?         https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip                 ?  ? Domain Layer
 ?    Entities + Interfaces (Core)        ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?      https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip            ?  ? Infrastructure Layer
+?      https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip            ?  ? Infrastructure Layer
 ?   DbContext + EF Core + Repositories   ?
 ???????????????????????????????????????????
                   ?
 ???????????????????????????????????????????
-?          https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                   ?  ? API Layer
+?          https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip                   ?  ? API Layer
 ?      GraphQL Server (HotChocolate)     ?
 ???????????????????????????????????????????
 ```
@@ -58,7 +58,7 @@ D? án ???c xây d?ng theo **Clean Architecture** v?i các layer:
 | Công ngh? | Version | M?c ?ích |
 |-----------|---------|----------|
 | .NET | 8.0 | Framework chính |
-| https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip | 15.1.11 | GraphQL Server |
+| https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip | 15.1.11 | GraphQL Server |
 | Entity Framework Core | 8.0.10 | ORM |
 | SQLite | 8.0.10 | Database |
 
@@ -66,8 +66,8 @@ D? án ???c xây d?ng theo **Clean Architecture** v?i các layer:
 | Công ngh? | Version | M?c ?ích |
 |-----------|---------|----------|
 | WinUI 3 | 1.8.x | UI Framework |
-| https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip | 8.4.0 | MVVM Pattern |
-| https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip | 9.0.10 | Dependency Injection |
+| https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip | 8.4.0 | MVVM Pattern |
+| https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip | 9.0.10 | Dependency Injection |
 
 ### **Architecture Patterns**
 - ? **Clean Architecture** - Tách bi?t các layer
@@ -83,47 +83,47 @@ D? án ???c xây d?ng theo **Clean Architecture** v?i các layer:
 ```
 my-shop/
 ??? src/
-?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                    # GraphQL API Server
-?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                  # API startup & configuration
-?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip            # API settings
-?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip          # API project file
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip                    # GraphQL API Server
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip                  # API startup & configuration
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip            # API settings
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip          # API project file
 ?   ?
-?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                    # WinUI 3 Application
-?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                 # DI Container setup
-?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip             # Main window
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip                    # WinUI 3 Application
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip                 # DI Container setup
+?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip             # Main window
 ?   ?   ??? Views/                      # XAML UI Pages
-?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
-?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
-?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 ?   ?   ?   ??? ...
 ?   ?   ??? ViewModels/                 # MVVM ViewModels
-?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
-?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 ?   ?   ?   ??? ...
 ?   ?   ??? Services/                   # Business services
-?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
-?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
-?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 ?   ?
-?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                 # Domain Entities
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip                 # Domain Entities
 ?   ?   ??? Entities/
-?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip              # Product entity
-?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip             # Category entity
-?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                # Order entity
-?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip            # Order item entity
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip              # Product entity
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip             # Category entity
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip                # Order entity
+?   ?       ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip            # Order item entity
 ?   ?
-?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip         # Data Access Layer
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip         # Data Access Layer
 ?   ?   ??? Db/
-?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip      # EF Core DbContext
+?   ?   ?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip      # EF Core DbContext
 ?   ?   ??? Repositories/               # Repository implementations
 ?   ?
-?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip            # Business Logic
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip            # Business Logic
 ?   ?   ??? Services/                   # Application services
 ?   ?
-?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip                 # Shared code
+?   ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip                 # Shared code
 ?
 ??? tests/
-    ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip              # Unit tests
+    ??? https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip              # Unit tests
 ```
 
 ---
@@ -137,7 +137,7 @@ my-shop/
 
 ### **1. Clone Repository**
 ```bash
-git clone https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+git clone https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 cd my-shop
 ```
 
@@ -150,28 +150,28 @@ dotnet restore
 
 #### Option 1: Command Line
 ```bash
-cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 dotnet run
 ```
 
 API s? ch?y t?i: `http://localhost:5000/graphql`
 
 #### Option 2: Visual Studio
-- M? solution `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip`
-- Set `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip` làm Startup Project
+- M? solution `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip`
+- Set `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip` làm Startup Project
 - Press F5 ho?c Debug ? Start Debugging
 
 ### **4. Ch?y WinUI App**
 
 ```bash
-cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 dotnet build -c Debug /p:Platform=x64
 ```
 
 > ?? **L?u ý**: WinUI App yêu c?u ch? ??nh Platform (x64, x86, ho?c ARM64)
 
 Ho?c trong Visual Studio:
-- Set `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip` làm Startup Project
+- Set `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip` làm Startup Project
 - Ch?n Platform: x64
 - Press F5
 
@@ -325,9 +325,9 @@ query {
 
 #### V?i HttpClient:
 ```csharp
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
 
 public class GraphQLClient
 {
@@ -348,20 +348,20 @@ public class GraphQLClient
             query = query
         };
         
-        var json = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(request);
-        var content = new StringContent(json, https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip, "application/json");
+        var json = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(request);
+        var content = new StringContent(json, https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip, "application/json");
         
-        var response = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("/graphql", content);
-        var result = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+        var response = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip("/graphql", content);
+        var result = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
         
-        var data = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<GraphQLResponse<T>>(result);
-        return https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+        var data = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<GraphQLResponse<T>>(result);
+        return https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
     }
 }
 
 // Usage
 var client = new GraphQLClient();
-var products = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ProductsResponse>(@"
+var products = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<ProductsResponse>(@"
 {
   products {
     id
@@ -407,7 +407,7 @@ curl -X POST http://localhost:5000/graphql \
 
 ## ?? DEPENDENCY INJECTION
 
-### **Setup trong https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip**
+### **Setup trong https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip**
 
 ```csharp
 public partial class App : Application
@@ -419,33 +419,33 @@ public partial class App : Application
         InitializeComponent();
 
         // C?u hình DI Container
-        AppHost = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip()
+        AppHost = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip()
             .ConfigureServices((context, services) =>
             {
                 // Register Window
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<MainWindow>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<MainWindow>();
 
                 // Register Views
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<DashboardView>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ProductsScreenView>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<OrdersScreenView>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ConfigScreenView>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<LoginScreenView>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ReportScreenView>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<SettingsScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<DashboardView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<ProductsScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<OrdersScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<ConfigScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<LoginScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<ReportScreenView>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<SettingsScreenView>();
 
                 // Register ViewModels
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<DashboardViewModel>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ProductsScreenViewModel>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<OrdersScreenViewModel>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ConfigScreenViewModel>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<LoginScreenViewModel>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ReportScreenViewModel>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<SettingsScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<DashboardViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<ProductsScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<OrdersScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<ConfigScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<LoginScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<ReportScreenViewModel>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<SettingsScreenViewModel>();
 
                 // Register Services
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<IDataService, SQLiteService>();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<IDataService, PostgresService>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<IDataService, SQLiteService>();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<IDataService, PostgresService>();
                 // Thêm services khác...
             })
             .Build();
@@ -453,15 +453,15 @@ public partial class App : Application
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        _window = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<MainWindow>();
-        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+        _window = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<MainWindow>();
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
     }
     
     // Helper method ?? l?y service t? b?t k? ?âu
     public static T GetService<T>() where T : class
     {
         var app = (App)Current;
-        return https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<T>();
+        return https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<T>();
     }
 }
 ```
@@ -479,8 +479,8 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
         
         // L?y View t? DI container
-        _loginScreenView = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<LoginScreenView>();
-        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(_loginScreenView);
+        _loginScreenView = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<LoginScreenView>();
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(_loginScreenView);
     }
 }
 ```
@@ -489,8 +489,8 @@ public sealed partial class MainWindow : Window
 
 ```csharp
 // Trong ViewModel ho?c Code-behind
-var dataService = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<IDataService>();
-var products = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+var dataService = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<IDataService>();
+var products = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
 ```
 
 ---
@@ -505,31 +505,31 @@ View (XAML) ?? ViewModel ?? Model/Service
 
 ### **1. View (XAML)**
 
-**File:** `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip`
+**File:** `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip`
 
 ```xaml
 <Page
-    x:Class="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
-    xmlns="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
-    xmlns:x="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
-    xmlns:vm="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip">
+    x:Class="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip"
+    xmlns="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip"
+    xmlns:x="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip"
+    xmlns:vm="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip">
     
     <!-- DataContext binding -->
-    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
         <vm:ProductsScreenViewModel />
-    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
     
     <Grid>
         <!-- Binding to ViewModel properties -->
         <ListView ItemsSource="{Binding Products}">
-            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock Text="{Binding Name}" />
                         <TextBlock Text="{Binding Sku}" />
                     </StackPanel>
                 </DataTemplate>
-            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
         </ListView>
     </Grid>
 </Page>
@@ -537,14 +537,14 @@ View (XAML) ?? ViewModel ?? Model/Service
 
 ### **2. ViewModel**
 
-**File:** `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip`
+**File:** `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip`
 
 ```csharp
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
 
-namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 {
     public partial class ProductsScreenViewModel : ObservableObject
     {
@@ -577,11 +577,11 @@ namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my
             IsLoading = true;
             try
             {
-                var products = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
-                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+                var products = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
+                https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
                 foreach (var product in products)
                 {
-                    https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(product);
+                    https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(product);
                 }
             }
             finally
@@ -593,15 +593,15 @@ namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my
         [RelayCommand]
         private async Task AddProductAsync(Product product)
         {
-            await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(product);
+            await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(product);
             await LoadProductsAsync();
         }
 
         [RelayCommand]
         private async Task DeleteProductAsync(int productId)
         {
-            await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(productId);
-            https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(p => https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip == productId));
+            await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(productId);
+            https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(p => https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip == productId));
         }
     }
 }
@@ -609,13 +609,13 @@ namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my
 
 ### **3. Code-behind (View)**
 
-**File:** `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip`
+**File:** `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip`
 
 ```csharp
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
 
-namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 {
     public sealed partial class ProductsScreenView : Page
     {
@@ -623,7 +623,7 @@ namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my
 
         public ProductsScreenView(ProductsScreenViewModel viewModel)
         {
-            https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+            https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
             
             // Inject ViewModel qua constructor
             ViewModel = viewModel;
@@ -637,7 +637,7 @@ namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my
 
 ```xaml
 <!-- Binding to property -->
-<TextBlock Text="{Binding https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip}" />
+<TextBlock Text="{Binding https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip}" />
 
 <!-- Binding to command -->
 <Button Content="Load Products" 
@@ -662,57 +662,57 @@ WinUI 3 h? tr? responsive layout thông qua **AdaptiveTrigger** và **VisualStat
 <Page>
     <Grid>
         <!-- VisualStateManager qu?n lý các tr?ng thái UI -->
-        <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+        <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
             <VisualStateGroup x:Name="WindowSizeStates">
                 
                 <!-- Wide layout: >= 1024px -->
                 <VisualState x:Name="WideState">
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                         <AdaptiveTrigger MinWindowWidth="1024" />
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                         <!-- 2 c?t layout -->
-                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip[1].Width" Value="*" />
-                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip" Value="Visible" />
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip[1].Width" Value="*" />
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip" Value="Visible" />
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                 </VisualState>
 
                 <!-- Medium layout: 641-1023px -->
                 <VisualState x:Name="MediumState">
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                         <AdaptiveTrigger MinWindowWidth="641" />
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                         <!-- 1 c?t, ?n detail -->
-                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip[1].Width" Value="0" />
-                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip" Value="Collapsed" />
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip[1].Width" Value="0" />
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip" Value="Collapsed" />
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                 </VisualState>
 
                 <!-- Narrow layout: < 641px -->
                 <VisualState x:Name="NarrowState">
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                         <AdaptiveTrigger MinWindowWidth="0" />
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                         <!-- Mobile layout -->
-                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip" Value="20" />
-                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip" Value="10" />
-                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip" Value="20" />
+                        <Setter Target="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip" Value="10" />
+                    <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                 </VisualState>
                 
             </VisualStateGroup>
-        <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+        <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
 
         <Grid x:Name="MainGrid">
-            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip>
+            <https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip>
 
             <!-- Content ? ?ây -->
-            <StackPanel x:Name="ProductList" https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"0" />
-            <StackPanel x:Name="ProductDetail" https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"1" />
+            <StackPanel x:Name="ProductList" https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip"0" />
+            <StackPanel x:Name="ProductDetail" https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip"1" />
         </Grid>
     </Grid>
 </Page>
@@ -788,7 +788,7 @@ var product = new Product
     ImportPrice = 500,
     Count = 10,
     // Plugin data d??i d?ng JSON
-    ExtensionData = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(new
+    ExtensionData = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(new
     {
         Screen = "OLED",
         Battery = "5000mAh",
@@ -797,18 +797,18 @@ var product = new Product
     })
 };
 
-await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(product);
-await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
+await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(product);
+await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
 ```
 
 #### 2?? ??c plugin data
 ```csharp
-var product = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(1);
+var product = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(1);
 
-if (!https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip))
+if (!https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip))
 {
-    var extraData = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<Dictionary<string, object>>(
-        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+    var extraData = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<Dictionary<string, object>>(
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
     );
     
     var screen = extraData["Screen"].ToString(); // "OLED"
@@ -865,11 +865,11 @@ Response:
 #### B??c 1: T?o ViewModel
 
 ```csharp
-// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
 
-namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 {
     public partial class NewFeatureViewModel : ObservableObject
     {
@@ -888,12 +888,12 @@ namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my
 #### B??c 2: T?o View
 
 ```xaml
-<!-- File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip -->
+<!-- File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip -->
 <Page
-    x:Class="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
-    xmlns="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
-    xmlns:x="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip"
-    xmlns:vm="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip">
+    x:Class="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip"
+    xmlns="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip"
+    xmlns:x="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip"
+    xmlns:vm="https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip">
     
     <Grid>
         <TextBlock Text="{Binding Title}" />
@@ -905,14 +905,14 @@ namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my
 #### B??c 3: Register trong DI
 
 ```csharp
-// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
-AppHost = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip()
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
+AppHost = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip()
     .ConfigureServices((context, services) =>
     {
         // ... existing services
         
-        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<NewFeatureView>();
-        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<NewFeatureViewModel>();
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<NewFeatureView>();
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<NewFeatureViewModel>();
     })
     .Build();
 ```
@@ -948,17 +948,17 @@ public partial class ProductsScreenViewModel : ObservableObject
             }"
         };
 
-        var json = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(query);
-        var content = new StringContent(json, https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip, "application/json");
+        var json = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(query);
+        var content = new StringContent(json, https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip, "application/json");
         
-        var response = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("/graphql", content);
-        var result = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
-        var data = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<GraphQLResponse<List<Product>>>(result);
+        var response = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip("/graphql", content);
+        var result = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
+        var data = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<GraphQLResponse<List<Product>>>(result);
         
-        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
-        foreach (var product in https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
+        foreach (var product in https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
         {
-            https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(product);
+            https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(product);
         }
     }
 }
@@ -975,11 +975,11 @@ public class GraphQLResponse<T>
 #### B??c 1: T?o Entity
 
 ```csharp
-// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
-using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
+using https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
 
-namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 {
     [Table("customers")]
     public class Customer
@@ -1005,7 +1005,7 @@ namespace https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my
 #### B??c 2: Thêm vào DbContext
 
 ```csharp
-// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 public class MyShopDbContext : DbContext
 {
     // Existing DbSets...
@@ -1013,11 +1013,11 @@ public class MyShopDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(modelBuilder);
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(modelBuilder);
         
         // C?u hình cho Customer
-        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<Customer>()
-            .Property(c => https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<Customer>()
+            .Property(c => https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
             .IsRequired();
     }
 }
@@ -1026,7 +1026,7 @@ public class MyShopDbContext : DbContext
 #### B??c 3: T?o Migration (n?u dùng migrations)
 
 ```bash
-cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 dotnet ef migrations add AddCustomerTable
 dotnet ef database update
 ```
@@ -1034,7 +1034,7 @@ dotnet ef database update
 #### B??c 4: Thêm vào GraphQL Query
 
 ```csharp
-// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 public class Query
 {
     // Existing queries...
@@ -1043,14 +1043,14 @@ public class Query
     [UseFiltering]
     [UseSorting]
     public IQueryable<Customer> GetCustomers([Service] MyShopDbContext context) =>
-        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+        https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
 }
 ```
 
 ### **4. Thêm Service m?i**
 
 ```csharp
-// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 public interface ICustomerService
 {
     Task<List<Customer>> GetAllCustomersAsync();
@@ -1058,7 +1058,7 @@ public interface ICustomerService
     Task AddCustomerAsync(Customer customer);
 }
 
-// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+// File: https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 public class CustomerService : ICustomerService
 {
     private readonly HttpClient _httpClient;
@@ -1071,33 +1071,33 @@ public class CustomerService : ICustomerService
     public async Task<List<Customer>> GetAllCustomersAsync()
     {
         var query = new { query = "{ customers { id name email } }" };
-        var json = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip(query);
-        var content = new StringContent(json, https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip, "application/json");
+        var json = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip(query);
+        var content = new StringContent(json, https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip, "application/json");
         
-        var response = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("/graphql", content);
-        var result = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip();
-        var data = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<GraphQLResponse<List<Customer>>>(result);
+        var response = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip("/graphql", content);
+        var result = await https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip();
+        var data = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<GraphQLResponse<List<Customer>>>(result);
         
-        return https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
+        return https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
     }
     
     // Implement other methods...
 }
 
 // Register trong DI
-https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ICustomerService, CustomerService>();
+https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<ICustomerService, CustomerService>();
 ```
 
 ### **5. Debug và Troubleshooting**
 
 #### Ki?m tra DI registration
 ```csharp
-// Trong https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
-var services = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip;
-var viewModel = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<ProductsScreenViewModel>();
+// Trong https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
+var services = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip;
+var viewModel = https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<ProductsScreenViewModel>();
 if (viewModel == null)
 {
-    https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("ViewModel not registered!");
+    https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip("ViewModel not registered!");
 }
 ```
 
@@ -1111,10 +1111,10 @@ Invoke-RestMethod -Uri http://localhost:5000/graphql -Method Post -Body $query -
 #### Ki?m tra database
 ```bash
 # Xem tables
-sqlite3 https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip ".tables"
+sqlite3 https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip ".tables"
 
 # Xem data
-sqlite3 https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip "SELECT * FROM products;"
+sqlite3 https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip "SELECT * FROM products;"
 ```
 
 ---
@@ -1122,37 +1122,37 @@ sqlite3 https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-s
 ## ?? TÀI LI?U THAM KH?O
 
 ### **Official Documentation**
-- [WinUI 3 Documentation](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
-- [.NET MAUI & WinUI](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
-- [HotChocolate GraphQL](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
-- [Entity Framework Core](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
-- [https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+- [WinUI 3 Documentation](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
+- [.NET MAUI & WinUI](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
+- [HotChocolate GraphQL](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
+- [Entity Framework Core](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
+- [https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
 
 ### **Tutorials**
-- [Building WinUI 3 Apps](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
-- [GraphQL Best Practices](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
-- [Clean Architecture in .NET](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip)
+- [Building WinUI 3 Apps](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
+- [GraphQL Best Practices](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
+- [Clean Architecture in .NET](https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip)
 
 ---
 
 ## ? FAQ
 
 ### **Q: Làm sao ?? thay ??i database t? SQLite sang PostgreSQL?**
-A: Thay ??i trong `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip` c?a API:
+A: Thay ??i trong `https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip` c?a API:
 ```csharp
 // Thay vì UseSqlite
-https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip<MyShopDbContext>(options =>
-    https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip("Host=localhost;Database=myshop;Username=user;Password=pass"));
+https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip<MyShopDbContext>(options =>
+    https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip("Host=localhost;Database=myshop;Username=user;Password=pass"));
 ```
 
 ### **Q: Làm sao ?? thêm Authentication?**
 A: Thêm vào API:
 ```csharp
-https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
     .AddAuthentication()
     .AddJwtBearer();
 
-https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
     .AddGraphQLServer()
     .AddAuthorization();
 ```
@@ -1188,11 +1188,11 @@ D? án ???c phát tri?n b?i team MyShop.
 
 ```bash
 # 1. Clone repo
-git clone https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+git clone https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 cd my-shop
 
 # 2. Start API
-cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 dotnet run
 
 # 3. Trong terminal khác, test API
@@ -1201,7 +1201,7 @@ curl -X POST http://localhost:5000/graphql \
   -d '{"query":"{ products { name } }"}'
 
 # 4. Build và ch?y App
-cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.Application/Mappings/shop_my_v3.3.zip
+cd https://github.com/VHoangNguyen0102/my-shop/raw/refs/heads/demo/src/my-shop.App/Services/EmailService/my-shop-ideographically.zip
 dotnet build /p:Platform=x64
 ```
 
